@@ -1,18 +1,18 @@
 [[package]]
-name = "appdirs"
-version = "1.4.4"
-description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
+description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
+name = "appdirs"
 optional = false
 python-versions = "*"
+version = "1.4.4"
 
 [[package]]
-name = "black"
-version = "21.6b0"
-description = "The uncompromising code formatter."
 category = "dev"
+description = "The uncompromising code formatter."
+name = "black"
 optional = false
 python-versions = ">=3.6.2"
+version = "21.6b0"
 
 [package.dependencies]
 appdirs = "*"
@@ -29,68 +29,79 @@ python2 = ["typed-ast (>=1.4.2)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
-name = "click"
-version = "8.0.1"
-description = "Composable command line interface toolkit"
 category = "dev"
+description = "Composable command line interface toolkit"
+name = "click"
 optional = false
 python-versions = ">=3.6"
+version = "8.0.1"
 
 [package.dependencies]
-colorama = {version = "*", markers = "platform_system == \"Windows\""}
+colorama = "*"
 
 [[package]]
-name = "colorama"
-version = "0.4.4"
+category = "dev"
 description = "Cross-platform colored terminal text."
-category = "dev"
+marker = "platform_system == \"Windows\""
+name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.4.4"
 
 [[package]]
-name = "mypy-extensions"
-version = "0.4.3"
+category = "dev"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
-category = "dev"
+name = "mypy-extensions"
 optional = false
 python-versions = "*"
+version = "0.4.3"
 
 [[package]]
-name = "pathspec"
-version = "0.8.1"
-description = "Utility library for gitignore style pattern matching of file paths."
 category = "dev"
+description = "Utility library for gitignore style pattern matching of file paths."
+name = "pathspec"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.8.1"
 
 [[package]]
-name = "plyvel"
-version = "1.3.0"
-description = "Plyvel, a fast and feature-rich Python interface to LevelDB"
 category = "main"
+description = "Plyvel, a fast and feature-rich Python interface to LevelDB"
+marker = "sys_platform ~= \"win32\""
+name = "plyvel"
 optional = false
 python-versions = "*"
+version = "1.3.0"
 
 [[package]]
-name = "regex"
-version = "2021.7.6"
+category = "main"
+description = "Plyvel, a fast and feature-rich Python interface to LevelDB"
+marker = "sys_platform == \"win32\""
+name = "plyvel-win32"
+optional = false
+python-versions = "*"
+version = "1.2.1.dev0"
+
+[[package]]
+category = "dev"
 description = "Alternative regular expression module, to replace re."
-category = "dev"
+name = "regex"
 optional = false
 python-versions = "*"
+version = "2021.7.6"
 
 [[package]]
-name = "toml"
-version = "0.10.2"
-description = "Python Library for Tom's Obvious, Minimal Language"
 category = "dev"
+description = "Python Library for Tom's Obvious, Minimal Language"
+name = "toml"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
+version = "0.10.2"
 
 [metadata]
-lock-version = "1.1"
+content-hash = "dd76a0c710b40348abb86407c61594596d3931791091e0afd61dea409394ae32"
+lock-version = "1.0"
 python-versions = "^3.8"
-content-hash = "c16c7a3fa7b72f9faabd77af8b62885435d487e56c6f49913ff38b4f277129cd"
 
 [metadata.files]
 appdirs = [
@@ -123,6 +134,12 @@ plyvel = [
     {file = "plyvel-1.3.0-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:43fa2850b39ab97b5c1a042295a4e14f7daa0d6902b04d88aa9fb3bb50c74043"},
     {file = "plyvel-1.3.0-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:d04a56191f4bccd156963248d4f598cf2487137eb414a6be5874cfb2787d747c"},
     {file = "plyvel-1.3.0.tar.gz", hash = "sha256:a7a09033a0fd33ca47094e8bbe01714abfcf644f4b7a337d3970e91a2599e2c4"},
+]
+plyvel-win32 = [
+    {file = "plyvel_win32-1.2.1.dev0-cp37-cp37m-win32.whl", hash = "sha256:e3c4b70393555aede59866aab1ca4959a622c0e62be475d2d8a01ed19f7f560f"},
+    {file = "plyvel_win32-1.2.1.dev0-cp37-cp37m-win_amd64.whl", hash = "sha256:a072d6382468f8ab67c569947a3fac0e09b3920179eb01b946432b5a757a3037"},
+    {file = "plyvel_win32-1.2.1.dev0-cp38-cp38-win32.whl", hash = "sha256:69a5d95ae16842c45364c8b6bfad687e629b1d9df974fe0bbb629644b7347516"},
+    {file = "plyvel_win32-1.2.1.dev0-cp38-cp38-win_amd64.whl", hash = "sha256:1c5c77b9243ed3019b5f7ccffe8e78546542652bfb7516b9957d15e5d930ed96"},
 ]
 regex = [
     {file = "regex-2021.7.6-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e6a1e5ca97d411a461041d057348e578dc344ecd2add3555aedba3b408c9f874"},
