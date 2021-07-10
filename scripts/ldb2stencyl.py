@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import plyvel
 
 from scripts.common import db_key, ldb_args, tmp_dir

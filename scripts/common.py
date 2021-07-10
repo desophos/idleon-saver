@@ -5,6 +5,10 @@ tmp_dir = Path("tmp")
 tmp_dir.mkdir(exist_ok=True)
 
 
+def resolved_path(s):
+    return Path(s).expanduser().resolve()
+
+
 def db_key(install_path: Path) -> bytes:
     # it seems like spaces are the only characters changed in the leveldb keys
     path = install_path.as_posix().replace(" ", "%20")
@@ -20,13 +24,13 @@ def ldb_args(parser: ArgumentParser = None):
         parser = ArgumentParser()
     parser.add_argument(
         "--idleon",
-        type=Path,
+        type=resolved_path,
         default="C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon",
         help="your Legends of Idleon install path",
     )
     parser.add_argument(
         "--ldb",
-        type=Path,
+        type=resolved_path,
         default="~/dev/leveldb",
         help="path to the leveldb to work with",
     )

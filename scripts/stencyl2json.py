@@ -1,14 +1,15 @@
 import argparse
 import json
-from pathlib import Path
 
 from idleon_save_editor.stencyl import StencylDecoder
+
+from scripts.common import resolved_path
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--file",
-        type=Path,
+        type=resolved_path,
         default="tmp/decoded.json",
         help="location of decoded JSON save file",
     )
