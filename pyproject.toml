@@ -6,7 +6,7 @@ authors = ["desophos <1887450+desophos@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-plyvel = { version = "^1.3.0", markers = "sys_platform ~= 'win32'" }
+plyvel = { version = "^1.3.0", markers = "sys_platform != 'win32'" }
 plyvel-win32 = { version = "1.2.1.dev0", markers = "sys_platform == 'win32'" }
 
 [tool.poetry.dev-dependencies]
