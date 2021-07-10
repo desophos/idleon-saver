@@ -1,5 +1,5 @@
-from typing import Any, Callable, List
 from functools import partial
+from typing import Any, Callable, Dict, List
 from urllib.parse import quote, unquote
 
 literals = {
@@ -19,7 +19,7 @@ class StencylDecoder:
         self.index = 0  # current position in data
         self.strcache: List[str] = []  # for string references ("R")
         # https://haxe.org/manual/std-serialization-format.html
-        self.parsers = {
+        self.parsers: Dict[str, Callable[[], Any]] = {
             "i": self._read_int,
             "d": self._read_float,
             "y": self._read_string,
@@ -115,7 +115,7 @@ class StencylEncoder:
     def __init__(self, data: str):
         self.data = data
         self.strcache: List[str] = []
-        self.parsers = {
+        self.parsers: Dict[Any, Callable[[Any], str]] = {
             int: self._encode_int,
             float: self._encode_float,
             str: self._encode_string,
