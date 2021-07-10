@@ -1,5 +1,5 @@
-from functools import lru_cache, partial
 from typing import Any, Callable, List
+from functools import partial
 from urllib.parse import quote, unquote
 
 literals = {
@@ -105,8 +105,9 @@ class StencylDecoder:
             raise Exception(f"Unknown character {char} at index {self.index}")
 
     @property
-    @lru_cache
     def result(self) -> Any:
+        # clear cache in case of multiple runs
+        self.strcache = []
         return self._parse(self._read_char())
 
 
@@ -159,6 +160,7 @@ class StencylEncoder:
         raise Exception(f"Could not encode {x}")
 
     @property
-    @lru_cache
     def result(self) -> str:
+        # clear cache in case of multiple runs
+        self.strcache = []
         return self._encode(self.data)
