@@ -2,8 +2,7 @@ import argparse
 from pathlib import Path
 
 import plyvel
-
-from common import db_key, db_path
+from idleon_save_editor.config import db_key, db_path
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -21,7 +20,7 @@ if __name__ == "__main__":
     key = db_key(args.steam)
 
     with open(Path(args.file).resolve(), "r", encoding="ascii") as file:
-        val = file.read()
+        val = file.read().strip()
 
     db.put(key, b"\x01" + bytes(val, encoding="ascii"))
 

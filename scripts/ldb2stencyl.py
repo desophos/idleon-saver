@@ -3,7 +3,7 @@ from pathlib import Path
 
 import plyvel
 
-from common import db_key, db_path
+from idleon_save_editor.config import db_key, db_path
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

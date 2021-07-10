@@ -1,16 +1,5 @@
 from pathlib import Path, PurePath
 
-literals = {
-    "n": None,
-    "z": 0,
-    "k": "NaN",
-    "m": "-inf",
-    "p": "inf",
-    "t": True,
-    "f": False,
-}
-
-
 db_path = {
     "prod": Path.home().joinpath(
         "AppData", "Roaming", "legends-of-idleon", "Local Storage", "leveldb"

@@ -15,7 +15,7 @@ This tool is for educational and investigative purposes only.
 
 ## Instructions
 
-0. Copy your database to a test location and modify `common.db_path` if not using the default location (`~/dev/leveldb`):
+0. Copy your database to a test location and modify `config.db_path` if not using the default location (`~/dev/leveldb`):
 
 ```
 cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
