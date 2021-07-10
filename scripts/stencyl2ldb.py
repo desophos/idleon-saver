@@ -3,7 +3,7 @@ from pathlib import Path
 
 import plyvel
 
-from common import db_key, ldb_args
+from scripts.common import db_key, ldb_args
 
 if __name__ == "__main__":
     parser = ArgumentParser()

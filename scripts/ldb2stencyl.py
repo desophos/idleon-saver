@@ -2,7 +2,7 @@ from pathlib import Path
 
 import plyvel
 
-from common import db_key, ldb_args, tmp_dir
+from scripts.common import db_key, ldb_args, tmp_dir
 
 if __name__ == "__main__":
     args = ldb_args()
