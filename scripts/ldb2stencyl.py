@@ -12,6 +12,8 @@ if __name__ == "__main__":
     try:
         val = db.get(key)
         assert val is not None
+    except plyvel.CorruptionError as e:
+        raise IOError(f"Could not access key {key} in database at {args.ldb}") from e
     except AssertionError as e:
         raise KeyError(f"Key not found in database: {key}") from e
 
