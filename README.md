@@ -15,11 +15,17 @@ This tool is for educational and investigative purposes only.
 
 ## Instructions
 
-0. Copy your database to a test location and modify `config.db_path` if not using the default location (`~/dev/leveldb`):
+### Setup
+
+Use either `poetry install` (recommended) or `pip install .` to install dependencies.
+
+Copy your database to a test location and modify `config.db_path` if not using the default location (`~/dev/leveldb`). For example:
 
 ```
 cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
 ```
+
+### Run
 
 Currently, scripts must be run individually in sequence. This process will be improved.
 
