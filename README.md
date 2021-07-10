@@ -19,13 +19,21 @@ This tool is for educational and investigative purposes only.
 
 Use either `poetry install` (recommended) or `pip install .` to install dependencies.
 
-Copy your database to a test location and modify `config.db_path` if not using the default location (`~/dev/leveldb`). For example:
+Copy your database to a test location (default is `~/dev/leveldb`). For example:
 
 ```
 cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
 ```
 
 ### Run
+
+You can pass `--help` to any script to see the arguments it takes.
+If your paths don't match the defaults, you'll need to pass your paths to the scripts.
+
+Script argument defaults:
+
+* `--idleon`: `C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon`
+* `--ldb`: `~/dev/leveldb`
 
 Currently, scripts must be run individually in sequence. This process will be improved.
 
