@@ -1,29 +1,24 @@
-import argparse
 from pathlib import Path
 
 import plyvel
 
-from idleon_save_editor.config import db_key, db_path
+from common import db_key, ldb_args, tmp_dir
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--steam",
-        default="C:/Steam",
-        help="Steam install directory",
-    )
-    args = parser.parse_args()
+    args = ldb_args()
+    tmp_file = tmp_dir / "decoded.txt"
 
-    tmp_dir = Path("tmp")
-    tmp_dir.mkdir(exist_ok=True)
-    filepath = tmp_dir / "decoded.txt"
+    db = plyvel.DB(str(args.ldb))
+    key = db_key(args.idleon)
 
-    db = plyvel.DB(str(db_path["test"].resolve()))
-    key = db_key(args.steam)
-    val = db.get(key)
+    try:
+        val = db.get(key)
+        assert val is not None
+    except AssertionError as e:
+        raise KeyError(f"Key not found in database: {key}") from e
 
-    with open(filepath, "w", encoding="utf-8") as f:
+    with open(tmp_file, "w", encoding="utf-8") as f:
         f.write(str(val.strip(b"\x01"), encoding="utf-8"))
-        print("Wrote file: " + str(filepath))
+        print("Wrote file: " + str(tmp_file))
 
     db.close()

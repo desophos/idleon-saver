@@ -8,18 +8,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--file",
-        default="tmp/decoded.txt",
-        help="location of decoded Stencyl save file",
+        type=Path,
+        default="tmp/decoded.json",
+        help="location of decoded JSON save file",
     )
     args = parser.parse_args()
 
-    infile = Path(args.file).resolve()
-    with open(infile, encoding="utf-8") as file:
+    with open(args.file, encoding="utf-8") as file:
         data = file.read().strip()
 
     decoded = StencylDecoder(data).result
 
-    outfile = infile.parent / "decoded.json"
+    outfile = args.file.parent / "decoded.json"
     with open(outfile, "w", encoding="utf-8") as file:
         json.dump(decoded, file)
 

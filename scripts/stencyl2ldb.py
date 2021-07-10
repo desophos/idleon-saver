@@ -1,29 +1,28 @@
-import argparse
+from argparse import ArgumentParser
 from pathlib import Path
 
 import plyvel
-from idleon_save_editor.config import db_key, db_path
+
+from common import db_key, ldb_args
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser()
     parser.add_argument(
-        "--steam",
-        default="C:/Steam",
-        help="Steam install directory",
+        "--file",
+        type=Path,
+        default="tmp/encoded.txt",
+        help="Encoded Stencyl save file location",
     )
-    parser.add_argument(
-        "--file", default="tmp/encoded.txt", help="Encoded Stencyl save file location"
-    )
-    args = parser.parse_args()
+    args = ldb_args(parser)
 
-    db = plyvel.DB(str(db_path["test"]))
-    key = db_key(args.steam)
+    db = plyvel.DB(str(args.ldb))
+    key = db_key(args.idleon)
 
-    with open(Path(args.file).resolve(), "r", encoding="ascii") as file:
+    with open(args.file, "r", encoding="ascii") as file:
         val = file.read().strip()
 
     db.put(key, b"\x01" + bytes(val, encoding="ascii"))
 
     db.close()
 
-    print(f"Wrote to key {key} in database at {db_path['test']}")
+    print(f"Wrote to key {key} in database at {args.ldb}")
