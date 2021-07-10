@@ -1,13 +1,13 @@
 from argparse import ArgumentParser
 from pathlib import Path
-from urllib.parse import quote
 
 tmp_dir = Path("tmp")
 tmp_dir.mkdir(exist_ok=True)
 
 
 def db_key(install_path: Path) -> bytes:
-    path = quote(install_path.as_posix())
+    # it seems like spaces are the only characters changed in the leveldb keys
+    path = install_path.as_posix().replace(" ", "%20")
     return (
         b"_file://\x00\x01/"
         + bytes(path, encoding="utf-8")
