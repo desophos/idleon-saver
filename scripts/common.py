@@ -10,6 +10,10 @@ def chunk(s: str, chunk_size: int) -> List[str]:
     return [s[i : i + chunk_size] for i in range(0, len(s), chunk_size)]
 
 
+def resolved_path(s: str) -> Path:
+    return Path(s).expanduser().resolve()
+
+
 @contextmanager
 def ldb(path: Path, create_if_missing: bool = False):
     try:
@@ -22,10 +26,6 @@ def ldb(path: Path, create_if_missing: bool = False):
         yield db
     finally:
         db.close()
-
-
-def resolved_path(s):
-    return Path(s).expanduser().resolve()
 
 
 def db_key(install_path: Path) -> bytes:
