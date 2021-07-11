@@ -20,7 +20,6 @@ def testargs(tmp_path_factory) -> Namespace:
 def testdb(testargs):
     with ldb(testargs.ldb, create_if_missing=True) as db:
         db.put(db_key(testargs.idleon), b"_placeholder")
-        return db
 
 
 @pytest.fixture(scope="session")
