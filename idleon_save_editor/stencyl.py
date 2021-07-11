@@ -152,7 +152,7 @@ class StencylEncoder:
     def _encode(self, x) -> str:
         # can't swap keys with vals because False and 0 are duplicate keys
         for k, v in literals.items():
-            if x == v:
+            if x is v:  # because True == 1
                 return k
         for cls, parser in self.parsers.items():
             if isinstance(x, cls):
