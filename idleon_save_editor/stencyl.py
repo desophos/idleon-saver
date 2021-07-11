@@ -112,7 +112,7 @@ class StencylDecoder:
 
 
 class StencylEncoder:
-    def __init__(self, data: str):
+    def __init__(self, data: Any):
         self.data = data
         self.strcache: List[str] = []
         self.parsers: Dict[Any, Callable[[Any], str]] = {

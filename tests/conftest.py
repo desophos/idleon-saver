@@ -24,6 +24,6 @@ def testdb(testargs):
 
 
 @pytest.fixture(scope="session")
-def stencylsave():
+def stencylsave() -> str:
     with open("tests/data/stencylsave.txt", "r") as f:
         return f.read()
