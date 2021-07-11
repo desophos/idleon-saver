@@ -1,8 +1,13 @@
 from argparse import ArgumentParser
 from contextlib import contextmanager
 from pathlib import Path
+from typing import List
 
 import plyvel
+
+
+def chunk(s: str, chunk_size: int) -> List[str]:
+    return [s[i : i + chunk_size] for i in range(0, len(s), chunk_size)]
 
 
 @contextmanager
