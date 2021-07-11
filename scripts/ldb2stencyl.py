@@ -6,7 +6,7 @@ from scripts.common import db_key, ldb, ldb_args
 
 
 def main(args: Namespace):
-    outfile = args.workdir / "decoded.txt"
+    outfile = args.workdir / "encoded.txt"
     key = db_key(args.idleon)
 
     with ldb(args.ldb) as db:

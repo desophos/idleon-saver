@@ -8,5 +8,5 @@ def test_inversion(testargs, stencylsave):
     stencyl2ldb.main(testargs)
     ldb2stencyl.main(testargs)
 
-    with open(testargs.workdir / "decoded.txt", "r") as file:
+    with open(testargs.workdir / "encoded.txt", "r") as file:
         assert stencylsave == file.read()
