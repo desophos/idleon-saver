@@ -1,8 +1,22 @@
 from argparse import ArgumentParser
+from contextlib import contextmanager
 from pathlib import Path
 
-tmp_dir = Path("tmp")
-tmp_dir.mkdir(exist_ok=True)
+import plyvel
+
+
+@contextmanager
+def ldb(path: Path, create_if_missing: bool = False):
+    try:
+        assert path.exists() and path.is_dir()
+    except AssertionError as e:
+        raise IOError(f"path does not exist: {path}") from e
+
+    db = plyvel.DB(str(path), create_if_missing=create_if_missing)
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 def resolved_path(s):
@@ -34,7 +48,15 @@ def ldb_args(parser: ArgumentParser = None):
         default="~/dev/leveldb",
         help="path to the leveldb to work with",
     )
+    parser.add_argument(
+        "--workdir",
+        type=resolved_path,
+        default="work",
+        help="path to the working directory where files will be created",
+    )
     args = parser.parse_args()
+
+    args.workdir.mkdir(exist_ok=True)
 
     for path in (args.idleon, args.ldb):
         try:
