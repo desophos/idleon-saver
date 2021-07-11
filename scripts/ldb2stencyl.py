@@ -14,10 +14,10 @@ def main(args: Namespace):
             assert val is not None
         except plyvel.CorruptionError as e:
             raise IOError(
-                f"Could not access key {key} in database at {args.ldb}"
+                f"Could not access key {key!s} in database at {args.ldb}"
             ) from e
         except AssertionError as e:
-            raise KeyError(f"Key not found in database: {key}") from e
+            raise KeyError(f"Key not found in database: {key!s}") from e
         else:
             with open(outfile, "w", encoding="utf-8") as f:
                 f.write(str(val.strip(b"\x01"), encoding="utf-8"))
