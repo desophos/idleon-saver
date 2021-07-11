@@ -25,14 +25,14 @@ class StencylDecoder:
             "y": self._read_string,
             "R": self._read_strcache,  # string cache reference
             "o": partial(self._read_dict, "g"),  # structure
+            "l": partial(self._read_list, "h"),  # list
+        }
+        """TODO: pending figuring out how to associate type info with json keys
             "b": partial(self._read_dict, "h"),  # StringMap
             "q": partial(self._read_dict, "h"),  # IntMap
             "M": partial(self._read_dict, "h"),  # ObjectMap
-            "l": partial(self._read_list, "h"),  # list
             "a": partial(self._read_list, "h"),  # array
             # TODO: consecutive nulls are combined in arrays
-        }
-        """
             "s": read_bytes,
             "v": read_date,
             "x": read_exception,
