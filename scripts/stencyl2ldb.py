@@ -22,11 +22,11 @@ def main(args: Namespace):
                 f"Key should already exist in database, but doesn't: {key}"
             ) from e
 
-        with open(infile, "r", encoding="ascii") as file:
+        with open(infile, "rb") as file:
             val = file.read().strip()
 
         try:
-            db.put(key, b"\x01" + bytes(val, encoding="ascii"))
+            db.put(key, b"\x01" + val)
         except plyvel.CorruptionError as e:
             raise IOError(f"Failed to edit key {key} in database at {args.ldb}") from e
         else:
