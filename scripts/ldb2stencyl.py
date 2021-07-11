@@ -1,15 +1,14 @@
 from argparse import Namespace
 
 import plyvel
-
-from scripts.common import db_key, ldb, ldb_args
+from idleon_save_editor.ldb import db_key, get_db, ldb_args
 
 
 def main(args: Namespace):
     outfile = args.workdir / "encoded.txt"
     key = db_key(args.idleon)
 
-    with ldb(args.ldb) as db:
+    with get_db(args.ldb) as db:
         try:
             val = db.get(key)
             assert val is not None

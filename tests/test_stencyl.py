@@ -1,5 +1,5 @@
 from idleon_save_editor.stencyl import StencylDecoder, StencylEncoder
-from scripts.common import chunk
+from idleon_save_editor.utility import chunk
 
 
 def test_inversion(stencylsave):

@@ -1,16 +1,14 @@
-from argparse import ArgumentParser, Namespace
-from pathlib import Path
+from argparse import Namespace
 
 import plyvel
-
-from scripts.common import db_key, ldb, ldb_args
+from idleon_save_editor.ldb import db_key, get_db, ldb_args
 
 
 def main(args: Namespace):
     infile = args.workdir / "encoded.txt"
     key = db_key(args.idleon)
 
-    with ldb(args.ldb) as db:
+    with get_db(args.ldb) as db:
         try:
             assert db.get(key) is not None
         except plyvel.CorruptionError as e:

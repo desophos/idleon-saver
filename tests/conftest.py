@@ -2,7 +2,7 @@ from argparse import Namespace
 from pathlib import Path
 
 import pytest
-from scripts.common import db_key, ldb
+from idleon_save_editor.ldb import db_key, get_db
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -18,7 +18,7 @@ def testargs(tmp_path_factory) -> Namespace:
 
 @pytest.fixture(autouse=True, scope="session")
 def testdb(testargs):
-    with ldb(testargs.ldb, create_if_missing=True) as db:
+    with get_db(testargs.ldb, create_if_missing=True) as db:
         db.put(db_key(testargs.idleon), b"_placeholder")
 
 
