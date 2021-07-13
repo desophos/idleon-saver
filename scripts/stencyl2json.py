@@ -12,11 +12,16 @@ def main(args: Namespace):
 
     decoded = StencylDecoder(data).result
 
-    outfile = args.workdir / "decoded.json"
-    with open(outfile, "w", encoding="utf-8") as file:
-        json.dump(decoded, file)
+    for name, attr in (
+        ("decoded_plain", "unwrapped"),
+        ("decoded_types", "wrapped"),
+    ):
+        outfile = args.workdir / f"{name}.json"
+        with open(outfile, "w", encoding="utf-8") as file:
+            # TODO: dict keys are coerced to str
+            json.dump(getattr(decoded, attr), file)
 
-    print(f"Wrote file: {outfile}")
+        print(f"Wrote file: {outfile}")
 
 
 if __name__ == "__main__":

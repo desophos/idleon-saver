@@ -3,7 +3,7 @@ from idleon_save_editor.utility import chunk
 
 
 def test_inversion(stencylsave):
-    decoded = StencylDecoder(stencylsave).result
+    decoded = StencylDecoder(stencylsave).result.wrapped
     encoded = StencylEncoder(decoded).result
     # pytest uses difflib for equality assertions,
     # which is extremely slow in this case:

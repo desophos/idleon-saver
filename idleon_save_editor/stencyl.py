@@ -1,4 +1,3 @@
-from functools import partial
 from abc import ABC
 from typing import Any, Callable, Dict, List, Tuple, Type
 from urllib.parse import quote, unquote
@@ -96,20 +95,24 @@ class StencylDecoder:
         self.index = 0  # current position in data
         self.strcache: List[str] = []  # for string references ("R")
         # https://haxe.org/manual/std-serialization-format.html
-        self.parsers: Dict[str, Callable[[], Any]] = {
+        self.literal_parsers: Dict[str, Callable[[], Any]] = {
             "i": self._read_int,
             "d": self._read_float,
             "y": self._read_string,
             "R": self._read_strcache,  # string cache reference
-            "o": partial(self._read_dict, "g"),  # structure
-            "b": partial(self._read_dict, "h"),  # StringMap
-            "q": partial(self._read_dict, "h"),  # IntMap
-            "M": partial(self._read_dict, "h"),  # ObjectMap
-            "l": partial(self._read_list, "h"),  # list
-            "a": partial(self._read_list, "h"),  # array
+        }
+        self.container_parsers: Dict[
+            str, Tuple[str, Type[StencylData], Callable[[str], Any]]
+        ] = {
+            "o": ("g", StencylDict, self._read_dict),  # structure
+            "b": ("h", StencylDict, self._read_dict),  # StringMap
+            "q": ("h", StencylDict, self._read_dict),  # IntMap
+            "M": ("h", StencylDict, self._read_dict),  # ObjectMap
+            "l": ("h", StencylList, self._read_list),  # list
+            "a": ("h", StencylList, self._read_list),  # array
             # TODO: consecutive nulls are combined in arrays
         }
-        """TODO: figure out how to associate type info with json keys
+        """
             "s": read_bytes,
             "v": read_date,
             "x": read_exception,
@@ -173,16 +176,24 @@ class StencylDecoder:
     def _read_list(self, end_char: str) -> list:
         return self._read_until(end_char, self._parse)
 
-    def _parse(self, char: str) -> Any:
-        if char in literals.keys():
-            return literals[char]
-        elif char in self.parsers.keys():
-            return self.parsers[char]()
-        else:
-            raise Exception(f"Unknown character {char} at index {self.index}")
+    def _parse(self, char: str) -> StencylData:
+        try:
+            return StencylLiteral(char, literals[char])
+        except KeyError:
+            try:
+                return StencylLiteral(char, self.literal_parsers[char]())
+            except KeyError:
+                try:
+                    end_char, cls, parser = self.container_parsers[char]
+                except KeyError as e:
+                    raise Exception(
+                        f"Unknown character {char} at index {self.index}"
+                    ) from e
+                else:
+                    return cls(char, end_char, parser(end_char))
 
     @property
-    def result(self) -> Any:
+    def result(self) -> StencylData:
         # clear cache in case of multiple runs
         self.strcache = []
         return self._parse(self._read_char())
@@ -192,10 +203,12 @@ class StencylEncoder:
     def __init__(self, data: Any):
         self.data = data
         self.strcache: List[str] = []
-        self.parsers: Dict[Any, Callable[[Any], str]] = {
+        self.literal_parsers: Dict[Any, Callable[[Any], str]] = {
             int: self._encode_int,
             float: self._encode_float,
             str: self._encode_string,
+        }
+        self.container_parsers: Dict[Any, Callable[[Any, str, str], str]] = {
             dict: self._encode_dict,
             list: self._encode_list,
         }
@@ -216,14 +229,14 @@ class StencylEncoder:
             s = quote(s, safe="")
             return f"y{len(s)}:{s}"
 
-    def _encode_list(self, xs: list) -> str:
-        return "l" + "".join([self._encode(x) for x in xs]) + "h"
+    def _encode_list(self, xs: list, start: str, end: str) -> str:
+        return start + "".join([self._encode(x) for x in xs]) + end
 
-    def _encode_dict(self, x: dict) -> str:
+    def _encode_dict(self, x: dict, start: str, end: str) -> str:
         return (
-            "o"
+            start
             + "".join([self._encode_string(k) + self._encode(v) for k, v in x.items()])
-            + "g"
+            + end
         )
 
     def _encode(self, x) -> str:
@@ -231,10 +244,15 @@ class StencylEncoder:
         for k, v in literals.items():
             if x is v:  # because True == 1
                 return k
-        for cls, parser in self.parsers.items():
-            if isinstance(x, cls):
-                return parser(x)
-        raise Exception(f"Could not encode {x}")
+        try:
+            return self.literal_parsers[type(x)](x)
+        except KeyError:
+            try:
+                parser = self.container_parsers[type(x["contents"])]
+            except KeyError as e:
+                raise Exception(f"Could not encode {x}") from e
+            else:
+                return parser(x["contents"], x["start"], x["end"])
 
     @property
     def result(self) -> str:

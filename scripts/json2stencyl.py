@@ -6,7 +6,7 @@ from idleon_save_editor.stencyl import StencylEncoder
 
 
 def main(args: Namespace):
-    infile = args.workdir / "decoded.json"
+    infile = args.workdir / "decoded_types.json"
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
 
