@@ -1,7 +1,16 @@
+# caches
 .pytest_cache
 __pycache__
-*.egg-info
+
+# build artifacts
 dist
+*.egg-info
+*.whl
+
+# temporary directories
 tmp
 work
-*.whl
+
+# project data
+.vscode
+*.ps1
