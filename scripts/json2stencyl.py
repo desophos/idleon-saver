@@ -2,7 +2,7 @@ import json
 from argparse import Namespace
 
 from idleon_save_editor.ldb import ldb_args
-from idleon_save_editor.stencyl import StencylEncoder
+from idleon_save_editor.stencyl.encoder import StencylEncoder
 
 
 def main(args: Namespace):
