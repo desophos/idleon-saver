@@ -1,4 +1,5 @@
-from idleon_save_editor.stencyl import StencylDecoder, StencylEncoder
+from idleon_save_editor.stencyl.decoder import StencylDecoder
+from idleon_save_editor.stencyl.encoder import StencylEncoder
 from idleon_save_editor.utility import chunk
 
 
