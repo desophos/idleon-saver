@@ -226,7 +226,7 @@ class StencylEncoder:
             return f"R{self.strcache.index(s)}"
         else:
             self.strcache.append(s)
-            s = quote(s, safe="")
+            s = quote(s, safe="'!*()")
             return f"y{len(s)}:{s}"
 
     def _encode_list(self, xs: list, start: str, end: str) -> str:
