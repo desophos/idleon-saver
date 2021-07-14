@@ -31,11 +31,13 @@ class StencylData(ABC):
 
     @property
     def wrapped(self):
-        return {
+        data = {
             "start": self.start,
-            "end": self.end,
             "contents": self._contents_wrapped,
         }
+        if self.end:
+            data["end"] = self.end
+        return data
 
 
 class StencylLiteral(StencylData):
@@ -45,12 +47,12 @@ class StencylLiteral(StencylData):
         super().__init__(start, "", contents)
 
     @property
-    def wrapped(self):
-        # We only need type data for containers because literals are unambiguous.
-        # Tentative in case we run into ambiguous literals,
-        # in which case we'll need the type info.
-        # return self.start
-        return self.unwrapped
+    def _contents_wrapped(self):
+        # We need type data for literals to disambiguate floats and strings.
+        # We dump floats as strings to preserve their exact representation
+        # because json.dump doesn't respect float format.
+        # TODO: reduce JSON clutter from constants
+        return self.contents
 
 
 class StencylList(StencylData):

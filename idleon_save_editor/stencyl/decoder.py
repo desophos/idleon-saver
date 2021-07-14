@@ -66,11 +66,13 @@ class StencylDecoder:
             digits += self._read_char()
         return int(digits)
 
-    def _read_float(self) -> float:
+    def _read_float(self) -> str:
+        """Return str to preserve exact representation of floats,
+        since json.dump doesn't respect float format."""
         digits = ""
         while self._peek_char() in "1234567890.-+e":
             digits += self._read_char()
-        return float(digits)
+        return digits
 
     def _read_string(self) -> str:
         def read_length():

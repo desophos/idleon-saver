@@ -8,10 +8,12 @@ class StencylEncoder:
     def __init__(self, data: Any):
         self.data = data
         self.strcache: List[str] = []
+        # https://haxe.org/manual/std-serialization-format.html
         self.literal_parsers: Dict[Any, Callable[[Any], str]] = {
-            int: self._encode_int,
-            float: self._encode_float,
-            str: self._encode_string,
+            "i": self._encode_int,
+            "d": self._encode_float,
+            "y": self._encode_string,
+            "R": self._encode_string,
         }
         self.container_parsers: Dict[Any, Callable[[Any, str, str], str]] = {
             dict: self._encode_dict,
@@ -21,9 +23,7 @@ class StencylEncoder:
     def _encode_int(self, x: int) -> str:
         return f"i{x}"
 
-    def _encode_float(self, x: float) -> str:
-        if int(x) == x:
-            x = int(x)
+    def _encode_float(self, x: str) -> str:
         return f"d{x}"
 
     def _encode_string(self, s: str) -> str:
@@ -45,19 +45,18 @@ class StencylEncoder:
         )
 
     def _encode(self, x) -> str:
-        # can't swap keys with vals because False and 0 are duplicate keys
-        for k, v in literals.items():
-            if x is v:  # because True == 1
-                return k
-        try:
-            return self.literal_parsers[type(x)](x)
-        except KeyError:
+        if x["start"] in literals:
+            return x["start"]
+        else:
             try:
-                parser = self.container_parsers[type(x["contents"])]
-            except KeyError as e:
-                raise Exception(f"Could not encode {x}") from e
-            else:
-                return parser(x["contents"], x["start"], x["end"])
+                return self.literal_parsers[x["start"]](x["contents"])
+            except KeyError:
+                try:
+                    parser = self.container_parsers[type(x["contents"])]
+                except (KeyError, TypeError) as e:
+                    raise Exception(f"Could not encode {type(x)}: {x}") from e
+                else:
+                    return parser(x["contents"], x["start"], x["end"])
 
     @property
     def result(self) -> str:
