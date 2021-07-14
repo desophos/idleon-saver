@@ -2,13 +2,11 @@
 
 Converts Legends of Idleon Steam save files to and from JSON.
 
-## Warning
+## Disclaimer
 
-Re-encoding the JSON data is not yet working correctly. **Use at your own risk.**
+**Use at your own risk.** 
 
 **MAKE BACKUPS** before using and ***DO NOT USE THE ENCODER ON YOUR REAL SAVE DATABASE!***
-
-## Disclaimer
 
 I do not endorse using this tool to edit your live save files. 
 This tool is for educational and investigative purposes only.
