@@ -6,7 +6,7 @@ from idleon_save_editor.stencyl.common import (
     StencylDict,
     StencylList,
     StencylLiteral,
-    literals,
+    constants,
 )
 
 
@@ -101,7 +101,7 @@ class StencylDecoder:
 
     def _parse(self, char: str) -> StencylData:
         try:
-            return StencylLiteral(char, literals[char])
+            return StencylLiteral(char, constants[char])
         except KeyError:
             try:
                 return StencylLiteral(char, self.literal_parsers[char]())

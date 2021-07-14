@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Any, Dict, List
 
-literals = {
+constants = {
     "n": None,
     "z": 0,
     "k": "NaN",

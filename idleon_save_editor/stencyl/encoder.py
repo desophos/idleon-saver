@@ -1,7 +1,7 @@
 from typing import Any, Callable, Dict, List
 from urllib.parse import quote
 
-from idleon_save_editor.stencyl.common import literals
+from idleon_save_editor.stencyl.common import constants
 
 
 class StencylEncoder:
@@ -45,7 +45,7 @@ class StencylEncoder:
         )
 
     def _encode(self, x) -> str:
-        if x["start"] in literals:
+        if x["start"] in constants:
             return x["start"]
         else:
             try:
