@@ -1,13 +1,8 @@
 from typing import Any, Callable, Dict, List, Tuple, Type
 from urllib.parse import unquote
 
-from idleon_save_editor.stencyl.common import (
-    StencylData,
-    StencylDict,
-    StencylList,
-    StencylLiteral,
-    constants,
-)
+from idleon_saver.stencyl.common import (StencylData, StencylDict, StencylList,
+                                         StencylLiteral, constants)
 
 
 class StencylDecoder:

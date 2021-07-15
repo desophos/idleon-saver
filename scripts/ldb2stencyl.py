@@ -1,7 +1,7 @@
 from argparse import Namespace
 
 import plyvel
-from idleon_save_editor.ldb import db_key, get_db, ldb_args
+from idleon_saver.ldb import db_key, get_db, ldb_args
 
 
 def main(args: Namespace):

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "idleon-save-editor"
+name = "idleon-saver"
 version = "0.1.0"
 description = ""
 authors = ["desophos <1887450+desophos@users.noreply.github.com>"]

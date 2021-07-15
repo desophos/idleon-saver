@@ -1,4 +1,4 @@
-# Idleon Save Editor
+# Idleon Saver
 
 Converts Legends of Idleon Steam save files to and from JSON.
 

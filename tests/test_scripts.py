@@ -1,5 +1,5 @@
 import pytest
-from idleon_save_editor.utility import chunk
+from idleon_saver.utility import chunk
 from scripts import json2stencyl, ldb2stencyl, stencyl2json, stencyl2ldb
 
 

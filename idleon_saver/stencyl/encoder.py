@@ -1,7 +1,7 @@
 from typing import Any, Callable, Dict, List
 from urllib.parse import quote
 
-from idleon_save_editor.stencyl.common import constants
+from idleon_saver.stencyl.common import constants
 
 
 class StencylEncoder:

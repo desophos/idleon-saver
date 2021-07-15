@@ -1,8 +1,8 @@
 import json
 from argparse import Namespace
 
-from idleon_save_editor.ldb import ldb_args
-from idleon_save_editor.stencyl.encoder import StencylEncoder
+from idleon_saver.ldb import ldb_args
+from idleon_saver.stencyl.encoder import StencylEncoder
 
 
 def main(args: Namespace):

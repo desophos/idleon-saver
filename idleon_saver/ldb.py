@@ -4,7 +4,7 @@ from pathlib import Path
 
 import plyvel
 
-from idleon_save_editor.utility import resolved_path
+from idleon_saver.utility import resolved_path
 
 
 @contextmanager

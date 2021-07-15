@@ -1,6 +1,6 @@
-from idleon_save_editor.stencyl.decoder import StencylDecoder
-from idleon_save_editor.stencyl.encoder import StencylEncoder
-from idleon_save_editor.utility import chunk
+from idleon_saver.stencyl.decoder import StencylDecoder
+from idleon_saver.stencyl.encoder import StencylEncoder
+from idleon_saver.utility import chunk
 
 
 def test_inversion(stencylsave):

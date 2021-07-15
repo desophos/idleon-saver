@@ -2,7 +2,7 @@ from argparse import Namespace
 from pathlib import Path
 
 import pytest
-from idleon_save_editor.ldb import db_key, get_db
+from idleon_saver.ldb import db_key, get_db
 
 
 @pytest.fixture(autouse=True, scope="session")
