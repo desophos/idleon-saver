@@ -55,6 +55,15 @@ class StencylLiteral(StencylData):
         return self.contents
 
 
+class StencylFloat(StencylLiteral):
+    def __init__(self, start: str, contents: str):
+        super().__init__(start, contents)
+
+    @property
+    def unwrapped(self):
+        return float(self.contents)
+
+
 class StencylList(StencylData):
     """Stencyl types that can be represented by a list:
     array (a), list (l)"""

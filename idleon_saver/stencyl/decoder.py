@@ -1,8 +1,14 @@
 from typing import Any, Callable, Dict, List, Tuple, Type
 from urllib.parse import unquote
 
-from idleon_saver.stencyl.common import (StencylData, StencylDict, StencylList,
-                                         StencylLiteral, constants)
+from idleon_saver.stencyl.common import (
+    StencylData,
+    StencylDict,
+    StencylFloat,
+    StencylList,
+    StencylLiteral,
+    constants,
+)
 
 
 class StencylDecoder:
@@ -11,11 +17,13 @@ class StencylDecoder:
         self.index = 0  # current position in data
         self.strcache: List[str] = []  # for string references ("R")
         # https://haxe.org/manual/std-serialization-format.html
-        self.literal_parsers: Dict[str, Callable[[], Any]] = {
-            "i": self._read_int,
-            "d": self._read_float,
-            "y": self._read_string,
-            "R": self._read_strcache,  # string cache reference
+        self.literal_parsers: Dict[
+            str, Tuple[Type[StencylLiteral], Callable[[], Any]]
+        ] = {
+            "i": (StencylLiteral, self._read_int),
+            "d": (StencylFloat, self._read_float),
+            "y": (StencylLiteral, self._read_string),
+            "R": (StencylLiteral, self._read_strcache),  # string cache reference
         }
         self.container_parsers: Dict[
             str, Tuple[str, Type[StencylData], Callable[[str], Any]]
@@ -95,20 +103,16 @@ class StencylDecoder:
         return self._read_until(end_char, self._parse)
 
     def _parse(self, char: str) -> StencylData:
-        try:
+        if char in constants:
             return StencylLiteral(char, constants[char])
-        except KeyError:
-            try:
-                return StencylLiteral(char, self.literal_parsers[char]())
-            except KeyError:
-                try:
-                    end_char, cls, parser = self.container_parsers[char]
-                except KeyError as e:
-                    raise Exception(
-                        f"Unknown character {char} at index {self.index}"
-                    ) from e
-                else:
-                    return cls(char, end_char, parser(end_char))
+        elif char in self.literal_parsers:
+            cls, parser = self.literal_parsers[char]
+            return cls(char, parser())
+        elif char in self.container_parsers:
+            end_char, cls, parser = self.container_parsers[char]
+            return cls(char, end_char, parser(end_char))
+        else:
+            raise Exception(f"Unknown character {char} at index {self.index}")
 
     @property
     def result(self) -> StencylData:
