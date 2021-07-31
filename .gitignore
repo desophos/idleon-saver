@@ -10,7 +10,6 @@ dist
 # temporary directories
 tmp
 work
-tests/data
 
 # project data
 .vscode
