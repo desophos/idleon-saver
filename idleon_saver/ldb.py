@@ -36,7 +36,7 @@ def ldb_args(parser: ArgumentParser = None):
         parser = ArgumentParser()
     parser.add_argument(
         "--idleon",
-        type=resolved_path,
+        type=Path,
         default="C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon",
         help="your Legends of Idleon install path",
     )
@@ -56,10 +56,12 @@ def ldb_args(parser: ArgumentParser = None):
 
     args.workdir.mkdir(exist_ok=True)
 
-    for path in (args.idleon, args.ldb):
-        try:
-            assert path.exists() and path.is_dir()
-        except AssertionError as e:
-            raise IOError(f"Invalid path: {path}") from e
+    # Only check ldb path.
+    # Idleon path is only used for the db key,
+    # so it doesn't have to exist.
+    try:
+        assert args.ldb.exists() and args.ldb.is_dir()
+    except AssertionError as e:
+        raise IOError(f"Invalid leveldb path: {args.ldb}") from e
 
     return args
