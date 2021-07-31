@@ -1,0 +1,107 @@
+#:kivy 2.0.0
+
+<BackgroundColor@Widget>:
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Info@Label+BackgroundColor>:
+    background_color: 1, 0, 0, 1
+    size: self.texture_size
+    size_hint_y: None
+    padding: [10, 10]
+    text_size: root.width, None
+    font_size: 18
+
+<Button>:
+    size: 100, 30
+    size_hint: None, None
+    font_size: 20
+
+<PathWindow>:
+    back: back
+    next: next
+    error: error
+    path_input: path_input
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [10]
+
+        Label:
+            size_hint_y: None
+            height: 100
+
+        Info:
+            id: caption
+            text: root.caption
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            TextInput:
+                id: path_input
+                size_hint_y: None
+                font_size: 16
+                height: 30
+                multiline: False
+                on_text: root.on_path_text(args[1])
+                text: root.default_path
+
+            Button:
+                text: 'Browse'
+                on_release: root.show_filebrowser()
+        
+        Info:
+            id: error
+
+        Label:
+
+        BoxLayout:
+            size_hint_y: None
+
+            Button:
+                id: back
+                text: 'Back'
+                on_release: 
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = root.manager.previous()
+            
+            Label:
+
+            Button:
+                id: next
+                text: 'Next'
+                on_release: 
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = root.manager.next()
+
+<FileChooserDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+
+        FileChooserListView:
+            id: filechooser
+            filters: root.filters
+            on_submit: root.done(filechooser.path, filechooser.selection)
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Label:
+
+            Button:
+                text: "Done"
+                on_release: root.done(filechooser.path, filechooser.selection)
