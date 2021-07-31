@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -8,7 +8,7 @@ from idleon_saver.utility import resolved_path
 
 
 @contextmanager
-def get_db(path: Path, create_if_missing: bool = False):
+def get_db(path: Path, create_if_missing: bool = False) -> plyvel.DB:
     try:
         assert path.exists() and path.is_dir()
     except AssertionError as e:
@@ -31,7 +31,7 @@ def db_key(install_path: Path) -> bytes:
     )
 
 
-def ldb_args(parser: ArgumentParser = None):
+def ldb_args(parser: ArgumentParser = None) -> Namespace:
     if parser is None:
         parser = ArgumentParser()
     parser.add_argument(
