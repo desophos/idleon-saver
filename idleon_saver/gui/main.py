@@ -1,3 +1,4 @@
+from argparse import Namespace
 from pathlib import Path
 
 from kivy.app import App
@@ -6,6 +7,7 @@ from kivy.properties import ListProperty, ObjectProperty, StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
+from scripts import inject, stencyl2json
 
 
 class FileChooserDialog(FloatLayout):
@@ -17,7 +19,7 @@ class FileChooserDialog(FloatLayout):
 class PathWindow(Screen):
     back = ObjectProperty(None)
     next = ObjectProperty(None)
-    action = ObjectProperty(None)  # TODO
+    action = ObjectProperty(None)
     caption = StringProperty("")
     default_path = StringProperty("")
     path_input = ObjectProperty(None)
@@ -67,12 +69,14 @@ class MainWindow(ScreenManager):
                 "C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
                 ["*.exe"],
                 name="find_exe",
+                action=lambda path: inject.main(Path(path)),
             ),
             PathWindow(
                 "Path to idleonsave.txt:",
                 str(Path.home() / "Downloads/idleonsave.txt"),
                 ["*.txt"],
                 name="find_save",
+                action=lambda path: stencyl2json.main(Namespace(workdir=Path(path))),
             ),
         ]
 

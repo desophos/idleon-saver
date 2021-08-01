@@ -78,6 +78,7 @@
                 id: next
                 text: 'Next'
                 on_release: 
+                    root.action(root.path_input.text)
                     root.manager.transition.direction = 'left'
                     root.manager.current = root.manager.next()
 
