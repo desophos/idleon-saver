@@ -1,6 +1,7 @@
 import subprocess
+from os import environ
 from pathlib import Path
-from shlex import quote
+from sys import executable
 
 from idleon_saver.ldb import ldb_args
 
@@ -24,8 +25,16 @@ def main(exe_path: Path):
         file.write(js)
 
     return subprocess.run(
-        f"python -m electron_inject -r work/inject.js - {quote(str(exe_path))}",
-        shell=True,
+        [
+            executable,
+            "-m",
+            "electron_inject",
+            "-r",
+            "work/inject.js",
+            "-",
+            str(exe_path),
+        ],
+        env=environ.copy(),
         check=True,
         timeout=30,
     )
