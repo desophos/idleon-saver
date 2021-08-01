@@ -1,6 +1,9 @@
+import logging
+import os
 from argparse import Namespace
 from pathlib import Path
 
+from idleon_saver.utility import BUGREPORT_LINK, user_dir
 from kivy.app import App
 from kivy.factory import Factory
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
@@ -8,6 +11,16 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 from scripts import inject, stencyl2json
+
+
+class ErrorDialog(BoxLayout):
+    done = ObjectProperty(None)
+
+    def open_logs(self):
+        os.startfile(user_dir(), "explore")
+
+    def open_github(self):
+        os.startfile(BUGREPORT_LINK)
 
 
 class FileChooserDialog(BoxLayout):
@@ -58,6 +71,18 @@ class PathWindow(Screen):
             self.error.text = ""
             self.next.disabled = False
 
+    def try_action(self, path):
+        try:
+            self.action(path)
+        except Exception as e:
+            logging.exception(e)
+            content = ErrorDialog(done=self.dismiss_popup)
+            self._popup = Popup(title="Error :(", content=content, size_hint=(0.9, 0.9))
+            self._popup.open()
+        else:
+            self.manager.transition.direction = "left"
+            self.manager.current = self.manager.next()
+
 
 class MainWindow(ScreenManager):
     def __init__(self, **kwargs):
@@ -105,7 +130,13 @@ class Saver(App):
 
 Factory.register("PathWindow", cls=PathWindow)
 Factory.register("FileChooserDialog", cls=FileChooserDialog)
+Factory.register("ErrorDialog", cls=ErrorDialog)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        filename=user_dir() / "idleon_saver.log",
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)-8s %(message)s",
+    )
     Saver().run()

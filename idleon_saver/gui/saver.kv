@@ -22,6 +22,33 @@
     size_hint: None, None
     font_size: 20
 
+<ErrorDialog>:
+    orientation: 'vertical'
+    padding: [10]
+
+    Info:
+        halign: "justify"
+        text: "Oops! I couldn't find the right file. Check the path and try again.\nIf you keep getting this error, please report it on GitHub with your log file attached."
+
+    BoxLayout:
+        size_hint_y: None
+
+        Button:
+            text: "Open Log Folder"
+            on_release: root.open_logs()
+        
+        Label:
+            
+        Button:
+            text: "Open GitHub"
+            on_release: root.open_github()
+        
+        Label:
+        
+        Button:
+            text: "Done"
+            on_release: root.done()
+
 <PathWindow>:
     back: back
     next: next
@@ -78,9 +105,7 @@
                 id: next
                 text: 'Next'
                 on_release: 
-                    root.action(root.path_input.text)
-                    root.manager.transition.direction = 'left'
-                    root.manager.current = root.manager.next()
+                    root.try_action(root.path_input.text)
 
 <FileChooserDialog>:
     orientation: "vertical"
