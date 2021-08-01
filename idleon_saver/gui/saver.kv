@@ -83,26 +83,26 @@
                     root.manager.current = root.manager.next()
 
 <FileChooserDialog>:
+    size: root.size
+    pos: root.pos
+    orientation: "vertical"
+    padding: [10]
+
+    FileChooserListView:
+        id: filechooser
+        filters: root.filters
+        on_submit: root.done(filechooser.path, filechooser.selection)
+
     BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
+        size_hint_y: None
+        height: 30
 
-        FileChooserListView:
-            id: filechooser
-            filters: root.filters
-            on_submit: root.done(filechooser.path, filechooser.selection)
+        Button:
+            text: "Cancel"
+            on_release: root.cancel()
 
-        BoxLayout:
-            size_hint_y: None
-            height: 30
+        Label:
 
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
-
-            Label:
-
-            Button:
-                text: "Done"
-                on_release: root.done(filechooser.path, filechooser.selection)
+        Button:
+            text: "Done"
+            on_release: root.done(filechooser.path, filechooser.selection)

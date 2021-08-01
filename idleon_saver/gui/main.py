@@ -4,13 +4,13 @@ from pathlib import Path
 from kivy.app import App
 from kivy.factory import Factory
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 from scripts import inject, stencyl2json
 
 
-class FileChooserDialog(FloatLayout):
+class FileChooserDialog(BoxLayout):
     filters = ListProperty([])
     done = ObjectProperty(None)
     cancel = ObjectProperty(None)
