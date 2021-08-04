@@ -1,16 +1,24 @@
-import logging
 import os
 from argparse import Namespace
 from pathlib import Path
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
+from kivy.config import Config
+from scripts import inject, stencyl2json
+
+# We need to change kivy config before other kivy imports.
+# TODO: maybe move to config file
+Config.set("kivy", "log_dir", str(user_dir()))
+Config.set("kivy", "log_level", "debug")
+Config.set("kivy", "log_enable", 1)
+
 from kivy.app import App
 from kivy.factory import Factory
+from kivy.logger import Logger
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
-from scripts import inject, stencyl2json
 
 
 class ErrorDialog(BoxLayout):
@@ -75,7 +83,7 @@ class PathWindow(Screen):
         try:
             self.action(path)
         except Exception as e:
-            logging.exception(e)
+            Logger.exception(e)
             content = ErrorDialog(done=self.dismiss_popup)
             self._popup = Popup(title="Error :(", content=content, size_hint=(0.9, 0.9))
             self._popup.open()
@@ -134,9 +142,4 @@ Factory.register("ErrorDialog", cls=ErrorDialog)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        filename=user_dir() / "idleon_saver.log",
-        level=logging.DEBUG,
-        format="%(asctime)s %(levelname)-8s %(message)s",
-    )
     Saver().run()
