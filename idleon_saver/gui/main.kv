@@ -37,13 +37,13 @@
             text: "Open Log Folder"
             on_release: root.open_logs()
         
-        Label:
+        Widget:
             
         Button:
             text: "Open GitHub"
             on_release: root.open_github()
         
-        Label:
+        Widget:
         
         Button:
             text: "Done"
@@ -87,7 +87,7 @@
         Info:
             id: error
 
-        Label:
+        Widget:
 
         BoxLayout:
             size_hint_y: None
@@ -99,7 +99,7 @@
                     root.manager.transition.direction = 'right'
                     root.manager.current = root.manager.previous()
             
-            Label:
+            Widget:
 
             Button:
                 id: next
@@ -124,7 +124,7 @@
             text: "Cancel"
             on_release: root.cancel()
 
-        Label:
+        Widget:
 
         Button:
             text: "Done"
@@ -142,7 +142,7 @@
         Info:
             text: "Welcome to Idleon Saver!"
 
-        Label:
+        Widget:
 
         BoxLayout:
             size_hint_y: None
@@ -153,7 +153,7 @@
                 on_release: 
                     app.stop()
             
-            Label:
+            Widget:
 
             Button:
                 id: next
@@ -174,7 +174,7 @@
         Info:
             text: "Thanks for using Idleon Saver!"
 
-        Label:
+        Widget:
 
         BoxLayout:
             size_hint_y: None
@@ -186,7 +186,7 @@
                     root.manager.transition.direction = 'right'
                     root.manager.current = root.manager.previous()
             
-            Label:
+            Widget:
 
             Button:
                 id: next
