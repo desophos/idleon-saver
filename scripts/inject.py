@@ -36,7 +36,7 @@ def main(exe_path: Path):
         ],
         env=environ.copy(),
         check=True,
-        timeout=30,
+        timeout=10,
     )
 
     # TODO pending electron_inject refactor:
