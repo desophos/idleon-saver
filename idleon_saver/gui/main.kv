@@ -49,64 +49,6 @@
             text: "Done"
             on_release: root.done()
 
-<PathScreen>:
-    back: back
-    next: next
-    error: error
-    path_input: path_input
-
-    BoxLayout:
-        orientation: 'vertical'
-        padding: [10]
-
-        Label:
-            size_hint_y: None
-            height: 100
-
-        Info:
-            id: caption
-            text: root.caption
-
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-
-            TextInput:
-                id: path_input
-                size_hint_y: None
-                font_size: 16
-                height: 30
-                multiline: False
-                on_text: root.on_path_text(args[1])
-                text: root.default_path
-
-            Button:
-                text: 'Browse'
-                on_release: root.show_filebrowser()
-
-        Info:
-            id: error
-
-        Widget:
-
-        BoxLayout:
-            size_hint_y: None
-
-            Button:
-                id: back
-                text: 'Back'
-                on_release:
-                    root.manager.transition.direction = 'right'
-                    root.manager.current = root.manager.previous()
-
-            Widget:
-
-            Button:
-                id: next
-                text: 'Next'
-                on_release:
-                    root.try_action(root.path_input.text)
-
 <FileChooserDialog>:
     orientation: "vertical"
     padding: [10]
@@ -193,3 +135,61 @@
                 text: 'Finish'
                 on_release:
                     app.stop()
+
+<PathScreen>:
+    back: back
+    next: next
+    error: error
+    path_input: path_input
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [10]
+
+        Label:
+            size_hint_y: None
+            height: 100
+
+        Info:
+            id: caption
+            text: root.caption
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            TextInput:
+                id: path_input
+                size_hint_y: None
+                font_size: 16
+                height: 30
+                multiline: False
+                on_text: root.on_path_text(args[1])
+                text: root.default_path
+
+            Button:
+                text: 'Browse'
+                on_release: root.show_filebrowser()
+
+        Info:
+            id: error
+
+        Widget:
+
+        BoxLayout:
+            size_hint_y: None
+
+            Button:
+                id: back
+                text: 'Back'
+                on_release:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = root.manager.previous()
+
+            Widget:
+
+            Button:
+                id: next
+                text: 'Next'
+                on_release:
+                    root.try_action(root.path_input.text)
