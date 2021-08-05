@@ -140,10 +140,11 @@ class MainWindow(ScreenManager):
             return super().previous()
 
 
-class Saver(App):
+class IdleonSaver(App):
     def build(self):
+        self.title = "Idleon Saver"
         return MainWindow()
 
 
 if __name__ == "__main__":
-    Saver().run()
+    IdleonSaver(kv_file="main.kv").run()
