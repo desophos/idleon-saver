@@ -37,7 +37,7 @@ class FileChooserDialog(BoxLayout):
     cancel = ObjectProperty(None)
 
 
-class PathWindow(Screen):
+class PathScreen(Screen):
     back = ObjectProperty(None)
     next = ObjectProperty(None)
     action = ObjectProperty(None)
@@ -97,14 +97,14 @@ class MainWindow(ScreenManager):
         super().__init__(**kwargs)
 
         screens = [
-            PathWindow(
+            PathScreen(
                 "Path to LegendsOfIdleon.exe:",
                 "C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
                 ["*.exe"],
                 name="find_exe",
                 action=lambda path: inject.main(Path(path)),
             ),
-            PathWindow(
+            PathScreen(
                 "Path to idleonsave.txt:",
                 str(Path.home() / "Downloads/idleonsave.txt"),
                 ["*.txt"],
@@ -136,7 +136,7 @@ class Saver(App):
         return MainWindow()
 
 
-Factory.register("PathWindow", cls=PathWindow)
+Factory.register("PathScreen", cls=PathScreen)
 Factory.register("FileChooserDialog", cls=FileChooserDialog)
 Factory.register("ErrorDialog", cls=ErrorDialog)
 
