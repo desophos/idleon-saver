@@ -37,6 +37,14 @@ class FileChooserDialog(BoxLayout):
     cancel = ObjectProperty(None)
 
 
+class StartScreen(Screen):
+    pass
+
+
+class EndScreen(Screen):
+    pass
+
+
 class PathScreen(Screen):
     back = ObjectProperty(None)
     next = ObjectProperty(None)
@@ -97,6 +105,7 @@ class MainWindow(ScreenManager):
         super().__init__(**kwargs)
 
         screens = [
+            StartScreen(name="start"),
             PathScreen(
                 "Path to LegendsOfIdleon.exe:",
                 "C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
@@ -111,6 +120,7 @@ class MainWindow(ScreenManager):
                 name="find_save",
                 action=lambda path: stencyl2json.main(Namespace(workdir=Path(path))),
             ),
+            EndScreen(name="end"),
         ]
 
         for screen in screens:
@@ -136,6 +146,8 @@ class Saver(App):
         return MainWindow()
 
 
+Factory.register("StartScreen", cls=StartScreen)
+Factory.register("EndScreen", cls=EndScreen)
 Factory.register("PathScreen", cls=PathScreen)
 Factory.register("FileChooserDialog", cls=FileChooserDialog)
 Factory.register("ErrorDialog", cls=ErrorDialog)

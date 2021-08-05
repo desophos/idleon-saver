@@ -129,3 +129,67 @@
         Button:
             text: "Done"
             on_release: root.done(filechooser.path, filechooser.selection)
+
+<StartScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [10]
+
+        Label:
+            size_hint_y: None
+            height: 100
+
+        Info:
+            text: "Welcome to Idleon Saver!"
+
+        Label:
+
+        BoxLayout:
+            size_hint_y: None
+
+            Button:
+                id: back
+                text: 'Exit'
+                on_release: 
+                    app.stop()
+            
+            Label:
+
+            Button:
+                id: next
+                text: 'Next'
+                on_release: 
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = root.manager.next()
+
+<EndScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [10]
+
+        Label:
+            size_hint_y: None
+            height: 100
+
+        Info:
+            text: "Thanks for using Idleon Saver!"
+
+        Label:
+
+        BoxLayout:
+            size_hint_y: None
+
+            Button:
+                id: back
+                text: 'Back'
+                on_release: 
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = root.manager.previous()
+            
+            Label:
+
+            Button:
+                id: next
+                text: 'Finish'
+                on_release: 
+                    app.stop()
