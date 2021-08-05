@@ -68,7 +68,7 @@ class PathScreen(Screen):
         content = FileChooserDialog(
             done=self.set_path, cancel=self.dismiss_popup, filters=self.path_filters
         )
-        self._popup = Popup(title="Find file", content=content, size_hint=(0.9, 0.9))
+        self._popup = Popup(title="Find file", content=content, size_hint=(1, 1))
         self._popup.open()
 
     def set_path(self, directory, filename):
