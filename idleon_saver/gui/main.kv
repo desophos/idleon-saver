@@ -36,15 +36,15 @@
         Button:
             text: "Open Log Folder"
             on_release: root.open_logs()
-        
+
         Widget:
-            
+
         Button:
             text: "Open GitHub"
             on_release: root.open_github()
-        
+
         Widget:
-        
+
         Button:
             text: "Done"
             on_release: root.done()
@@ -83,7 +83,7 @@
             Button:
                 text: 'Browse'
                 on_release: root.show_filebrowser()
-        
+
         Info:
             id: error
 
@@ -95,16 +95,16 @@
             Button:
                 id: back
                 text: 'Back'
-                on_release: 
+                on_release:
                     root.manager.transition.direction = 'right'
                     root.manager.current = root.manager.previous()
-            
+
             Widget:
 
             Button:
                 id: next
                 text: 'Next'
-                on_release: 
+                on_release:
                     root.try_action(root.path_input.text)
 
 <FileChooserDialog>:
@@ -150,15 +150,15 @@
             Button:
                 id: back
                 text: 'Exit'
-                on_release: 
+                on_release:
                     app.stop()
-            
+
             Widget:
 
             Button:
                 id: next
                 text: 'Next'
-                on_release: 
+                on_release:
                     root.manager.transition.direction = 'left'
                     root.manager.current = root.manager.next()
 
@@ -182,14 +182,14 @@
             Button:
                 id: back
                 text: 'Back'
-                on_release: 
+                on_release:
                     root.manager.transition.direction = 'right'
                     root.manager.current = root.manager.previous()
-            
+
             Widget:
 
             Button:
                 id: next
                 text: 'Finish'
-                on_release: 
+                on_release:
                     app.stop()
