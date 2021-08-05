@@ -13,7 +13,6 @@ Config.set("kivy", "log_level", "debug")
 Config.set("kivy", "log_enable", 1)
 
 from kivy.app import App
-from kivy.factory import Factory
 from kivy.logger import Logger
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -144,13 +143,6 @@ class MainWindow(ScreenManager):
 class Saver(App):
     def build(self):
         return MainWindow()
-
-
-Factory.register("StartScreen", cls=StartScreen)
-Factory.register("EndScreen", cls=EndScreen)
-Factory.register("PathScreen", cls=PathScreen)
-Factory.register("FileChooserDialog", cls=FileChooserDialog)
-Factory.register("ErrorDialog", cls=ErrorDialog)
 
 
 if __name__ == "__main__":
