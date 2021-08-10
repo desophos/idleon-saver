@@ -9,8 +9,12 @@
             size: self.size
             pos: self.pos
 
+<Header@Widget>:
+    size_hint_y: None
+    height: 50
+
 <Info@Label+BackgroundColor>:
-    background_color: 1, 0, 0, 1
+    background_color: 0.1, 0.1, 0.1, 1
     size: self.texture_size
     size_hint_y: None
     padding: [10, 10]
@@ -18,9 +22,9 @@
     font_size: 18
 
 <Button>:
-    size: 100, 30
+    size: 120, 30
     size_hint: None, None
-    font_size: 20
+    font_size: 18
 
 <ErrorDialog>:
     orientation: 'vertical'
@@ -34,7 +38,7 @@
         size_hint_y: None
 
         Button:
-            text: "Open Log Folder"
+            text: "Open Logs"
             on_release: root.open_logs()
 
         Widget:
@@ -77,9 +81,7 @@
         orientation: 'vertical'
         padding: [10]
 
-        Label:
-            size_hint_y: None
-            height: 100
+        Header:
 
         Info:
             text: "Welcome to Idleon Saver!"
@@ -109,9 +111,7 @@
         orientation: 'vertical'
         padding: [10]
 
-        Label:
-            size_hint_y: None
-            height: 100
+        Header:
 
         Info:
             text: "Thanks for using Idleon Saver!"
@@ -146,9 +146,7 @@
         orientation: 'vertical'
         padding: [10]
 
-        Label:
-            size_hint_y: None
-            height: 100
+        Header:
 
         Info:
             id: caption
@@ -173,6 +171,7 @@
 
         Info:
             id: error
+            background_color: 0.3, 0.1, 0.1, 1
 
         Widget:
 

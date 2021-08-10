@@ -11,6 +11,8 @@ from scripts import inject, stencyl2json
 Config.set("kivy", "log_dir", str(user_dir()))
 Config.set("kivy", "log_level", "debug")
 Config.set("kivy", "log_enable", 1)
+Config.set("graphics", "width", 800)
+Config.set("graphics", "height", 300)
 
 from kivy.app import App
 from kivy.logger import Logger
