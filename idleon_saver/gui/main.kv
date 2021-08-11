@@ -1,10 +1,12 @@
 #:kivy 2.0.0
+#:import hex kivy.utils.get_color_from_hex
 
 <BackgroundColor@Widget>:
-    background_color: 1, 1, 1, 1
+    background_normal: ''
+    background_color: hex("#1F2933")
     canvas.before:
         Color:
-            rgba: root.background_color
+            rgba: (1, 1, 1, 1) if root.background_color is None else root.background_color
         Rectangle:
             size: self.size
             pos: self.pos
@@ -14,7 +16,7 @@
     height: 50
 
 <Info@Label+BackgroundColor>:
-    background_color: 0.1, 0.1, 0.1, 1
+    background_color: hex("#3E4C59")
     size: self.texture_size
     size_hint_y: None
     padding: [10, 10]
@@ -22,9 +24,20 @@
     font_size: 18
 
 <Button>:
+    background_normal: ''
+    background_color: hex("#52606D")
     size: 120, 30
     size_hint: None, None
     font_size: 18
+
+<MainWindow>:
+    background_normal: ''
+    canvas.before:
+        Color:
+            rgba: hex("#1F2933")
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
 <ErrorDialog>:
     orientation: 'vertical'
@@ -171,7 +184,7 @@
 
         Info:
             id: error
-            background_color: 0.3, 0.1, 0.1, 1
+            background_color: hex("#B71C1C")
 
         Widget:
 
