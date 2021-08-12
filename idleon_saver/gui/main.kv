@@ -13,13 +13,22 @@
 
 <Header@Widget>:
     size_hint_y: None
-    height: 50
+    height: 20
+
+<ButtonBox@BoxLayout>:
+    size_hint_y: None
+    height: 30
+
+<VBox@BoxLayout>:
+    orientation: 'vertical'
+    padding: [10]
+    spacing: 5
 
 <Info@Label+BackgroundColor>:
     background_color: hex("#3E4C59")
     size: self.texture_size
     size_hint_y: None
-    padding: [10, 10]
+    padding: [10, 5]
     text_size: root.width, None
     font_size: 18
 
@@ -39,17 +48,12 @@
             pos: self.pos
             size: self.size
 
-<ErrorDialog>:
-    orientation: 'vertical'
-    padding: [10]
-
+<ErrorDialog@VBox>:
     Info:
         halign: "justify"
         text: "Oops! I couldn't find the right file. Check the path and try again.\nIf you keep getting this error, please report it on GitHub with your log file attached."
 
-    BoxLayout:
-        size_hint_y: None
-
+    ButtonBox:
         Button:
             text: "Open Logs"
             on_release: root.open_logs()
@@ -66,19 +70,13 @@
             text: "Done"
             on_release: root.done()
 
-<FileChooserDialog>:
-    orientation: "vertical"
-    padding: [10]
-
+<FileChooserDialog@VBox>:
     FileChooserListView:
         id: filechooser
         filters: root.filters
         on_submit: root.done(filechooser.path, filechooser.selection)
 
-    BoxLayout:
-        size_hint_y: None
-        height: 30
-
+    ButtonBox:
         Button:
             text: "Cancel"
             on_release: root.cancel()
@@ -90,10 +88,7 @@
             on_release: root.done(filechooser.path, filechooser.selection)
 
 <StartScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        padding: [10]
-
+    VBox:
         Header:
 
         Info:
@@ -101,9 +96,7 @@
 
         Widget:
 
-        BoxLayout:
-            size_hint_y: None
-
+        ButtonBox:
             Button:
                 id: back
                 text: 'Exit'
@@ -120,10 +113,7 @@
                     root.manager.current = root.manager.next()
 
 <EndScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        padding: [10]
-
+    VBox:
         Header:
 
         Info:
@@ -131,9 +121,7 @@
 
         Widget:
 
-        BoxLayout:
-            size_hint_y: None
-
+        ButtonBox:
             Button:
                 id: back
                 text: 'Back'
@@ -155,20 +143,14 @@
     error: error
     path_input: path_input
 
-    BoxLayout:
-        orientation: 'vertical'
-        padding: [10]
-
+    VBox:
         Header:
 
         Info:
             id: caption
             text: root.caption
 
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-
+        ButtonBox:
             TextInput:
                 id: path_input
                 size_hint_y: None
@@ -188,7 +170,7 @@
 
         Widget:
 
-        BoxLayout:
+        ButtonBox:
             size_hint_y: None
 
             Button:
