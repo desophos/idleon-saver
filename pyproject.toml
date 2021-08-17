@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "idleon-saver"
-version = "0.1.0"
-description = ""
+version = "0.2.0"
+description = "Converts Legends of Idleon Steam save data to and from JSON."
 authors = ["desophos <1887450+desophos@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
