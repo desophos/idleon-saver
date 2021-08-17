@@ -4,7 +4,8 @@ from pathlib import Path
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
 from kivy.config import Config
-from scripts import inject, stencyl2json
+from scripts import inject
+from scripts.decode import stencyl2json
 
 # We need to change kivy config before other kivy imports.
 # TODO: maybe move to config file
@@ -121,7 +122,7 @@ class MainWindow(ScreenManager):
                 str(Path.home() / "Downloads/idleonsave.txt"),
                 ["*.txt"],
                 name="find_save",
-                action=lambda path: stencyl2json.main(Namespace(workdir=Path(path))),
+                action=lambda path: stencyl2json(Namespace(workdir=Path(path))),
             ),
             EndScreen(name="end"),
         ]
