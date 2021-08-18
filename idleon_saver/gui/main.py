@@ -18,6 +18,7 @@ Config.set("graphics", "height", 300)
 Config.set("graphics", "minimum_height", 300)
 
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -66,6 +67,10 @@ class PathScreen(Screen):
         self.on_path_text(default_path)
         self.path_filters = path_filters
 
+        # Recheck path every second in case of filesystem changes.
+        # Hopefully not a performance issue.
+        Clock.schedule_interval(lambda dt: self.on_path_text(), 1)
+
     def dismiss_popup(self):
         self._popup.dismiss()
 
@@ -83,7 +88,10 @@ class PathScreen(Screen):
             pass  # no file selected, so just treat it like canceling
         self.dismiss_popup()
 
-    def on_path_text(self, text):
+    def on_path_text(self, text=None):
+        if text is None:
+            text = self.path_input.text
+
         if not Path(text).exists():
             self.error.text = "Invalid path!"
             self.next.disabled = True
