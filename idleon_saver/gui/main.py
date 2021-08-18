@@ -26,7 +26,11 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 
 
-class ErrorDialog(BoxLayout):
+class VBox(BoxLayout):
+    pass
+
+
+class ErrorDialog(VBox):
     done = ObjectProperty(None)
 
     def open_logs(self):
@@ -36,7 +40,7 @@ class ErrorDialog(BoxLayout):
         os.startfile(BUGREPORT_LINK)
 
 
-class FileChooserDialog(BoxLayout):
+class FileChooserDialog(VBox):
     filters = ListProperty([])
     done = ObjectProperty(None)
     cancel = ObjectProperty(None)
