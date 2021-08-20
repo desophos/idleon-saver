@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 from idleon_saver.ldb import db_key, get_db
+from idleon_saver.utility import ROOT_DIR
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -24,5 +25,5 @@ def testdb(testargs):
 
 @pytest.fixture(scope="session")
 def stencylsave() -> str:
-    with open("tests/data/stencylsave.txt", "r") as f:
+    with open(ROOT_DIR.joinpath("tests", "data", "stencylsave.txt"), "r") as f:
         return f.read()

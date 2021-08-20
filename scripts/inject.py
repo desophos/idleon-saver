@@ -4,9 +4,12 @@ from pathlib import Path
 from sys import executable
 
 from idleon_saver.ldb import ldb_args
+from idleon_saver.utility import ROOT_DIR, user_dir
 
 
 def main(exe_path: Path):
+    infile = ROOT_DIR.joinpath("scripts", "inject.js")
+    outfile = user_dir() / "inject.js"
     storage_key = "".join(
         [
             "/",
@@ -15,13 +18,13 @@ def main(exe_path: Path):
         ]
     )
 
-    with open("scripts/inject.js", "r") as file:
+    with open(infile, "r") as file:
         js = file.read()
 
     # TODO: this is extremely hacky. there is a better way to do this
     js = js.replace("__KEY_PLACEHOLDER__", storage_key)
 
-    with open("work/inject.js", "w") as file:
+    with open(outfile, "w") as file:
         file.write(js)
 
     return subprocess.run(
@@ -30,7 +33,7 @@ def main(exe_path: Path):
             "-m",
             "electron_inject",
             "-r",
-            "work/inject.js",
+            outfile,
             "-",
             str(exe_path),
         ],
@@ -40,7 +43,7 @@ def main(exe_path: Path):
     )
 
     # TODO pending electron_inject refactor:
-    # argv = ["electron_inject", "-r", "work/inject.js", "-", exe_path]
+    # argv = ["electron_inject", "-r", user_dir() / "inject.js", "-", exe_path]
     # with patch("sys.argv", argv):
     #     electron_inject.main()
 

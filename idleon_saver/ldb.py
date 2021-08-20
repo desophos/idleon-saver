@@ -4,7 +4,7 @@ from pathlib import Path
 
 import plyvel
 
-from idleon_saver.utility import resolved_path
+from idleon_saver.utility import ROOT_DIR, resolved_path
 
 
 @contextmanager
@@ -49,7 +49,7 @@ def ldb_args(parser: ArgumentParser = None) -> Namespace:
     parser.add_argument(
         "--workdir",
         type=resolved_path,
-        default="work",
+        default=ROOT_DIR / "work",
         help="path to the working directory where files will be created",
     )
     args = parser.parse_args()
