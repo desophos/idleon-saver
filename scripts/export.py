@@ -9,6 +9,9 @@ from typing import Iterator, Tuple
 from data import (
     bag_names,
     card_names,
+    cog_boosts,
+    cog_datas_map,
+    cog_type_map,
     constellation_names,
     gem_bag_names,
     pouch_names,
@@ -218,7 +221,45 @@ def to_idleon_companion(raw: dict) -> dict:
 
 
 def to_cogstruction(raw: dict) -> dict:
-    raise NotImplementedError
+    cog_datas, empties = [], []
+
+    for y in range(8):
+        for x in range(12):
+            i = y * 12 + x
+            if i >= 96:
+                break
+            elif raw["CogOrder"][i] == "Blank":
+                empties.append({"empties_x": x, "empties_y": y})
+
+    for cog, name in zip(raw["CogMap"], raw["CogOrder"]):
+        data = {"cog type": "Cog", "name": ""}
+
+        if name == "Blank":
+            continue
+        elif name.startswith("Player_"):
+            data["cog type"] = "Character"
+            data["name"] = name.removeprefix("Player_")
+        elif name == "CogY":
+            data["cog type"] = "Yang_Cog"
+        elif name.startswith("CogZ"):
+            data["cog type"] = "Omni_Cog"
+        else:
+            for abbr, cog_type in cog_type_map.items():
+                if name.endswith(abbr):
+                    data["cog type"] = f"{cog_type}_Cog"
+                    break
+
+        for abbr, field in cog_datas_map.items():
+            try:
+                data[field] = cog[abbr] / 100 if abbr in cog_boosts else cog[abbr]
+            except KeyError:
+                data[field] = ""
+
+        cog_datas.append(data)
+
+    return {"cog_datas": cog_datas, "empties_datas": empties}
+
+
 
 
 def main(args: Namespace):
