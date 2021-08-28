@@ -333,3 +333,27 @@ pouch_sizes = {
 constellation_names = list(
     chain.from_iterable([f"{c}-{i}" for i in range(1, 13)] for c in "AB")
 )
+
+cog_datas_map = {
+    "a": "build_rate",
+    "c": "flaggy_rate",
+    "d": "exp_mult",
+    "b": "exp_rate",
+    "e": "build_rate_boost",
+    "g": "flaggy_rate_boost",
+    "k": "flaggy_speed",
+    "f": "exp_rate_boost",
+}
+
+cog_boosts = "defg"
+
+cog_type_map = {
+    "ad": "Plus",
+    "di": "X",
+    "up": "Up",  # guess
+    "do": "Down",
+    "ri": "Right",
+    "le": "Left",
+    "ro": "Row",  # guess
+    "co": "Col",  # guess
+}
