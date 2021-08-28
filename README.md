@@ -59,3 +59,13 @@ Script arguments:
 - `decoded_types.json`, which contains all the information required to re-encode the data back into the leveldb.
 
 `python scripts/encode.py` will encode the data in `decoded_types.json` back into the database.
+
+After you've obtained your `decoded_plain.json`, you can export it into formats used by community tools with `python scripts/export.py`. This script takes one additional argument:
+
+| Argument   | Description                                   | Default            | Choices                                       |
+| ---------- | --------------------------------------------- | ------------------ | --------------------------------------------- |
+| `--to`     | Community tool format to export your data to  | `idleon_companion` | `idleon_companion`, `cogstruction`            |
+
+The `idleon_companion` option produces `idleon_companion.json` for import into [Idleon Companion](https://idleoncompanion.com/).
+
+The `cogstruction` option produces `cog_datas.csv` and `empties_datas.csv` for use with [Cogstruction](https://github.com/automorphis/Cogstruction).
