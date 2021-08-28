@@ -1,8 +1,10 @@
+import csv
 import json
 from argparse import ArgumentParser, Namespace
 from enum import Enum
 from itertools import chain
 from math import floor
+from pathlib import Path
 from string import ascii_lowercase
 from typing import Iterator, Tuple
 
@@ -220,6 +222,15 @@ def to_idleon_companion(raw: dict) -> dict:
     }
 
 
+def save_idleon_companion(workdir: Path, data: dict):
+    outfile = workdir / "idleon_companion.json"
+
+    with open(outfile, "w", encoding="utf-8") as file:
+        json.dump(data, file)
+
+    print(f"Wrote file: {outfile}")
+
+
 def to_cogstruction(raw: dict) -> dict:
     cog_datas, empties = [], []
 
@@ -260,11 +271,23 @@ def to_cogstruction(raw: dict) -> dict:
     return {"cog_datas": cog_datas, "empties_datas": empties}
 
 
+def save_cogstruction(workdir: Path, data: dict):
+    for which in ["cog_datas", "empties_datas"]:
+        outfile = workdir / f"{which}.csv"
+
+        with open(outfile, "w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=data[which][0].keys())
+
+            writer.writeheader()
+            for row in data[which]:
+                writer.writerow(row)
+
+        print(f"Wrote file: {outfile}")
 
 
 def main(args: Namespace):
-    export_fns = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
-    export_files = {Formats.IC: "idleon_companion.json", Formats.COG: "cog_datas.csv"}
+    export_parsers = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
+    export_savers = {Formats.IC: save_idleon_companion, Formats.COG: save_cogstruction}
 
     infile = normalize_workfile(args.workdir, "decoded_plain.json")
     workdir = infile.parent
@@ -272,13 +295,8 @@ def main(args: Namespace):
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
 
-    parsed = export_fns[args.to](data)
-
-    outfile = workdir / export_files[args.to]
-    with open(outfile, "w", encoding="utf-8") as file:
-        json.dump(parsed, file)
-
-    print(f"Wrote file: {outfile}")
+    parsed = export_parsers[args.to](data)
+    export_savers[args.to](workdir, parsed)
 
 
 if __name__ == "__main__":
