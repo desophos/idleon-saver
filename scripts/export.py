@@ -26,6 +26,12 @@ class Formats(Enum):
     IC = "idleon_companion"
     COG = "cogstruction"
 
+    @staticmethod
+    def lookup(key: str):
+        for member in Formats.__members__.values():
+            if member.value == key:
+                return member
+
 
 def map_bags(names: dict[str, str], capacities: list[list[str]]) -> dict[str, str]:
     return {key: names[name] for key, _, name in capacities if name in names}
@@ -238,7 +244,8 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
         "--to",
-        choices=[f.value for f in Formats],
+        choices=[f for f in Formats],
+        type=Formats.lookup,
         default=Formats.IC,
         help="format to parse save data into",
     )
