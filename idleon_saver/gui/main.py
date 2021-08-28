@@ -9,8 +9,10 @@ from scripts.decode import stencyl2json
 
 # We need to change kivy config before other kivy imports.
 # TODO: maybe move to config file
-Config.set("kivy", "log_dir", str(user_dir()))
+Config.set("kivy", "log_dir", user_dir())
+Config.set("kivy", "log_name", "log_%y-%m-%d_%_.txt")
 Config.set("kivy", "log_level", "debug")
+Config.set("kivy", "log_maxfiles", 5)
 Config.set("kivy", "log_enable", 1)
 Config.set("graphics", "width", 800)
 Config.set("graphics", "minimum_width", 700)
