@@ -19,7 +19,7 @@
     size_hint_y: None
     height: 30
 
-<VBox@BoxLayout>:
+<VBox>:
     orientation: 'vertical'
     padding: [10]
     spacing: 5
@@ -48,7 +48,7 @@
             pos: self.pos
             size: self.size
 
-<ErrorDialog@VBox>:
+<ErrorDialog>:
     Header:
 
     Info:
@@ -74,7 +74,7 @@
             text: "Done"
             on_release: root.done()
 
-<FileChooserDialog@VBox>:
+<FileChooserDialog>:
     FileChooserListView:
         id: filechooser
         filters: root.filters
