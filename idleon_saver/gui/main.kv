@@ -44,10 +44,17 @@
 
 <Button>:
     background_normal: ''
-    background_color: hex("#52606D")
+    background_color: 0,0,0,0
     size: 120, 30
     size_hint: None, None
     font_size: 18
+    canvas.before:
+        Color:
+            rgba: coolgray600 if self.state=='normal' else coolgray700
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [self.height//4]
 
 <MainWindow>:
     background_normal: ''
