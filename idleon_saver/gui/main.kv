@@ -42,6 +42,21 @@
     text_size: root.width, None
     font_size: 18
 
+<Infobox@BoxLayout+BackgroundColor>:
+    background_color: coolgray800
+    height: info.height
+    size_hint_y: None
+    text: ''
+    Widget:
+        size_hint_x: 0.1
+    Info:
+        id: info
+        width: 630
+        size_hint_x: None
+        text: root.text
+    Widget:
+        size_hint_x: 0.1
+
 <Button>:
     background_normal: ''
     background_color: 0,0,0,0
@@ -112,7 +127,7 @@
     VBox:
         Header:
 
-        Info:
+        Infobox:
             text: "Welcome to Idleon Saver! This tool will:\n\n  1. open Legends of Idleon,\n  2. save your data to a file on your computer, and\n  3. process that data to create a file ready for import into Idleon Companion.\n\nThis all takes place on your computer; this app does not collect any data.\nTo get started, click Next!"
 
         Widget:
@@ -137,7 +152,7 @@
     VBox:
         Header:
 
-        Info:
+        Infobox:
             text: "Thanks for using Idleon Saver!\n\nYour data has been saved to decoded_plain.json in the same place as your idleonsave.txt."
 
         Widget:
