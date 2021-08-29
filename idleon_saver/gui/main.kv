@@ -1,9 +1,19 @@
 #:kivy 2.0.0
 #:import hex kivy.utils.get_color_from_hex
+#:set coolgray100 hex('#E4E7EB')
+#:set coolgray200 hex('#CBD2D9')
+#:set coolgray300 hex('#9AA5B1')
+#:set coolgray400 hex('#7B8794')
+#:set coolgray500 hex('#616E7C')
+#:set coolgray600 hex('#52606D')
+#:set coolgray700 hex('#3E4C59')
+#:set coolgray800 hex('#323F4B')
+#:set coolgray900 hex('#1F2933')
+#:set red900 hex('#B71C1C')
 
 <BackgroundColor@Widget>:
     background_normal: ''
-    background_color: hex("#1F2933")
+    background_color: coolgray900
     canvas.before:
         Color:
             rgba: (1, 1, 1, 1) if root.background_color is None else root.background_color
@@ -25,7 +35,7 @@
     spacing: 5
 
 <Info@Label+BackgroundColor>:
-    background_color: hex("#3E4C59")
+    background_color: coolgray800
     size: self.texture_size
     size_hint_y: None
     padding: [10, 5]
@@ -43,7 +53,7 @@
     background_normal: ''
     canvas.before:
         Color:
-            rgba: hex("#1F2933")
+            rgba: coolgray900
         Rectangle:
             pos: self.pos
             size: self.size
@@ -170,7 +180,7 @@
 
         Info:
             id: error
-            background_color: hex("#B71C1C")
+            background_color: red900
 
         Widget:
 
