@@ -56,9 +56,13 @@ def ldb_args(parser: ArgumentParser = None) -> Namespace:
 
     args.workdir.mkdir(exist_ok=True)
 
+    # In case someone passes the exe path instead of the install dir.
+    if args.idleon.name == "LegendsOfIdleon.exe":
+        args.idleon = args.idleon.parent
+
     # Only check ldb path.
-    # Idleon path is only used for the db key,
-    # so it doesn't have to exist.
+    # Idleon path is only used for the db key, so it doesn't have to exist.
+    # (Allows running from VMs.)
     try:
         assert args.ldb.exists() and args.ldb.is_dir()
     except AssertionError as e:
