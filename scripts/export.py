@@ -38,6 +38,10 @@ class Formats(Enum):
                 return member
 
 
+def friendly_name(s: str) -> str:
+    return s.replace("_", " ").title()
+
+
 def map_bags(names: dict[str, str], capacities: list[list[str]]) -> dict[str, str]:
     return {key: names[name] for key, _, name in capacities if name in names}
 
@@ -71,7 +75,7 @@ def get_baseclass(which: int) -> int:
 
 
 def get_classname(data: dict, which: int) -> str:
-    return data["CustomLists"]["ClassNames"][which].replace("_", " ").title()
+    return friendly_name(data["CustomLists"]["ClassNames"][which])
 
 
 def get_alchemy(data: dict) -> dict[str, dict]:
@@ -80,7 +84,11 @@ def get_alchemy(data: dict) -> dict[str, dict]:
             zip(("Orange", "Green", "Purple", "Yellow"), data["CauldronInfo"][:4])
         ),
         "vials": {
-            str(k): v for k, v in enumerate(data["CauldronInfo"][4], start=1) if v > 0
+            friendly_name(info[0]): level
+            for info, level in zip(
+                data["CustomLists"]["AlchemyDescription"][4], data["CauldronInfo"][4]
+            )
+            if level > 0
         },
     }
 
