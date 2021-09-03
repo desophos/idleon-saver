@@ -330,6 +330,43 @@ pouch_sizes = {
     2000: "Large",
 }
 
+starsign_ids = {
+    "The_Book_Worm": "1",
+    "The_Buff_Guy": "1a",
+    "The_Fuzzy_Dice": "1b",
+    "Flexo_Bendo": "2",
+    "Dwarfo_Beardus": "3",
+    "Hipster_Logger": "4",
+    "Pie_Seas": "4a",
+    "Miniature_Game": "4b",
+    "Shoe_Fly": "4c",
+    "Pack_Mule": "5",
+    "Pirate_Booty": "6",
+    "All_Rounder": "7",
+    "Muscle_Man": "7a",
+    "Fast_Frog": "7b",
+    "Smart_Stooge": "7c",
+    "Lucky_Larry": "7d",
+    "Fatty_Doodoo": "8",
+    "Robinhood": "9",
+    "Blue_Hedgehog": "9a",
+    "Ned_Kelly": "10",
+    "The_Fallen_Titan": "10a",
+    "Chronus_Cosmos": "CR",
+    "Activelius": "11",
+    "Gum_Drop": "11a",
+    "Mount_Eaterest": "12",
+    "Bob_Build_Guy": "13",
+    "The_Big_Comatose": "14",
+    "Sir_Savvy": "14a",
+    "Silly_Snoozer": "15",
+    "The_Big_Brain": "15a",
+    "Grim_Reaper": "16",
+    "The_Forsaken": "16a",
+    "The_OG_Skiller": "17",
+    "Mr_No_Sleep": "18",
+}
+
 constellation_names = list(
     chain.from_iterable([f"{c}-{i}" for i in range(1, 13)] for c in "AB")
 )

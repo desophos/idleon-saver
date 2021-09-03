@@ -20,6 +20,7 @@ from data import (
     pouch_sizes,
     skill_names,
     stamp_names,
+    starsign_ids,
     statue_names,
     storage_names,
 )
@@ -93,9 +94,13 @@ def get_alchemy(data: dict) -> dict[str, dict]:
     }
 
 
+def get_starsign_from_index(data: dict, i: int) -> str:
+    return starsign_ids[data["CustomLists"]["StarSigns"][i][0]]
+
+
 def get_starsigns(data: dict) -> dict[str, bool]:
     return {
-        name.replace("_", " "): bool(unlocked)
+        starsign_ids[name]: bool(unlocked)
         for name, unlocked in data["StarSignsUnlocked"].items()
     }
 
@@ -204,7 +209,7 @@ def get_chars(data: dict) -> list[dict]:
                 if char_map(data)[charname] in chars
             },
             "starSigns": {
-                k: True
+                get_starsign_from_index(data, int(k)): True
                 for k in chardata["PersonalValuesMap"]["StarSign"]
                 .strip(",_")
                 .split(",")
