@@ -1,8 +1,7 @@
-import subprocess
-from os import environ
+from multiprocessing import Process
 from pathlib import Path
-from sys import executable
 
+import electron_inject
 from idleon_saver.ldb import ldb_args
 from idleon_saver.utility import ROOT_DIR, user_dir
 
@@ -27,27 +26,13 @@ def main(exe_path: Path):
     with open(outfile, "w") as file:
         file.write(js)
 
-    return subprocess.run(
-        [
-            executable,
-            "-m",
-            "electron_inject",
-            "-r",
-            outfile,
-            "-",
-            str(exe_path),
-        ],
-        env=environ.copy(),
-        check=True,
-        timeout=10,
+    # launch it as a separate process to avoid blocking the main process
+    p = Process(
+        target=electron_inject.inject,
+        args=(f'"{exe_path}"',),
+        kwargs={"scripts": [str(outfile)]},
     )
-
-    # TODO pending electron_inject refactor:
-    # argv = ["electron_inject", "-r", user_dir() / "inject.js", "-", exe_path]
-    # with patch("sys.argv", argv):
-    #     electron_inject.main()
-
-    # TODO: delete work/inject.js
+    p.start()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 import os
+from multiprocessing import freeze_support
 from pathlib import Path
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
@@ -184,4 +185,5 @@ class IdleonSaver(App):
 
 
 if __name__ == "__main__":
+    freeze_support()
     IdleonSaver(kv_file="main.kv").run()
