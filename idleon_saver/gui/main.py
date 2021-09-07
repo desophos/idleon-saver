@@ -3,17 +3,20 @@ from argparse import Namespace
 from pathlib import Path
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
-from kivy.config import Config
 from scripts import inject
 from scripts.decode import stencyl2json
 
+# Set log config before all kivy imports
+# to ensure that *all* kivy logging obeys our settings.
+# (Prevents kivy.config from creating extra log files.)
+os.environ["KCFG_KIVY_LOG_DIR"] = str(user_dir())
+os.environ["KCFG_KIVY_LOG_NAME"] = "log_%y-%m-%d_%_.txt"
+os.environ["KCFG_KIVY_LOG_LEVEL"] = "info"
+os.environ["KCFG_KIVY_LOG_MAXFILES"] = "1"
+
+from kivy.config import Config
+
 # We need to change kivy config before other kivy imports.
-# TODO: maybe move to config file
-Config.set("kivy", "log_dir", user_dir())
-Config.set("kivy", "log_name", "log_%y-%m-%d_%_.txt")
-Config.set("kivy", "log_level", "debug")
-Config.set("kivy", "log_maxfiles", 5)
-Config.set("kivy", "log_enable", 1)
 Config.set("graphics", "width", 820)
 Config.set("graphics", "minimum_width", 700)
 Config.set("graphics", "height", 300)
