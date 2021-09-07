@@ -29,6 +29,7 @@ from kivy.properties import ListProperty, ObjectProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.utils import get_color_from_hex
 
 
 class VBox(BoxLayout):
@@ -68,13 +69,15 @@ class PathScreen(Screen):
     path_input = ObjectProperty(None)
     path_filters = ListProperty([])
     error = ObjectProperty(None)
+    instructions = StringProperty("")
 
-    def __init__(self, caption, default_path, path_filters, **kwargs):
+    def __init__(self, caption, default_path, path_filters, instructions="", **kwargs):
         super().__init__(**kwargs)
         self.caption = caption
         self.default_path = default_path
         self.on_path_text(default_path)
         self.path_filters = path_filters
+        self.instructions = instructions
 
         # Recheck path every second in case of filesystem changes.
         # Hopefully not a performance issue.
@@ -103,9 +106,12 @@ class PathScreen(Screen):
 
         if not Path(text).exists():
             self.error.text = "Invalid path!"
+            self.error.background_color = get_color_from_hex("#B71C1C")  # red900
             self.next.disabled = True
         else:
-            self.error.text = ""
+            # hack to stop instructions from moving up
+            self.error.text = " "
+            self.error.background_color = get_color_from_hex("#1F2933")  # coolgray900
             self.next.disabled = False
 
     def try_action(self, path):
@@ -138,6 +144,7 @@ class MainWindow(ScreenManager):
                 "Path to LegendsOfIdleon.exe:",
                 "C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
                 ["*.exe"],
+                "Make sure Steam is running, then click Next to open Legends of Idleon.\nYou'll be prompted to download your save file, then you can close the game.",
                 name="find_exe",
                 action=lambda path: inject.main(Path(path)),
             ),
@@ -145,6 +152,7 @@ class MainWindow(ScreenManager):
                 "Path to idleonsave.txt:",
                 str(Path.home() / "Downloads/idleonsave.txt"),
                 ["*.txt"],
+                "Click Next to convert the save file you downloaded into a format ready to import into Idleon Companion.",
                 name="find_save",
                 action=convert_save,
             ),
