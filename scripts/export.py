@@ -25,7 +25,7 @@ from data import (
     storage_names,
 )
 from idleon_saver.ldb import ldb_args
-from idleon_saver.utility import from_keys_in, normalize_workfile, zip_from_iterable
+from idleon_saver.utility import from_keys_in, zip_from_iterable
 
 
 class Formats(Enum):
@@ -302,14 +302,12 @@ def main(args: Namespace):
     export_parsers = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
     export_savers = {Formats.IC: save_idleon_companion, Formats.COG: save_cogstruction}
 
-    infile = normalize_workfile(args.workdir, "decoded_plain.json")
-    workdir = infile.parent
-
+    infile = args.workdir / (args.infile or "decoded_plain.json")
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
 
     parsed = export_parsers[args.to](data)
-    export_savers[args.to](workdir, parsed)
+    export_savers[args.to](args.workdir, parsed)
 
 
 if __name__ == "__main__":

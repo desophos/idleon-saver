@@ -35,22 +35,37 @@ def ldb_args(parser: ArgumentParser = None) -> Namespace:
     if parser is None:
         parser = ArgumentParser()
     parser.add_argument(
+        "-n",
         "--idleon",
         type=Path,
         default="C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon",
         help="your Legends of Idleon install path",
     )
     parser.add_argument(
+        "-l",
         "--ldb",
         type=resolved_path,
         default="~/dev/leveldb",
         help="path to the leveldb to work with",
     )
     parser.add_argument(
+        "-w",
         "--workdir",
         type=resolved_path,
         default=ROOT_DIR / "work",
         help="path to the working directory where files will be created",
+    )
+    parser.add_argument(
+        "-i",
+        "--infile",
+        default="",
+        help="name of the input file; default varies by script",
+    )
+    parser.add_argument(
+        "-o",
+        "--outfile",
+        default="",
+        help="name of the output file; default varies by script",
     )
     args = parser.parse_args()
 

@@ -47,11 +47,13 @@ If your paths don't match the defaults, you'll need to pass your paths to the sc
 
 Script arguments:
 
-| Argument    | Description                                   | Default                                                           |
-| ----------  | --------------------------------------------- | ----------------------------------------------------------------- |
-| `--workdir` | Working directory where files will be created | `<package directory>/work`                                        |
-| `--idleon`  | Legends of Idleon install path                | `C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon` |
-| `--ldb`     | Path to the leveldb to work with              | `~/dev/leveldb`                                                   |
+| Argument          | Description                                   | Default                                                           |
+| ----------------- | --------------------------------------------- | ----------------------------------------------------------------- |
+| `-n`, `--idleon`  | Legends of Idleon install path                | `C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon` |
+| `-l`, `--ldb`     | Path to the leveldb to work with              | `~/dev/leveldb`                                                   |
+| `-w`, `--workdir` | Working directory where files will be created | `<package directory>/work`                                        |
+| `-i`, `--infile`  | Input filename                                | Varies by script                                                  |
+| `-o`, `--outfile` | Output filename                               | Varies by script                                                  |
 
 `python scripts/decode.py` will decode leveldb data into 2 JSON files:
 

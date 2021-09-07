@@ -4,11 +4,10 @@ from argparse import Namespace
 import plyvel
 from idleon_saver.ldb import db_key, get_db, ldb_args
 from idleon_saver.stencyl.encoder import StencylEncoder
-from idleon_saver.utility import normalize_workfile
 
 
 def stencyl2ldb(args: Namespace):
-    infile = args.workdir / "encoded.txt"
+    infile = args.workdir / (args.infile or "encoded.txt")
     key = db_key(args.idleon)
 
     with get_db(args.ldb) as db:
@@ -37,15 +36,14 @@ def stencyl2ldb(args: Namespace):
 
 
 def json2stencyl(args: Namespace):
-    infile = normalize_workfile(args.workdir, "decoded_types.json")
-    workdir = infile.parent
+    infile = args.workdir / (args.infile or "decoded_types.json")
 
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
 
     encoded = StencylEncoder(data).result
 
-    outfile = workdir / "encoded.txt"
+    outfile = args.workdir / (args.outfile or "encoded.txt")
     with open(outfile, "w", encoding="ascii") as file:
         file.write(encoded)
 

@@ -1,14 +1,15 @@
 import json
 from argparse import Namespace
+from pathlib import Path
 
 import plyvel
 from idleon_saver.ldb import db_key, get_db, ldb_args
+from idleon_saver.stencyl.common import StencylData
 from idleon_saver.stencyl.decoder import StencylDecoder
-from idleon_saver.utility import normalize_workfile
 
 
 def ldb2stencyl(args: Namespace):
-    outfile = args.workdir / "encoded.txt"
+    outfile = args.workdir / (args.outfile or "encoded.txt")
     key = db_key(args.idleon)
 
     with get_db(args.ldb) as db:
@@ -27,25 +28,52 @@ def ldb2stencyl(args: Namespace):
                 print(f"Wrote file: {outfile}")
 
 
-def stencyl2json(args: Namespace):
-    infile = normalize_workfile(args.workdir, "encoded.txt")
-    workdir = infile.parent
+def read_stencyl(workdir: Path, filename: str = "") -> StencylData:
+    """Decode a Stencyl save file."""
+    infile = workdir / (filename or "encoded.txt")
 
     with open(infile, encoding="ascii") as file:
         data = file.read().strip()
 
-    decoded = StencylDecoder(data).result
+    return StencylDecoder(data).result
 
-    for name, attr in (
-        ("decoded_plain", "unwrapped"),
-        ("decoded_types", "wrapped"),
+
+def write_json(
+    decoded: StencylData,
+    workdir: Path,
+    filename: str = "",
+    fmt: str = "unwrapped",
+):
+    """Write decoded Stencyl data to a JSON file.
+
+    `fmt` can be either "unwrapped" or "wrapped".
+    You probably want "unwrapped", which is the default and only dumps the actual data.
+    "wrapped" includes type info for re-encoding into Stencyl format.
+    """
+    outfile = workdir / (filename or "decoded.json")
+
+    if fmt not in ("unwrapped", "wrapped"):
+        raise ValueError(f"format must be one of ['unwrapped', 'wrapped'], not '{fmt}'")
+
+    with open(outfile, "w", encoding="utf-8") as file:
+        # TODO: dict keys are coerced to str
+        json.dump(getattr(decoded, fmt), file)
+
+
+def stencyl2json(args: Namespace):
+    """Convert a Stencyl save file to JSON.
+
+    Does not respect args.outfile, since it creates two files.
+    If you need to name the created files, use `write_json`."""
+    decoded = read_stencyl(args.workdir, args.infile)
+
+    for name, fmt in (
+        ("plain", "unwrapped"),
+        ("types", "wrapped"),
     ):
-        outfile = workdir / f"{name}.json"
-        with open(outfile, "w", encoding="utf-8") as file:
-            # TODO: dict keys are coerced to str
-            json.dump(getattr(decoded, attr), file)
-
-        print(f"Wrote file: {outfile}")
+        filename = f"decoded_{name}.json"
+        write_json(decoded, args.workdir, filename, fmt)
+        print(f"Wrote file: {args.workdir / filename}")
 
 
 def main(args: Namespace):
