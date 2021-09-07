@@ -1,10 +1,10 @@
 import os
-from argparse import Namespace
 from pathlib import Path
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
 from scripts import inject
-from scripts.decode import stencyl2json
+from scripts.decode import read_stencyl
+from scripts.export import save_idleon_companion, to_idleon_companion
 
 # Set log config before all kivy imports
 # to ensure that *all* kivy logging obeys our settings.
@@ -125,6 +125,13 @@ class MainWindow(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        def convert_save(path: str):
+            infile = Path(path)
+            save_idleon_companion(
+                infile.parent,
+                to_idleon_companion(read_stencyl(infile.parent, infile.name).unwrapped),
+            )
+
         screens = [
             StartScreen(name="start"),
             PathScreen(
@@ -139,7 +146,7 @@ class MainWindow(ScreenManager):
                 str(Path.home() / "Downloads/idleonsave.txt"),
                 ["*.txt"],
                 name="find_save",
-                action=lambda path: stencyl2json(Namespace(workdir=Path(path))),
+                action=convert_save,
             ),
             EndScreen(name="end"),
         ]
