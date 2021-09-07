@@ -8,7 +8,7 @@ from idleon_saver.utility import ROOT_DIR, user_dir
 
 
 def main(exe_path: Path):
-    infile = ROOT_DIR.joinpath("scripts", "inject.js")
+    infile = ROOT_DIR.joinpath("data", "inject.js")
     outfile = user_dir() / "inject.js"
     storage_key = "".join(
         [
