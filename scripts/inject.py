@@ -30,7 +30,7 @@ def main(exe_path: Path):
     p = Process(
         target=electron_inject.inject,
         args=(f'"{exe_path}"',),
-        kwargs={"scripts": [str(outfile)]},
+        kwargs={"timeout": 20, "scripts": [str(outfile)]},
     )
     p.start()
 
