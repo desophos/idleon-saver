@@ -42,22 +42,25 @@
     text_size: root.width, None
     font_size: 18
 
+<SidePanel@BackgroundColor>:
+    background_color: coolgray700
+    size_hint_x: 0.1
+
 <Infobox@BoxLayout+BackgroundColor>:
     background_color: coolgray800
     height: info.height
     size_hint_y: None
     text: ''
-    BackgroundColor:
-        background_color: coolgray700
-        size_hint_x: 0.1
+
+    SidePanel:
+
     Info:
         id: info
         width: 630
         size_hint_x: None
         text: root.text
-    BackgroundColor:
-        background_color: coolgray700
-        size_hint_x: 0.1
+
+    SidePanel:
 
 <Button>:
     background_normal: ''
