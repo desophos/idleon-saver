@@ -25,8 +25,19 @@ function downloadFile(data, fileName, type = "text/plain") {
     document.body.removeChild(a);
 }
 
-let saveData = localStorage.getItem("__KEY_PLACEHOLDER__");
+// Extreme hack to detect when loading is finished.
+// window.onload and document.body.onload are unreliable, even with setTimeout.
+// This may break suddenly if console log messages change!
+// https://stackoverflow.com/a/6455713
+(function () {
+    var _log = console.log;
 
-window.onload = function () {
-    downloadFile(saveData, "idleonsave.txt");
-};
+    console.log = function (txt) {
+        if (txt == "Top bar change") {
+            const saveData = localStorage.getItem("__KEY_PLACEHOLDER__");
+            downloadFile(saveData, "idleonsave.txt");
+        }
+
+        _log.apply(console, arguments);
+    }
+})();
