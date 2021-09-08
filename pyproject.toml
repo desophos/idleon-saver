@@ -10,13 +10,14 @@ plyvel = { version = "^1.3.0", markers = "sys_platform != 'win32'" }
 plyvel-win32 = { version = "^1.3.0", markers = "sys_platform == 'win32'" }
 electron-inject = { git = "https://github.com/desophos/electron-inject.git", develop = true }
 Kivy = {extras = ["base"], version = "^2.0.0"}
+electron-inject = { git = "https://github.com/desophos/electron-inject.git" }
 pyinstaller = "^4.5.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.6-beta.0", allow-prereleases = true}
-mypy = "^0.910"
+mypy = "~0.910"
 pytest = "^6.2.4"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.1"]
+build-backend = "poetry.core.masonry.api"
