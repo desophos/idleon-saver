@@ -33,6 +33,8 @@ def main(exe_path: Path):
         kwargs={"timeout": 20, "scripts": [str(outfile)]},
     )
     p.start()
+    p.join()
+    assert not p.exitcode
 
 
 if __name__ == "__main__":
