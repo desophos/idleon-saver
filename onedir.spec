@@ -1,24 +1,26 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from PyInstaller.utils.hooks import collect_data_files
+from kivy.tools.packaging.pyinstaller_hooks import get_deps_minimal, hookspath, runtime_hooks
 from kivy_deps import sdl2, glew
+
+deps = get_deps_minimal(audio=None, camera=None, spelling=None, video=None)
+deps['hiddenimports'].append('win32timezone')
 
 block_cipher = None
 
 
 a = Analysis(['idleon_saver\\gui\\main.py'],
              pathex=['C:\\Users\\desophos\\Dropbox\\Code\\Python\\idleon\\Idleon Saver'],
-             binaries=[],
              datas=collect_data_files('data'),
-             hiddenimports=['win32timezone'],
-             hookspath=[],
+             hookspath=hookspath(),
              hooksconfig={},
-             runtime_hooks=[],
-             excludes=[],
+             runtime_hooks=runtime_hooks(),
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,
-             noarchive=False)
+             noarchive=False,
+             **deps)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 
