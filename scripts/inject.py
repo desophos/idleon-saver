@@ -26,7 +26,8 @@ def main(exe_path: Path):
     with open(outfile, "w") as file:
         file.write(js)
 
-    # launch it as a separate process to avoid blocking the main process
+    # Launching electron_inject as a child process
+    # allows the user to close the game exe.
     p = Process(
         target=electron_inject.inject,
         args=(f'"{exe_path}"',),
