@@ -1,11 +1,9 @@
+import logging
 import os
 from multiprocessing import freeze_support
 from pathlib import Path
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
-from scripts import inject
-from scripts.decode import read_stencyl
-from scripts.export import save_idleon_companion, to_idleon_companion
 
 # Set log config before all kivy imports
 # to ensure that *all* kivy logging obeys our settings.
@@ -13,7 +11,7 @@ from scripts.export import save_idleon_companion, to_idleon_companion
 os.environ["KCFG_KIVY_LOG_DIR"] = str(user_dir())
 os.environ["KCFG_KIVY_LOG_NAME"] = "log_%y-%m-%d_%_.txt"
 os.environ["KCFG_KIVY_LOG_LEVEL"] = "info"
-os.environ["KCFG_KIVY_LOG_MAXFILES"] = "1"
+os.environ["KCFG_KIVY_LOG_MAXFILES"] = "10"
 
 from kivy.config import Config
 
@@ -31,6 +29,13 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.utils import get_color_from_hex
+
+# Make other modules use Kivy's logger.
+logging.Logger.manager.root = Logger
+
+from scripts import inject
+from scripts.decode import read_stencyl
+from scripts.export import save_idleon_companion, to_idleon_companion
 
 
 class VBox(BoxLayout):
