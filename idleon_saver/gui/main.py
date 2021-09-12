@@ -161,7 +161,7 @@ class MainWindow(ScreenManager):
             ),
             PathScreen(
                 "Path to idleonsave.txt:",
-                str(Path.home() / "Downloads/idleonsave.txt"),
+                str(Path.home().joinpath("Downloads", "idleonsave.txt")),
                 ["*.txt"],
                 "Click Next to convert the save file you downloaded into a format ready to import into Idleon Companion.",
                 name="find_save",
