@@ -2,6 +2,7 @@ import logging
 import os
 from multiprocessing import freeze_support
 from pathlib import Path
+from zipfile import ZipFile
 
 from idleon_saver.utility import BUGREPORT_LINK, user_dir
 
@@ -46,6 +47,10 @@ class ErrorDialog(VBox):
     done = ObjectProperty(None)
 
     def open_logs(self):
+        with ZipFile(user_dir() / "logs.zip", "w") as zf:
+            for f in user_dir().iterdir():
+                if f.suffix != ".zip":
+                    zf.write(f, f.name)
         os.startfile(user_dir(), "explore")
 
     def open_github(self):
