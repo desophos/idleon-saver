@@ -115,15 +115,31 @@
             on_release: root.done()
 
 <FileChooserDialog>:
-    FileChooserListView:
+    FileChooser:
         id: filechooser
         filters: root.filters
         on_submit: root.done(filechooser.path, filechooser.selection)
+        FileChooserIconLayout
+        FileChooserListLayout
 
     ButtonBox:
         Button:
             text: "Cancel"
             on_release: root.cancel()
+
+        Widget:
+
+        Button:
+            text: 'Icon View'
+            on_press: filechooser.view_mode = 'icon'
+
+        Widget:
+            size_hint_x: None
+            width: 5
+
+        Button:
+            text: 'List View'
+            on_press: filechooser.view_mode = 'list'
 
         Widget:
 
