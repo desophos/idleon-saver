@@ -11,7 +11,11 @@ Converts Legends of Idleon Steam save files to and from JSON.
 I do not endorse using this tool to edit your live save files.
 This tool is for educational and investigative purposes only.
 
-## Instructions
+## Download
+
+Most users will only need to **download [the latest exe release](https://github.com/desophos/idleon-saver/releases)**.
+
+## Development
 
 ### Setup
 
@@ -26,10 +30,7 @@ cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
 
 ### Running the GUI
 
-An executable will be released once the GUI is polished enough.
-However, it currently needs to be launched via Python (after installing dependencies).
-
-For now, to launch the GUI, run `python idleon_saver/gui/main.py`.
+To launch the GUI, run `python idleon_saver/gui/main.py`.
 
 ### Running scripts directly
 
