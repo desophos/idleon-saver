@@ -1,6 +1,6 @@
 [[package]]
 name = "altgraph"
-version = "0.17"
+version = "0.17.2"
 description = "Python graph (network) package"
 category = "main"
 optional = false
@@ -210,7 +210,7 @@ requests = "*"
 
 [[package]]
 name = "macholib"
-version = "1.15.1"
+version = "1.15.2"
 description = "Mach-O header analysis and editing"
 category = "main"
 optional = false
@@ -503,8 +503,8 @@ content-hash = "439d849275a5409f6c1e335bb8fa2054d46e3ca3843a6219153135987378423c
 
 [metadata.files]
 altgraph = [
-    {file = "altgraph-0.17-py2.py3-none-any.whl", hash = "sha256:c623e5f3408ca61d4016f23a681b9adb100802ca3e3da5e718915a9e4052cebe"},
-    {file = "altgraph-0.17.tar.gz", hash = "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa"},
+    {file = "altgraph-0.17.2-py2.py3-none-any.whl", hash = "sha256:743628f2ac6a7c26f5d9223c91ed8ecbba535f506f4b6f558885a8a56a105857"},
+    {file = "altgraph-0.17.2.tar.gz", hash = "sha256:ebf2269361b47d97b3b88e696439f6e4cbc607c17c51feb1754f90fb79839158"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -604,8 +604,8 @@ kivy-garden = [
     {file = "kivy-garden-0.1.4.tar.gz", hash = "sha256:c256f42788421273a08fbb0a228f0fb0e80dd86b629fb8c0920507f645be6c72"},
 ]
 macholib = [
-    {file = "macholib-1.15.1-py2.py3-none-any.whl", hash = "sha256:3781768cdbc8c7996cbf0c61844e80e715f870385358b17602b1c9c1eba9f48e"},
-    {file = "macholib-1.15.1.tar.gz", hash = "sha256:96ce0efeea6adadda0e20bc2366314646483b5504119c2212b24838cf0cb80b1"},
+    {file = "macholib-1.15.2-py2.py3-none-any.whl", hash = "sha256:885613dd02d3e26dbd2b541eb4cc4ce611b841f827c0958ab98656e478b9e6f6"},
+    {file = "macholib-1.15.2.tar.gz", hash = "sha256:1542c41da3600509f91c165cb897e7e54c0e74008bd8da5da7ebbee519d593d2"},
 ]
 mypy = [
     {file = "mypy-0.910-cp35-cp35m-macosx_10_9_x86_64.whl", hash = "sha256:a155d80ea6cee511a3694b108c4494a39f42de11ee4e61e72bc424c490e46457"},
