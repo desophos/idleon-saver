@@ -22,6 +22,7 @@ Config.set("graphics", "width", 820)
 Config.set("graphics", "minimum_width", 700)
 Config.set("graphics", "height", 300)
 Config.set("graphics", "minimum_height", 300)
+Config.set("input", "mouse", "mouse,disable_multitouch")
 
 from kivy.app import App
 from kivy.clock import Clock
