@@ -281,7 +281,7 @@ def main(args: Namespace):
     export_parsers = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
     export_savers = {Formats.IC: save_idleon_companion, Formats.COG: save_cogstruction}
 
-    infile = args.workdir / (args.infile or "decoded_plain.json")
+    infile = args.workdir / (args.infile or "decoded.json")
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
 
