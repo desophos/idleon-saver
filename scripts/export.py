@@ -9,20 +9,23 @@ from string import ascii_lowercase
 from typing import Iterator, Tuple
 
 from data import (
-    bag_names,
+    Bags,
+    bag_maps,
+    card_bases,
     card_names,
+    class_names,
     cog_boosts,
     cog_datas_map,
     cog_type_map,
     constellation_names,
-    gem_bag_names,
     pouch_names,
     pouch_sizes,
     skill_names,
     stamp_names,
     starsign_ids,
+    starsign_names,
     statue_names,
-    storage_names,
+    vial_names,
 )
 from idleon_saver.ldb import ldb_args
 from idleon_saver.utility import from_keys_in, zip_from_iterable
@@ -43,22 +46,6 @@ def friendly_name(s: str) -> str:
     return s.replace("_", " ").title()
 
 
-def map_bags(names: dict[str, str], capacities: list[list[str]]) -> dict[str, str]:
-    return {key: names[name] for key, _, name in capacities if name in names}
-
-
-def bag_map(data: dict) -> dict[str, str]:
-    return map_bags(bag_names, data["CustomLists"]["PlayerCapacities"][0])
-
-
-def gem_bag_map(data: dict) -> dict[str, str]:
-    return map_bags(gem_bag_names, data["CustomLists"]["PlayerCapacities"][0])
-
-
-def storage_map(data: dict) -> dict[str, str]:
-    return map_bags(storage_names, data["CustomLists"]["PlayerCapacities"][1])
-
-
 def char_map(data: dict) -> dict[str, str]:
     return dict(zip(data["GetPlayersUsernames"], "_" + ascii_lowercase))
 
@@ -75,8 +62,8 @@ def get_baseclass(which: int) -> int:
     raise ValueError(f"Class {which} does not exist")
 
 
-def get_classname(data: dict, which: int) -> str:
-    return friendly_name(data["CustomLists"]["ClassNames"][which])
+def get_classname(which: int) -> str:
+    return friendly_name(class_names[which])
 
 
 def get_alchemy(data: dict) -> dict[str, dict]:
@@ -85,17 +72,15 @@ def get_alchemy(data: dict) -> dict[str, dict]:
             zip(("Orange", "Green", "Purple", "Yellow"), data["CauldronInfo"][:4])
         ),
         "vials": {
-            friendly_name(info[0]): level
-            for info, level in zip(
-                data["CustomLists"]["AlchemyDescription"][4], data["CauldronInfo"][4]
-            )
+            friendly_name(name): level
+            for name, level in zip(vial_names, data["CauldronInfo"][4])
             if level > 0
         },
     }
 
 
-def get_starsign_from_index(data: dict, i: int) -> str:
-    return starsign_ids[data["CustomLists"]["StarSigns"][i][0]]
+def get_starsign_from_index(i: int) -> str:
+    return starsign_ids[starsign_names[i]]
 
 
 def get_starsigns(data: dict) -> dict[str, bool]:
@@ -105,15 +90,8 @@ def get_starsigns(data: dict) -> dict[str, bool]:
     }
 
 
-def get_card_bases(data: dict) -> dict[str, float]:
-    return {
-        name: float(base)
-        for name, _, base, _, _ in chain(*data["CustomLists"]["CardStuff"])
-    }
-
-
-def get_cardtier(data: dict, name: str, level: int) -> int:
-    base = get_card_bases(data)[name]
+def get_cardtier(name: str, level: int) -> int:
+    base = card_bases[name]
     if level == 0:
         return 0
     elif level >= base * 9:
@@ -128,7 +106,7 @@ def get_cardtier(data: dict, name: str, level: int) -> int:
 
 def get_cards(data: dict) -> dict[str, int]:
     return {
-        card_names[name]: get_cardtier(data, name, level)
+        card_names[name]: get_cardtier(name, level)
         for name, level in data["Cards"][0].items()
         if level > 0
     }
@@ -164,11 +142,11 @@ def get_statues(data: dict) -> dict:
 def get_checklist(data: dict) -> dict[str, bool]:
     return (
         from_keys_in(
-            gem_bag_map(data),
+            bag_maps[Bags.GEM],
             list(data["PlayerDATABASE"].values())[0]["InvBagsUsed"],
             True,
         )
-        | from_keys_in(storage_map(data), data["InvStorageUsed"].keys(), True)
+        | from_keys_in(bag_maps[Bags.STORAGE], data["InvStorageUsed"].keys(), True)
         | {name: True for name, level in get_stamps(data) if level > 0}
     )
 
@@ -201,7 +179,7 @@ def get_chars(data: dict) -> list[dict]:
     return [
         {
             "name": charname,
-            "class": get_classname(data, chardata["CharacterClass"]),
+            "class": get_classname(chardata["CharacterClass"]),
             "level": chardata["PersonalValuesMap"]["StatList"][4],
             "constellations": {
                 constellation_names[i]: True
@@ -209,13 +187,15 @@ def get_chars(data: dict) -> list[dict]:
                 if char_map(data)[charname] in chars
             },
             "starSigns": {
-                get_starsign_from_index(data, int(k)): True
+                get_starsign_from_index(int(k)): True
                 for k in chardata["PersonalValuesMap"]["StarSign"]
                 .strip(",_")
                 .split(",")
             },
             "skills": dict(list(zip(skill_names, chardata["Lv0"]))[1:]),
-            "items": from_keys_in(bag_map(data), chardata["InvBagsUsed"].keys(), True)
+            "items": from_keys_in(
+                bag_maps[Bags.INV], chardata["InvBagsUsed"].keys(), True
+            )
             | get_pouches(chardata["MaxCarryCap"]),
         }
         for charname, chardata in data["PlayerDATABASE"].items()
