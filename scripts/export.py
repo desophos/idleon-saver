@@ -224,7 +224,6 @@ def get_chars(data: dict) -> list[dict]:
 
 def to_idleon_companion(raw: dict) -> dict:
     return {
-        "version": raw["CustomLists"]["PatchNotesInfo"][-1][0].lstrip("V"),
         "alchemy": get_alchemy(raw),
         "starSigns": get_starsigns(raw),
         "cards": get_cards(raw),
