@@ -12,6 +12,12 @@ def user_dir():
     return path
 
 
+def logs_dir():
+    path = user_dir() / "logs"
+    path.mkdir(exist_ok=True)
+    return path
+
+
 def zip_from_iterable(iterables):
     return zip(*iterables)
 

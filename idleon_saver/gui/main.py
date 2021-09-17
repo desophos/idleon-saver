@@ -5,12 +5,12 @@ from multiprocessing import freeze_support
 from pathlib import Path
 from zipfile import ZipFile
 
-from idleon_saver.utility import BUGREPORT_LINK, user_dir
+from idleon_saver.utility import BUGREPORT_LINK, logs_dir, user_dir
 
 # Set log config before all kivy imports
 # to ensure that *all* kivy logging obeys our settings.
 # (Prevents kivy.config from creating extra log files.)
-os.environ["KCFG_KIVY_LOG_DIR"] = str(user_dir())
+os.environ["KCFG_KIVY_LOG_DIR"] = str(logs_dir())
 os.environ["KCFG_KIVY_LOG_NAME"] = "log_%y-%m-%d_%_.txt"
 os.environ["KCFG_KIVY_LOG_LEVEL"] = "info"
 os.environ["KCFG_KIVY_LOG_MAXFILES"] = "10"
@@ -51,9 +51,8 @@ class ErrorDialog(VBox):
 
     def open_logs(self):
         with ZipFile(user_dir() / "logs.zip", "w") as zf:
-            for f in user_dir().iterdir():
-                if f.suffix != ".zip":
-                    zf.write(f, f.name)
+            for f in logs_dir().iterdir():
+                zf.write(f, f.name)
         os.startfile(user_dir(), "explore")
 
     def open_github(self):
