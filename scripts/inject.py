@@ -1,14 +1,15 @@
-from multiprocessing import Process
+import logging
 from pathlib import Path
 
-import electron_inject
+import win32con
+import win32gui
+from ChromeController import ChromeContext
 from idleon_saver.ldb import ldb_args
-from idleon_saver.utility import ROOT_DIR, user_dir
+
+logger = logging.getLogger(__name__)
 
 
 def main(exe_path: Path):
-    infile = ROOT_DIR.joinpath("data", "inject.js")
-    outfile = user_dir() / "inject.js"
     storage_key = "".join(
         [
             "/",
@@ -17,25 +18,27 @@ def main(exe_path: Path):
         ]
     )
 
-    with open(infile, "r") as file:
-        js = file.read()
+    with ChromeContext(
+        binary=f'"{exe_path}"',
+        disable_page=True,
+        disable_dom=True,
+        disable_network=True,
+    ) as c:
+        # The window minimizes late but it's better than leaving it up the whole time.
+        win32gui.ShowWindow(
+            win32gui.FindWindow(None, "Legends Of Idleon"), win32con.SW_MINIMIZE
+        )
+        response = c.execute_javascript_statement(
+            f"localStorage.getItem('{storage_key}')"
+        )
 
-    # TODO: this is extremely hacky. there is a better way to do this
-    js = js.replace("__KEY_PLACEHOLDER__", storage_key)
-
-    with open(outfile, "w") as file:
-        file.write(js)
-
-    # Launching electron_inject as a child process
-    # allows the user to close the game exe.
-    p = Process(
-        target=electron_inject.inject,
-        args=(f'"{exe_path}"',),
-        kwargs={"timeout": 20, "scripts": [str(outfile)]},
-    )
-    p.start()
-    p.join()
-    assert not p.exitcode
+    try:
+        assert response["type"] == "string"
+        assert response["value"]
+        return response["value"]
+    except (KeyError, AssertionError) as e:
+        logger.exception(f"Malformed return value: {response}", exc_info=e)
+        raise
 
 
 if __name__ == "__main__":

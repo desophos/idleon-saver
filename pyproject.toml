@@ -8,8 +8,9 @@ authors = ["desophos <1887450+desophos@users.noreply.github.com>"]
 python = "^3.9"
 plyvel = { version = "^1.3.0", markers = "sys_platform != 'win32'" }
 plyvel-win32 = { version = "^1.3.0", markers = "sys_platform == 'win32'" }
-electron-inject = { git = "https://github.com/desophos/electron-inject.git" }
 Kivy = { extras = ["base"], version = "^2.0.0" }
+chromecontroller = { git = "https://github.com/desophos/ChromeController.git" }
+pywin32 = { version = ">=300", markers = "sys_platform == 'win32'" }
 
 [tool.poetry.dev-dependencies]
 black = { version = "^21.6-beta.0", allow-prereleases = true }
