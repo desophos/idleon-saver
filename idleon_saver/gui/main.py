@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 from multiprocessing import freeze_support
+from enum import Enum
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -72,6 +73,9 @@ class EndScreen(Screen):
     pass
 
 
+Blockers = Enum("Blockers", "PATH ACTION")
+
+
 class PathScreen(Screen):
     back = ObjectProperty(None)
     next = ObjectProperty(None)
@@ -82,6 +86,8 @@ class PathScreen(Screen):
     path_filters = ListProperty([])
     error = ObjectProperty(None)
     instructions = StringProperty("")
+
+    blockers = dict.fromkeys(list(Blockers), False)
 
     def __init__(self, caption, default_path, path_filters, instructions="", **kwargs):
         super().__init__(**kwargs)
@@ -94,6 +100,15 @@ class PathScreen(Screen):
         # Recheck path every second in case of filesystem changes.
         # Hopefully not a performance issue.
         Clock.schedule_interval(lambda dt: self.on_path_text(), 1)
+
+    def block_next(self, which: Blockers, val: bool):
+        """Disable "Next" button if blocked for any reason.
+
+        Enable when all blocks are cleared.
+        True means "blocked" to match Button.disabled.
+        """
+        self.blockers[which] = val
+        self.next.disabled = any(self.blockers.values())
 
     def dismiss_popup(self):
         self._popup.dismiss()
@@ -117,11 +132,11 @@ class PathScreen(Screen):
             text = self.path_input.text
 
         if not Path(text).exists():
-            self.next.disabled = True
             self.error.opacity = 1.0
+            self.block_next(Blockers.PATH, True)
         else:
-            self.next.disabled = False
             self.error.opacity = 0.0
+            self.block_next(Blockers.PATH, False)
 
     def try_action(self, path):
         try:
