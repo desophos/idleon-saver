@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-from multiprocessing import freeze_support
 import threading
 from enum import Enum
 from pathlib import Path
@@ -32,7 +31,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
-from kivy.resources import resource_add_path, resource_find
+from kivy.resources import resource_add_path
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
@@ -238,9 +237,6 @@ class IdleonSaver(App):
 
 
 if __name__ == "__main__":
-    # Support multiprocessing in frozen bundle.
-    freeze_support()
-
     # Add data dir to Kivy path in frozen bundle.
     if hasattr(sys, "_MEIPASS"):
         resource_add_path(os.path.join(sys._MEIPASS))  # type: ignore[attr-defined]
