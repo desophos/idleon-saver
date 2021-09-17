@@ -5,6 +5,7 @@ from multiprocessing import freeze_support
 import threading
 from enum import Enum
 from pathlib import Path
+from time import sleep
 from zipfile import ZipFile
 
 from idleon_saver.stencyl.decoder import StencylDecoder
@@ -87,8 +88,10 @@ class PathScreen(Screen):
     path_filters = ListProperty([])
     error = ObjectProperty(None)
     instructions = StringProperty("")
+    progress = ObjectProperty(None)
 
     blockers = dict.fromkeys(list(Blockers), False)
+    action_done = threading.Event()
 
     def __init__(self, caption, default_path, path_filters, instructions="", **kwargs):
         super().__init__(**kwargs)
@@ -139,7 +142,30 @@ class PathScreen(Screen):
             self.error.opacity = 0.0
             self.block_next(Blockers.PATH, False)
 
+    def increment_progress(self, amt: int, slp: float):
+        """Increments progress until self.action_done is set.
+
+        Args:
+            amt: Amount to increment progress bar by.
+            slp: Seconds to sleep in between increments.
+
+        Time to fill progress bar = 100 * slp / amt.
+        """
+        self.progress.opacity = 1.0
+
+        while not self.action_done.is_set():
+            self.progress.value += amt
+            sleep(slp)
+
+        # Reset progress bar.
+        self.progress.opacity = 0.0
+        self.progress.value = 0
+
     def resolve_action(self, path):
+        # Increment progress bar while action is underway.
+        self.action_done.clear()
+        threading.Thread(target=self.increment_progress, args=(1, 0.25)).start()
+
         try:
             self.action(path)
         except Exception as e:
@@ -151,6 +177,7 @@ class PathScreen(Screen):
             self.manager.transition.direction = "left"
             self.manager.current = self.manager.next()
         finally:
+            self.action_done.set()
             # Only re-enable "Next" button once action is completed.
             self.next.text = "Next"
             self.block_next(Blockers.ACTION, False)

@@ -202,6 +202,7 @@
     next: next
     error: error
     path_input: path_input
+    progress: progress
 
     VBox:
         Header:
@@ -238,6 +239,10 @@
             text: root.instructions
 
         Widget:
+
+        ProgressBar:
+            id: progress
+            opacity: 0.0
 
         ButtonBox:
             size_hint_y: None
