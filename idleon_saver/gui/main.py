@@ -32,7 +32,6 @@ from kivy.resources import resource_add_path, resource_find
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.utils import get_color_from_hex
 
 # Make other modules use Kivy's logger.
 logging.Logger.manager.root = Logger
@@ -118,14 +117,11 @@ class PathScreen(Screen):
             text = self.path_input.text
 
         if not Path(text).exists():
-            self.error.text = "Invalid path!"
-            self.error.background_color = get_color_from_hex("#B71C1C")  # red900
             self.next.disabled = True
+            self.error.opacity = 1.0
         else:
-            # hack to stop instructions from moving up
-            self.error.text = " "
-            self.error.background_color = get_color_from_hex("#1F2933")  # coolgray900
             self.next.disabled = False
+            self.error.opacity = 0.0
 
     def try_action(self, path):
         try:
