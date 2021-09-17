@@ -1,3 +1,5 @@
+import logging
+import sys
 from argparse import ArgumentParser, Namespace
 from contextlib import contextmanager
 from pathlib import Path
@@ -32,6 +34,13 @@ def db_key(install_path: Path) -> bytes:
 
 
 def ldb_args(parser: ArgumentParser = None) -> Namespace:
+    # Redirect logs to stdout for CLI scripts.
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.INFO)
+    root.addHandler(handler)
+
     if parser is None:
         parser = ArgumentParser()
     parser.add_argument(

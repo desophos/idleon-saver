@@ -1,9 +1,12 @@
 import json
+import logging
 from argparse import Namespace
 
 import plyvel
 from idleon_saver.ldb import db_key, get_db, ldb_args
 from idleon_saver.stencyl.encoder import StencylEncoder
+
+logger = logging.getLogger(__name__)
 
 
 def stencyl2ldb(args: Namespace):
@@ -32,7 +35,7 @@ def stencyl2ldb(args: Namespace):
                 f"Failed to edit key {key!s} in database at {args.ldb}"
             ) from e
         else:
-            print(f"Wrote to key {key!s} in database at {args.ldb}")
+            logger.info(f"Wrote to key {key!s} in database at {args.ldb}")
 
 
 def json2stencyl(args: Namespace):
@@ -47,7 +50,7 @@ def json2stencyl(args: Namespace):
     with open(outfile, "w", encoding="ascii") as file:
         file.write(encoded)
 
-    print(f"Wrote file: {outfile}")
+    logger.info(f"Wrote file: {outfile}")
 
 
 def main(args: Namespace):

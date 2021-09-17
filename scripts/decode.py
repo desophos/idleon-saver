@@ -1,4 +1,5 @@
 import json
+import logging
 from argparse import Namespace
 from pathlib import Path
 
@@ -6,6 +7,8 @@ import plyvel
 from idleon_saver.ldb import db_key, get_db, ldb_args
 from idleon_saver.stencyl.common import StencylData
 from idleon_saver.stencyl.decoder import StencylDecoder
+
+logger = logging.getLogger(__name__)
 
 
 def ldb2stencyl(args: Namespace):
@@ -25,7 +28,7 @@ def ldb2stencyl(args: Namespace):
         else:
             with open(outfile, "w", encoding="utf-8") as f:
                 f.write(str(val.strip(b"\x01"), encoding="utf-8"))
-                print(f"Wrote file: {outfile}")
+                logger.info(f"Wrote file: {outfile}")
 
 
 def read_stencyl(workdir: Path, filename: str = "") -> StencylData:
@@ -73,7 +76,7 @@ def stencyl2json(args: Namespace):
     ):
         filename = f"decoded_{name}.json"
         write_json(decoded, args.workdir, filename, fmt)
-        print(f"Wrote file: {args.workdir / filename}")
+        logger.info(f"Wrote file: {args.workdir / filename}")
 
 
 def main(args: Namespace):

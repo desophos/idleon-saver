@@ -1,10 +1,12 @@
 import json
+import logging
 import random
 from argparse import Namespace
 
 from idleon_saver.ldb import ldb_args
 from idleon_saver.stencyl.encoder import StencylEncoder
 
+logger = logging.getLogger(__name__)
 CHARS = [x for x in map(chr, range(32, 127)) if x.isalnum()]
 
 
@@ -32,7 +34,7 @@ def main(args: Namespace):
     with open(outfile, "w", encoding="ascii") as file:
         file.write(encoded)
 
-    print(f"Wrote file: {outfile}")
+    logger.info(f"Wrote file: {outfile}")
 
 
 if __name__ == "__main__":

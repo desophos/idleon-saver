@@ -1,5 +1,6 @@
 import csv
 import json
+import logging
 from argparse import ArgumentParser, Namespace
 from enum import Enum
 from itertools import chain
@@ -29,6 +30,8 @@ from data import (
 )
 from idleon_saver.ldb import ldb_args
 from idleon_saver.utility import from_keys_in, zip_from_iterable
+
+logger = logging.getLogger(__name__)
 
 
 class Formats(Enum):
@@ -220,7 +223,7 @@ def save_idleon_companion(workdir: Path, data: dict):
     with open(outfile, "w", encoding="utf-8") as file:
         json.dump(data, file)
 
-    print(f"Wrote file: {outfile}")
+    logger.info(f"Wrote file: {outfile}")
 
 
 def to_cogstruction(raw: dict) -> dict:
@@ -274,7 +277,7 @@ def save_cogstruction(workdir: Path, data: dict):
             for row in data[which]:
                 writer.writerow(row)
 
-        print(f"Wrote file: {outfile}")
+        logger.info(f"Wrote file: {outfile}")
 
 
 def main(args: Namespace):
