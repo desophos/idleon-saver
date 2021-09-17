@@ -2,10 +2,12 @@ import logging
 import os
 import sys
 from multiprocessing import freeze_support
+import threading
 from enum import Enum
 from pathlib import Path
 from zipfile import ZipFile
 
+from idleon_saver.stencyl.decoder import StencylDecoder
 from idleon_saver.utility import BUGREPORT_LINK, logs_dir, user_dir
 
 # Set log config before all kivy imports
@@ -38,7 +40,6 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 logging.Logger.manager.root = Logger
 
 from scripts import inject
-from scripts.decode import read_stencyl
 from scripts.export import save_idleon_companion, to_idleon_companion
 
 
@@ -138,7 +139,7 @@ class PathScreen(Screen):
             self.error.opacity = 0.0
             self.block_next(Blockers.PATH, False)
 
-    def try_action(self, path):
+    def resolve_action(self, path):
         try:
             self.action(path)
         except Exception as e:
@@ -149,18 +150,28 @@ class PathScreen(Screen):
         else:
             self.manager.transition.direction = "left"
             self.manager.current = self.manager.next()
+        finally:
+            # Only re-enable "Next" button once action is completed.
+            self.next.text = "Next"
+            self.block_next(Blockers.ACTION, False)
+
+    def start_action(self, path):
+        # Disable "Next" button until action is completed.
+        self.next.text = "Loading..."
+        self.block_next(Blockers.ACTION, True)
+
+        # Use threading to avoid freezing the UI.
+        threading.Thread(target=self.resolve_action, args=(path,)).start()
 
 
 class MainWindow(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        def convert_save(path: str):
-            infile = Path(path)
-            save_idleon_companion(
-                infile.parent,
-                to_idleon_companion(read_stencyl(infile.parent, infile.name).unwrapped),
-            )
+        def get_savedata(path: str):
+            savedata = inject.main(Path(path))
+            decoded = StencylDecoder(savedata).result.unwrapped
+            save_idleon_companion(user_dir(), to_idleon_companion(decoded))
 
         screens = [
             StartScreen(name="start"),
@@ -168,17 +179,9 @@ class MainWindow(ScreenManager):
                 "Path to LegendsOfIdleon.exe:",
                 "C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
                 ["*.exe"],
-                "Make sure Steam is running, then click Next to open Legends of Idleon.\nYou'll be prompted to download your save file, then you can close the game.",
+                "Make sure Steam is running and Legends of Idleon is closed, then click Next.\nLegends of Idleon will open briefly to retrieve your save data.",
                 name="find_exe",
-                action=lambda path: inject.main(Path(path)),
-            ),
-            PathScreen(
-                "Path to idleonsave.txt:",
-                str(Path.home().joinpath("Downloads", "idleonsave.txt")),
-                ["*.txt"],
-                "Click Next to convert the save file you downloaded into a format ready to import into Idleon Companion.",
-                name="find_save",
-                action=convert_save,
+                action=get_savedata,
             ),
             EndScreen(name="end"),
         ]
