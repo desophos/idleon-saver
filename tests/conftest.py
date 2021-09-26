@@ -1,3 +1,4 @@
+import json
 from argparse import Namespace
 from pathlib import Path
 
@@ -28,3 +29,9 @@ def testdb(testargs):
 def stencylsave() -> str:
     with open(ROOT_DIR.joinpath("tests", "data", "stencylsave.txt"), "r") as f:
         return f.read()
+
+
+@pytest.fixture(scope="session")
+def jsonsave() -> str:
+    with open(ROOT_DIR.joinpath("tests", "data", "save.json"), "r") as f:
+        return json.load(f)
