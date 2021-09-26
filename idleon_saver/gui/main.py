@@ -134,12 +134,14 @@ class PathScreen(Screen):
         if text is None:
             text = self.path_input.text
 
-        if not Path(text).exists():
-            self.error.opacity = 1.0
-            self.block_next(Blockers.PATH, True)
-        else:
+        if text and Path(text).exists() and Path(text).suffix == ".exe":
+            # Valid path -> allow next
             self.error.opacity = 0.0
             self.block_next(Blockers.PATH, False)
+        else:
+            # Invalid path -> block next
+            self.error.opacity = 1.0
+            self.block_next(Blockers.PATH, True)
 
     def increment_progress(self, amt: int, slp: float):
         """Increments progress until self.action_done is set.
