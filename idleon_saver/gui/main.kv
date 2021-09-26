@@ -80,6 +80,12 @@
             size: self.size
             radius: [self.height//4]
 
+<BackButton@Button>:
+    text: 'Back'
+
+<NextButton@Button>:
+    text: 'Next'
+
 <MainWindow>:
     background_normal: ''
 
@@ -159,7 +165,7 @@
         Widget:
 
         ButtonBox:
-            Button:
+            BackButton:
                 id: back
                 text: 'Exit'
                 on_release:
@@ -167,9 +173,8 @@
 
             Widget:
 
-            Button:
+            NextButton:
                 id: next
-                text: 'Next'
                 on_release:
                     root.manager.transition.direction = 'left'
                     root.manager.current = root.manager.next()
@@ -184,9 +189,8 @@
         Widget:
 
         ButtonBox:
-            Button:
+            BackButton:
                 id: back
-                text: 'Back'
                 on_release:
                     root.manager.transition.direction = 'right'
                     root.manager.current = root.manager.previous()
@@ -200,7 +204,7 @@
 
             Widget:
 
-            Button:
+            NextButton:
                 id: next
                 text: 'Finish'
                 on_release:
@@ -256,17 +260,15 @@
         ButtonBox:
             size_hint_y: None
 
-            Button:
+            BackButton:
                 id: back
-                text: 'Back'
                 on_release:
                     root.manager.transition.direction = 'right'
                     root.manager.current = root.manager.previous()
 
             Widget:
 
-            Button:
+            NextButton:
                 id: next
-                text: 'Next'
                 on_release:
                     root.start_action(root.path_input.text)
