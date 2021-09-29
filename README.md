@@ -1,6 +1,8 @@
 # Idleon Saver
 
-Converts Legends of Idleon Steam save files to and from JSON.
+[![Maintainability](https://api.codeclimate.com/v1/badges/bda291e68f16afb3fbfe/maintainability)](https://codeclimate.com/github/desophos/idleon-saver/maintainability)
+
+Converts Legends of Idleon Steam save files to and from JSON. Includes [a friendly GUI](https://github.com/desophos/idleon-saver/releases) that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/).
 
 ## Disclaimer
 
