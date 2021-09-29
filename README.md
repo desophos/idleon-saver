@@ -1,8 +1,9 @@
 # Idleon Saver
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/bda291e68f16afb3fbfe/maintainability)](https://codeclimate.com/github/desophos/idleon-saver/maintainability)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Converts Legends of Idleon Steam save files to and from JSON. Includes [a friendly GUI](https://github.com/desophos/idleon-saver/releases) that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/).
+Converts Legends of Idleon Steam save files to and from JSON with [a friendly GUI](https://github.com/desophos/idleon-saver/releases) that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/).
 
 ## Disclaimer
 
@@ -13,16 +14,16 @@ Converts Legends of Idleon Steam save files to and from JSON. Includes [a friend
 I do not endorse using this tool to edit your live save files.
 This tool is for educational and investigative purposes only.
 
-## Download
+## For Users
 
 Most users will only need to **download [the latest exe release](https://github.com/desophos/idleon-saver/releases)**.
 
-## Development
+## For Developers
 
 ### Setup
 
-Use either `poetry install` (recommended) or `pip install .` to install dependencies.
-If using poetry, replace `python` with `poetry run python` in this document.
+Use either [`poetry install`](https://python-poetry.org/docs/master/) (recommended) or `pip install .` to install dependencies.
+If using poetry, replace `python` with `poetry run python` in this document (or run from a `poetry shell`).
 
 If using leveldb scripts, copy your database to a test location (default is `~/dev/leveldb`). For example:
 
@@ -74,3 +75,9 @@ After you've obtained your `decoded_plain.json`, you can export it into formats 
 The `idleon_companion` option produces `idleon_companion.json` for import into [Idleon Companion](https://idleoncompanion.com/).
 
 The `cogstruction` option produces `cog_datas.csv` and `empties_datas.csv` for use with [Cogstruction](https://github.com/automorphis/Cogstruction).
+
+### Contributing
+
+Feedback, suggestions, and contributions are welcome!
+
+Use `poetry install --with dev,test` to install the optional dependencies. Run tests with [`pytest`](https://docs.pytest.org/en/latest/index.html). Please run [Black](https://black.readthedocs.io/en/stable/) before submitting a PR; I have it configured to run on save. Thanks for reading!
