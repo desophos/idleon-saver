@@ -12,13 +12,21 @@ Kivy = { extras = ["base"], version = "^2.0.0" }
 chromecontroller = { git = "https://github.com/desophos/ChromeController.git" }
 pywin32 = { version = ">=300", markers = "sys_platform == 'win32'" }
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
 black = { version = "^21.6-beta.0", allow-prereleases = true }
 mypy = "^0.910"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
 pytest = "^6.2.4"
 pytest-cov = "^2.12.1"
 telenium = { git = "https://github.com/desophos/telenium.git" }
 
 [build-system]
-requires = ["poetry-core>=1.1"]
+requires = ["poetry-core>=1.2.0a2"]
 build-backend = "poetry.core.masonry.api"
