@@ -16,6 +16,7 @@ pywin32 = { version = ">=300", markers = "sys_platform == 'win32'" }
 black = { version = "^21.6-beta.0", allow-prereleases = true }
 mypy = "^0.910"
 pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
 telenium = { git = "https://github.com/desophos/telenium.git" }
 
 [build-system]
