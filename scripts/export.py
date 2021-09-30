@@ -3,11 +3,11 @@ import json
 import logging
 from argparse import ArgumentParser, Namespace
 from enum import Enum
-from itertools import chain
+from itertools import chain, starmap
 from math import floor
 from pathlib import Path
 from string import ascii_lowercase
-from typing import Iterator, Tuple
+from typing import Any, Iterator, Tuple, Union
 
 from data import (
     Bags,
@@ -226,8 +226,8 @@ def save_idleon_companion(workdir: Path, data: dict):
     logger.info(f"Wrote file: {outfile}")
 
 
-def to_cogstruction(raw: dict) -> dict:
-    cog_datas, empties = [], []
+def get_empties(raw: dict) -> list[dict[str, int]]:
+    empties = []
 
     for y in range(8):
         for x in range(12):
@@ -237,33 +237,43 @@ def to_cogstruction(raw: dict) -> dict:
             elif raw["CogOrder"][i] == "Blank":
                 empties.append({"empties_x": x, "empties_y": y})
 
-    for cog, name in zip(raw["CogMap"], raw["CogOrder"]):
-        data = {"cog type": "Cog", "name": ""}
+    return empties
 
-        if name == "Blank":
-            continue
-        elif name.startswith("Player_"):
-            data["cog type"] = "Character"
-            data["name"] = name.removeprefix("Player_")
-        elif name == "CogY":
-            data["cog type"] = "Yang_Cog"
-        elif name.startswith("CogZ"):
-            data["cog type"] = "Omni_Cog"
-        else:
-            for abbr, cog_type in cog_type_map.items():
-                if name.endswith(abbr):
-                    data["cog type"] = f"{cog_type}_Cog"
-                    break
 
-        for abbr, field in cog_datas_map.items():
-            try:
-                data[field] = cog[abbr] / 100 if abbr in cog_boosts else cog[abbr]
-            except KeyError:
-                data[field] = ""
+def get_cog_data(cog: dict[str, Any], name: str) -> Union[None, dict[str, Any]]:
+    data = {"cog type": "Cog", "name": ""}
 
-        cog_datas.append(data)
+    if name == "Blank":
+        return None
+    elif name.startswith("Player_"):
+        data["cog type"] = "Character"
+        data["name"] = name.removeprefix("Player_")
+    elif name == "CogY":
+        data["cog type"] = "Yang_Cog"
+    elif name.startswith("CogZ"):
+        data["cog type"] = "Omni_Cog"
+    else:
+        for abbr, cog_type in cog_type_map.items():
+            if name.endswith(abbr):
+                data["cog type"] = f"{cog_type}_Cog"
+                break
 
-    return {"cog_datas": cog_datas, "empties_datas": empties}
+    for abbr, field in cog_datas_map.items():
+        try:
+            data[field] = cog[abbr] / 100 if abbr in cog_boosts else cog[abbr]
+        except KeyError:
+            data[field] = ""
+
+    return data
+
+
+def to_cogstruction(raw: dict) -> dict[str, Any]:
+    return {
+        "cog_datas": filter(
+            None, starmap(get_cog_data, zip(raw["CogMap"], raw["CogOrder"]))
+        ),
+        "empties_datas": get_empties(raw),
+    }
 
 
 def save_cogstruction(workdir: Path, data: dict):
