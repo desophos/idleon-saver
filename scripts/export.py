@@ -226,15 +226,19 @@ def save_idleon_companion(workdir: Path, data: dict):
     logger.info(f"Wrote file: {outfile}")
 
 
-def get_empties(raw: dict) -> list[dict[str, int]]:
-    empties = []
+def get_empties(cogs: list[str]) -> list[dict[str, int]]:
+    assert len(cogs) >= 96, (
+        "cog list must contain at least 96 entries to cover the whole cog board; "
+        f"{len(cogs)} isn't enough"
+    )
 
+    empties: list[dict[str, int]] = []
+    # The cog board is 8 rows by 12 columns = 96 spaces.
     for y in range(8):
         for x in range(12):
             i = y * 12 + x
-            if i >= 96:
-                break
-            elif raw["CogOrder"][i] == "Blank":
+            # Ignore occupied spaces.
+            if cogs[i] == "Blank":
                 empties.append({"empties_x": x, "empties_y": y})
 
     return empties
@@ -287,7 +291,7 @@ def to_cogstruction(raw: dict) -> dict[str, Any]:
         "cog_datas": list(
             filter(None, starmap(get_cog_data, zip(raw["CogMap"], raw["CogOrder"])))
         ),  # Filter to ignore blank cogs.
-        "empties_datas": get_empties(raw),
+        "empties_datas": get_empties(raw["CogOrder"]),
     }
 
 
