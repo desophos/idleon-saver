@@ -7,7 +7,7 @@ from itertools import chain, starmap
 from math import floor
 from pathlib import Path
 from string import ascii_lowercase
-from typing import Any, Iterator, Tuple, Union
+from typing import Any, Iterator, Optional, Tuple
 
 from data import (
     Bags,
@@ -240,28 +240,43 @@ def get_empties(raw: dict) -> list[dict[str, int]]:
     return empties
 
 
-def get_cog_data(cog: dict[str, Any], name: str) -> Union[None, dict[str, Any]]:
-    data = {"cog type": "Cog", "name": ""}
-
+def get_cog_type(name: str) -> Optional[str]:
+    # Check simple special cases.
     if name == "Blank":
         return None
     elif name.startswith("Player_"):
-        data["cog type"] = "Character"
-        data["name"] = name.removeprefix("Player_")
+        return "Character"
     elif name == "CogY":
-        data["cog type"] = "Yang_Cog"
+        return "Yang_Cog"
     elif name.startswith("CogZ"):
-        data["cog type"] = "Omni_Cog"
-    else:
-        for abbr, cog_type in cog_type_map.items():
-            if name.endswith(abbr):
-                data["cog type"] = f"{cog_type}_Cog"
-                break
+        return "Omni_Cog"
 
-    for abbr, field in cog_datas_map.items():
+    # Check each type of directional cog.
+    for direction, cog_type in cog_type_map.items():
+        if name.endswith(direction):
+            return f"{cog_type}_Cog"
+
+    # If the name didn't match any special cases, it's just a regular cog.
+    return "Cog"
+
+
+def get_cog_data(cog: dict[str, Any], name: str) -> Optional[dict[str, Any]]:
+    data = {}
+
+    cog_type = get_cog_type(name)
+    if cog_type is None:
+        return None
+
+    data["cog type"] = cog_type
+    data["name"] = name.removeprefix("Player_") if cog_type == "Character" else ""
+
+    for key, field in cog_datas_map.items():
         try:
-            data[field] = cog[abbr] / 100 if abbr in cog_boosts else cog[abbr]
+            # Boosts are stored as percentages, so convert them to multipliers.
+            data[field] = cog[key] / 100 if key in cog_boosts else cog[key]
         except KeyError:
+            # Cogs only have keys for whatever bonuses they have,
+            # but we need to fill in the missing fields for DictWriter.
             data[field] = ""
 
     return data
@@ -269,9 +284,9 @@ def get_cog_data(cog: dict[str, Any], name: str) -> Union[None, dict[str, Any]]:
 
 def to_cogstruction(raw: dict) -> dict[str, Any]:
     return {
-        "cog_datas": filter(
-            None, starmap(get_cog_data, zip(raw["CogMap"], raw["CogOrder"]))
-        ),
+        "cog_datas": list(
+            filter(None, starmap(get_cog_data, zip(raw["CogMap"], raw["CogOrder"])))
+        ),  # Filter to ignore blank cogs.
         "empties_datas": get_empties(raw),
     }
 
