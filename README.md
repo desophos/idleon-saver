@@ -1,5 +1,6 @@
 # Idleon Saver
 
+[![Build](https://github.com/desophos/idleon-saver/actions/workflows/build.yml/badge.svg)](https://github.com/desophos/idleon-saver/actions/workflows/build.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bda291e68f16afb3fbfe/maintainability)](https://codeclimate.com/github/desophos/idleon-saver/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
