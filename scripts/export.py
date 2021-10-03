@@ -309,16 +309,17 @@ def save_cogstruction(workdir: Path, data: dict):
         logger.info(f"Wrote file: {outfile}")
 
 
-def main(args: Namespace):
-    export_parsers = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
-    export_savers = {Formats.IC: save_idleon_companion, Formats.COG: save_cogstruction}
+parsers = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
+savers = {Formats.IC: save_idleon_companion, Formats.COG: save_cogstruction}
 
+
+def main(args: Namespace):
     infile = args.workdir / (args.infile or "decoded.json")
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
 
-    parsed = export_parsers[args.to](data)
-    export_savers[args.to](args.workdir, parsed)
+    parsed = parsers[args.to](data)
+    savers[args.to](args.workdir, parsed)
 
 
 if __name__ == "__main__":
