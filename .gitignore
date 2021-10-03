@@ -11,6 +11,10 @@ dist
 *.pyd
 *.pyo
 
+# test artifacts
+coverage
+.coverage
+
 # temporary directories
 tmp
 work
