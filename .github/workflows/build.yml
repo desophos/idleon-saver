@@ -63,7 +63,9 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Build exe
-        run: poetry run pyinstaller onefile.spec
+        run: poetry run pyinstaller -y onefile.spec
+        env:
+          KIVY_GL_BACKEND: angle_sdl2
 
       - name: Archive exe
         uses: actions/upload-artifact@v2
