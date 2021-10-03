@@ -64,7 +64,7 @@ jobs:
         run: poetry run pyinstaller onefile.spec
 
       - name: Archive exe
-        uses: action/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: IdleonSaver.exe
           path: dist/IdleonSaver.exe
