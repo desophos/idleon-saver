@@ -1,0 +1,70 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    defaults:
+      run:
+        shell: bash
+    runs-on: windows-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Cache PyInstaller
+        uses: actions/cache@v2
+        id: cache-pyinstaller
+        env:
+          cache-name: cache-pyinstaller
+        with:
+          path: ~/pyinstaller
+          key: ${{ runner.os }}-build-${{ env.cache-name }} }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Clone PyInstaller
+        if: steps.cache-pyinstaller.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          repository: pyinstaller/pyinstaller
+          path: ~/pyinstaller
+
+      - name: Build bootloader
+        if: steps.cache-pyinstaller.outputs.cache-hit != 'true'
+        run: |
+          cd ~/pyinstaller/bootloader
+          python ./waf all
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install PyInstaller
+        run: poetry add ~/pyinstaller --no-interaction
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Install package
+        run: poetry install --no-interaction
+
+      - name: Build exe
+        run: poetry run pyinstaller onefile.spec
+
+      - name: Archive exe
+        uses: action/upload-artifact@v2
+        with:
+          name: IdleonSaver.exe
+          path: dist/IdleonSaver.exe
