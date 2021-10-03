@@ -54,14 +54,15 @@ def char_map(data: dict) -> dict[str, str]:
 
 
 def get_baseclass(which: int) -> int:
-    if 1 <= which and which <= 5:
+    if which in range(1, 5 + 1):
         # special case for beginner because it has only 4 subclasses
         return 1
-    else:
-        for base in [7, 19, 31]:  # warrior, archer, mage
-            # each has 6 subclasses (unreleased but still in ClassNames)
-            if base <= which and which <= base + 6:
-                return base
+
+    for base in [7, 19, 31]:  # warrior, archer, mage
+        # each has 6 subclasses (unreleased but still in ClassNames)
+        if which in range(base, base + 6 + 1):
+            return base
+
     raise ValueError(f"Class {which} does not exist")
 
 
