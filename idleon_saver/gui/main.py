@@ -101,14 +101,9 @@ class PathScreen(MyScreen):
     blockers = dict.fromkeys(list(Blockers), False)
     action_done = threading.Event()
 
-    def __init__(self, caption, default_path, path_filters, instructions="", **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.caption = caption
-        self.default_path = default_path
-        self.on_path_text(default_path)
-        self.path_filters = path_filters
-        self.instructions = instructions
-
+        self.on_path_text(self.default_path)
         # Recheck path every second in case of filesystem changes.
         # Hopefully not a performance issue.
         Clock.schedule_interval(lambda dt: self.on_path_text(), 1)
@@ -218,10 +213,10 @@ class MainWindow(ScreenManager):
         screens = [
             StartScreen(name="start"),
             PathScreen(
-                "Path to LegendsOfIdleon.exe:",
-                "C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
-                ["*.exe"],
-                "Make sure Steam is running and Legends of Idleon is closed, then click Next.\nLegends of Idleon will open briefly to retrieve your save data.",
+                caption="Path to LegendsOfIdleon.exe:",
+                default_path="C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon/LegendsOfIdleon.exe",
+                path_filters=["*.exe"],
+                instructions="Make sure Steam is running and Legends of Idleon is closed, then click Next.\nLegends of Idleon will open briefly to retrieve your save data.",
                 name="find_exe",
                 action=get_savedata,
             ),
