@@ -1,4 +1,4 @@
-name: Scan Executable
+name: Virus Scan
 
 on:
   release:
