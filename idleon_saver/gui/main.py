@@ -30,7 +30,7 @@ Config.set("input", "mouse", "mouse,disable_multitouch")
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.logger import Logger
-from kivy.properties import ListProperty, ObjectProperty, StringProperty
+from kivy.properties import ListProperty, ObjectProperty, OptionProperty, StringProperty
 from kivy.resources import resource_add_path
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
@@ -40,7 +40,27 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 logging.Logger.manager.root = Logger
 
 from scripts import inject
-from scripts.export import save_idleon_companion, to_idleon_companion
+from scripts.decode import write_json
+from scripts.export import Formats, friendly_name, parsers, savers
+
+
+class ButtonBox(BoxLayout):
+    pass
+
+
+class ExportButtonBox(ButtonBox):
+    button = ObjectProperty(None)
+    label = ObjectProperty(None)
+    fmt = OptionProperty(Formats.IC, options=[f for f in Formats])
+    try_export = ObjectProperty(None)
+
+    def on_kv_post(self, _):
+        self.label.text = f"to {friendly_name(self.fmt.value)}"
+        self.button.bind(on_release=self.btn_released)
+
+    def btn_released(self, instance):
+        if self.try_export(self.fmt):
+            instance.text = "Exported"
 
 
 class VBox(BoxLayout):
@@ -67,8 +87,6 @@ class FileChooserDialog(VBox):
     cancel = ObjectProperty(None)
 
 
-class StartScreen(Screen):
-    pass
 class MyScreen(Screen):
     def dismiss_popup(self):
         self._popup.dismiss()
@@ -79,8 +97,29 @@ class MyScreen(Screen):
         self._popup.open()
 
 
-class EndScreen(Screen):
+class StartScreen(MyScreen):
     pass
+
+
+class EndScreen(MyScreen):
+    export = ObjectProperty(None)
+
+    def try_export(self, fmt: Formats):
+        try:
+            self.export(fmt)
+        except Exception as e:
+            Logger.exception(e)
+            self.popup_error(
+                text=(
+                    "Oops! Something went wrong.\n\n"
+                    "If you keep getting this error, "
+                    "please report it on GitHub with "
+                    "your logs.zip and idleon_save.json attached."
+                )
+            )
+            return False
+        else:
+            return True
 
 
 Blockers = Enum("Blockers", "PATH ACTION")
@@ -205,10 +244,16 @@ class MainWindow(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.savedata = None
+
         def get_savedata(path: str):
-            savedata = inject.main(Path(path))
-            decoded = StencylDecoder(savedata).result.unwrapped
-            save_idleon_companion(user_dir(), to_idleon_companion(decoded))
+            rawdata = inject.main(Path(path))
+            decoded = StencylDecoder(rawdata).result
+            self.savedata = decoded.unwrapped
+            write_json(decoded, user_dir(), filename="idleon_save.json")
+
+        def export(fmt: Formats):
+            savers[fmt](user_dir(), parsers[fmt](self.savedata))
 
         screens = [
             StartScreen(name="start"),
@@ -220,7 +265,7 @@ class MainWindow(ScreenManager):
                 name="find_exe",
                 action=get_savedata,
             ),
-            EndScreen(name="end"),
+            EndScreen(name="end", export=export),
         ]
 
         for screen in screens:

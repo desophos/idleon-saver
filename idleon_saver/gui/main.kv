@@ -1,6 +1,7 @@
 #:kivy 2.0.0
 #:import startfile os.startfile
 #:import user_dir idleon_saver.utility.user_dir
+#:import Formats scripts.export.Formats
 #:import hex kivy.utils.get_color_from_hex
 #:set coolgray100 hex('#E4E7EB')
 #:set coolgray200 hex('#CBD2D9')
@@ -28,7 +29,7 @@
     size_hint_y: None
     height: 20
 
-<ButtonBox@BoxLayout>:
+<ButtonBox>:
     size_hint_y: None
     height: 30
 
@@ -86,6 +87,26 @@
 
 <NextButton@Button>:
     text: 'Next'
+
+<ExportButtonBox>:
+    button: button
+    label: label
+
+    Button:
+        id: button
+        width: 90
+        text: "Export"
+
+    Label:
+        id: label
+        width: 190
+        text_size: self.size
+        size_hint_x: None
+        padding_x: 5
+        font_size: 18
+        halign: "left"
+        valign: "middle"
+        text: ""
 
 <MainWindow>:
     background_normal: ''
@@ -185,7 +206,31 @@
         Header:
 
         Infobox:
-            text: "Thanks for using Idleon Saver! Your data has been saved to:\n\n" + str(user_dir() / "idleon_companion.json")
+            text: "Thanks for using Idleon Saver! Your data has been saved to:\n\n" + str(user_dir() / "idleon_save.json")
+
+        Widget:
+
+        BoxLayout:
+            height: 85
+            size_hint_y: None
+
+            SidePanel:
+                size_hint_x: 1
+
+            VBox:
+                width: 280
+                size_hint_x: None
+
+                ExportButtonBox:
+                    try_export: root.try_export
+                    fmt: Formats.IC
+
+                ExportButtonBox:
+                    try_export: root.try_export
+                    fmt: Formats.COG
+
+            SidePanel:
+                size_hint_x: 1
 
         Widget:
 
@@ -199,7 +244,7 @@
             Widget:
 
             Button:
-                text: 'Show File'
+                text: 'Show Files'
                 on_release:
                     startfile(user_dir(), "explore")
 
