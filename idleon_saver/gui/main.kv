@@ -67,14 +67,15 @@
 
 <Button>:
     background_normal: ''
-    background_color: 0,0,0,0
+    background_color: 0, 0, 0, 0
+    disabled_color: 1, 1, 1, 0.7  # text color when disabled
     size: 120, 30
     size_hint: None, None
     font_size: 18
 
     canvas.before:
         Color:
-            rgba: coolgray600 if self.state=='normal' else coolgray700
+            rgba: coolgray700 if self.disabled or self.state=='down' else coolgray600
         RoundedRectangle:
             pos: self.pos
             size: self.size
