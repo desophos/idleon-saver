@@ -48,6 +48,7 @@ class VBox(BoxLayout):
 
 
 class ErrorDialog(VBox):
+    text = StringProperty("")
     done = ObjectProperty(None)
 
     def open_logs(self):
@@ -68,6 +69,14 @@ class FileChooserDialog(VBox):
 
 class StartScreen(Screen):
     pass
+class MyScreen(Screen):
+    def dismiss_popup(self):
+        self._popup.dismiss()
+
+    def popup_error(self, text):
+        content = ErrorDialog(text=text, done=self.dismiss_popup)
+        self._popup = Popup(title="Error :(", content=content, size_hint=(0.95, 0.95))
+        self._popup.open()
 
 
 class EndScreen(Screen):
@@ -77,7 +86,7 @@ class EndScreen(Screen):
 Blockers = Enum("Blockers", "PATH ACTION")
 
 
-class PathScreen(Screen):
+class PathScreen(MyScreen):
     back = ObjectProperty(None)
     next = ObjectProperty(None)
     action = ObjectProperty(None)
@@ -112,9 +121,6 @@ class PathScreen(Screen):
         """
         self.blockers[which] = val
         self.next.disabled = any(self.blockers.values())
-
-    def dismiss_popup(self):
-        self._popup.dismiss()
 
     def show_filebrowser(self):
         content = FileChooserDialog(
@@ -171,9 +177,17 @@ class PathScreen(Screen):
             self.action(path)
         except Exception as e:
             Logger.exception(e)
-            content = ErrorDialog(done=self.dismiss_popup)
-            self._popup = Popup(title="Error :(", content=content, size_hint=(0.9, 0.9))
-            self._popup.open()
+            self.popup_error(
+                text=(
+                    "Oops! Something went wrong. "
+                    "Make sure Steam is running and Legends of Idleon is closed, "
+                    "then check the path and try again. "
+                    "If it still doesn't work, "
+                    "make sure you've played a character recently.\n\n"
+                    "If you keep getting this error, "
+                    "please report it on GitHub with your logs.zip attached."
+                )
+            )
         else:
             self.manager.transition.direction = "left"
             self.manager.current = self.manager.next()
