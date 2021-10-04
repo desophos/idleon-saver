@@ -36,6 +36,8 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest --cov-report= --cov=idleon_saver --cov=scripts
+        env:
+          KIVY_GL_BACKEND: angle_sdl2
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
