@@ -12,8 +12,9 @@ dist
 *.pyo
 
 # test artifacts
-coverage
 .coverage
+coverage.*
+htmlcov
 
 # temporary directories
 tmp
