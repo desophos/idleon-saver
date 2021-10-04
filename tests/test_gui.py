@@ -5,6 +5,11 @@ from idleon_saver.utility import wait_for
 from telenium.context import TeleniumContext
 
 path_input = "//PathScreen//TextInput"
+# telenium loads attribute selector values as json.
+# We can't select by the fmt attribute because it's Formats,
+# which is an enum and therefore can't be serialized to json.
+export_ic = "//EndScreen//ExportButtonBox[0]/Button"
+export_cog = "//EndScreen//ExportButtonBox[1]/Button"
 
 
 def current_screen(app: TeleniumContext) -> str:
@@ -128,3 +133,17 @@ def test_loading(app_at_pathscreen):
     app.assertNotExists("//ProgressBar", timeout=5)
     # We should be on the end screen now.
     assert "EndScreen" == current_screen(app)
+
+
+@pytest.mark.parametrize(
+    "button,files",
+    [
+        (export_ic, ["idleon_companion.json"]),
+        (export_cog, ["cog_datas.csv", "empties_datas.csv"]),
+    ],
+)
+def test_export(app_at_endscreen, tmp_path, button, files):
+    app = app_at_endscreen
+    app.cli.wait_click(button)
+    for f in files:
+        assert wait_for((tmp_path / f).exists, 5.0)
