@@ -243,17 +243,8 @@ class PathScreen(MyScreen):
 class MainWindow(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
         self.savedata = None
-
-        def get_savedata(path: str):
-            rawdata = inject.main(Path(path))
-            decoded = StencylDecoder(rawdata).result
-            self.savedata = decoded.unwrapped
-            write_json(decoded, user_dir(), filename="idleon_save.json")
-
-        def export(fmt: Formats):
-            savers[fmt](user_dir(), parsers[fmt](self.savedata))
+        self.userdir = user_dir()
 
         screens = [
             StartScreen(name="start"),
@@ -263,13 +254,25 @@ class MainWindow(ScreenManager):
                 path_filters=["*.exe"],
                 instructions="Make sure Steam is running and Legends of Idleon is closed, then click Next.\nLegends of Idleon will open briefly to retrieve your save data.",
                 name="find_exe",
-                action=get_savedata,
+                action=self.get_json,
             ),
-            EndScreen(name="end", export=export),
+            EndScreen(name="end", export=self.export),
         ]
 
         for screen in screens:
             self.add_widget(screen)
+
+    def get_stencyl(self, path: str):
+        return inject.main(Path(path))
+
+    def get_json(self, path: str):
+        rawdata = self.get_stencyl(path)
+        decoded = StencylDecoder(rawdata).result
+        self.savedata = decoded.unwrapped
+        write_json(decoded, self.userdir, filename="idleon_save.json")
+
+    def export(self, fmt: Formats):
+        savers[fmt](self.userdir, parsers[fmt](self.savedata))
 
     def next(self):
         # don't wrap from last to first screen
