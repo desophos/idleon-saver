@@ -1,4 +1,3 @@
-import json
 import sys
 
 import pytest
@@ -24,12 +23,19 @@ def next_blocked(app: TeleniumContext):
 
 
 @pytest.fixture
-def app():
+def app(tmp_path, stencylsave) -> TeleniumContext:
     with TeleniumContext(
         cmd_process=[sys.executable, "-m", "telenium.execute"],
         cmd_entrypoint=["idleon_saver/gui/main.py"],
     ) as ctx:
         ctx.cli.select_and_store("window", "/MainWindow")
+        ctx.cli.execute(f'window.get_stencyl = lambda _: r"{stencylsave}"')
+        ctx.cli.execute(
+            f"""
+            from pathlib import Path
+            window.userdir = Path(r"{tmp_path}")
+            """
+        )
         yield ctx
 
 
@@ -44,25 +50,10 @@ def mock_path(tmp_path):
 
 
 @pytest.fixture
-def app_at_pathscreen(app, mock_path, tmp_path, jsonsave):
+def app_at_pathscreen(app, mock_path) -> TeleniumContext:
     app.cli.wait_click(next_button(app))
     app.cli.setattr(path_input, "text", str(mock_path("LegendsOfIdleon.exe")))
-    # We need to jump through hoops to mock the inject action
-    # because functions aren't JSON-serializable.
     app.cli.select_and_store("path_screen", "//PathScreen")
-    app.cli.execute(
-        f"""
-        import json
-        from pathlib import Path
-        from scripts.export import save_idleon_companion, to_idleon_companion
-        path_screen.action = lambda _: save_idleon_companion(
-            Path(r"{tmp_path}"),
-            to_idleon_companion(
-                json.loads('{json.dumps(jsonsave)}')
-            )
-        )
-        """
-    )
     return app
 
 
