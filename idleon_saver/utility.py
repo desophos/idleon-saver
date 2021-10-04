@@ -1,6 +1,7 @@
 import os
+import time
 from pathlib import Path
-from typing import Iterable, List
+from typing import Any, Callable, Iterable, List
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 BUGREPORT_LINK = "https://github.com/desophos/idleon-saver/issues/new?assignees=desophos&labels=bug&template=bug_report.md&title="
@@ -32,3 +33,12 @@ def chunk(s: str, chunk_size: int) -> List[str]:
 
 def resolved_path(s: str) -> Path:
     return Path(s).expanduser().resolve()
+
+
+def wait_for(check: Callable[[], Any], timeout: float = 1.0) -> bool:
+    start = time.time()
+    while time.time() - start < timeout:
+        if check():
+            return True
+        time.sleep(0.1)
+    return False
