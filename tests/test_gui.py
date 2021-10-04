@@ -107,6 +107,12 @@ def test_path_next(app_at_pathscreen):
     assert wait_for(lambda: "EndScreen" == current_screen(app), 5.0)
 
 
+def test_file_saved(app_at_pathscreen, tmp_path):
+    app = app_at_pathscreen
+    app.cli.wait_click(next_button(app))
+    assert wait_for((tmp_path / "idleon_save.json").exists, 5.0)
+
+
 def test_loading(app_at_pathscreen):
     app = app_at_pathscreen
     # Fake loading time.
