@@ -1,6 +1,7 @@
 import sys
 
 import pytest
+from idleon_saver.utility import wait_for
 from telenium.context import TeleniumContext
 
 path_input = "//PathScreen//TextInput"
@@ -52,6 +53,7 @@ def mock_path(tmp_path):
 @pytest.fixture
 def app_at_pathscreen(app, mock_path) -> TeleniumContext:
     app.cli.wait_click(next_button(app))
+    assert app.cli.wait("//PathScreen", timeout=5)
     app.cli.setattr(path_input, "text", str(mock_path("LegendsOfIdleon.exe")))
     app.cli.select_and_store("path_screen", "//PathScreen")
     return app
@@ -94,7 +96,7 @@ def test_file_path(app, mock_path, blocked, text):
 def test_path_next(app_at_pathscreen):
     app = app_at_pathscreen
     app.cli.wait_click(next_button(app))
-    assert "EndScreen" == current_screen(app)
+    assert wait_for(lambda: "EndScreen" == current_screen(app), 5.0)
 
 
 def test_loading(app_at_pathscreen):
