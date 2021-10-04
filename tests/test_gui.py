@@ -59,6 +59,14 @@ def app_at_pathscreen(app, mock_path) -> TeleniumContext:
     return app
 
 
+@pytest.fixture
+def app_at_endscreen(app_at_pathscreen) -> TeleniumContext:
+    app = app_at_pathscreen
+    app.cli.wait_click(next_button(app))
+    assert app.cli.wait("//EndScreen", timeout=5)
+    return app
+
+
 def test_smoke(app):
     assert app
 
