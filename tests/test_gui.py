@@ -130,7 +130,7 @@ def test_loading(app_at_pathscreen):
     assert 0.0 < app.cli.getattr("//ProgressBar", "opacity")
     assert 0 < app.cli.getattr("//ProgressBar", "value")
     # Wait for action to finish. Progress bar should disappear.
-    app.assertNotExists("//ProgressBar", timeout=5)
+    app.assertNotExists("//ProgressBar", timeout=10)
     # We should be on the end screen now.
     assert "EndScreen" == current_screen(app)
 
