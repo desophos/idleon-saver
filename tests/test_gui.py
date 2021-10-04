@@ -8,7 +8,7 @@ path_input = "//PathScreen//TextInput"
 
 
 def current_screen(app: TeleniumContext) -> str:
-    return app.cli.evaluate("main.current_screen.__class__.__name__")
+    return app.cli.evaluate("window.current_screen.__class__.__name__")
 
 
 def back_button(app: TeleniumContext) -> str:
@@ -29,7 +29,7 @@ def app():
         cmd_process=[sys.executable, "-m", "telenium.execute"],
         cmd_entrypoint=["idleon_saver/gui/main.py"],
     ) as ctx:
-        ctx.cli.select_and_store("main", "/MainWindow")
+        ctx.cli.select_and_store("window", "/MainWindow")
         yield ctx
 
 
