@@ -46,6 +46,6 @@ jobs:
           KIVY_GL_BACKEND: angle_sdl2
       
       - name: Publish coverage
-        run: coveralls
+        run: coveralls --service=github
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
