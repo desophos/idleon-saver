@@ -35,15 +35,15 @@ jobs:
         run: poetry install --with test --no-interaction
 
       - name: Run tests
-        run: poetry run pytest --cov-report xml --cov=idleon_saver --cov=scripts
+        run: poetry run pytest --cov-report= --cov=idleon_saver --cov=scripts
         env:
           KIVY_GL_BACKEND: angle_sdl2
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v2
         with:
-          name: coverage.xml
-          path: ${{ github.workspace }}/coverage.xml
+          name: .coverage
+          path: ${{ github.workspace }}/.coverage
 
   coverage:
     needs: test
@@ -55,12 +55,11 @@ jobs:
       - name: Download coverage artifact
         uses: actions/download-artifact@v2
         with:
-          name: coverage.xml
+          name: .coverage
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
-          coverageLocations: |
-            ${{ github.workspace }}/coverage.xml:cobertura
+          coverageCommand: coverage report
