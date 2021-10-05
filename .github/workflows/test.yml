@@ -22,6 +22,9 @@ jobs:
       
       - name: Update build tools
         run: python -m pip install --upgrade pip setuptools wheel
+      
+      - name: Install Coveralls
+        run: python -m pip install coveralls
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -41,39 +44,8 @@ jobs:
         run: poetry run pytest --cov-report= --cov=idleon_saver --cov=scripts
         env:
           KIVY_GL_BACKEND: angle_sdl2
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: .coverage
-          path: ${{ github.workspace }}/.coverage
-
-  coverage:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
       
-      - name: Update build tools
-        run: python -m pip install --upgrade pip setuptools wheel
-      
-      - name: Install coverage.py
-        run: python -m pip install coverage
-          
-      - name: Check out repository
-        uses: actions/checkout@v2
-        
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: .coverage
-
-      - name: Publish code coverage
-        uses: paambaati/codeclimate-action@v3.0.0
+      - name: Publish coverage
+        run: coveralls
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: python -m coverage report
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
