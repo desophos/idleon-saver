@@ -2,6 +2,7 @@
 
 [![Build](https://github.com/desophos/idleon-saver/actions/workflows/build.yml/badge.svg)](https://github.com/desophos/idleon-saver/actions/workflows/build.yml)
 [![Test](https://github.com/desophos/idleon-saver/actions/workflows/test.yml/badge.svg)](https://github.com/desophos/idleon-saver/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/desophos/idleon-saver/badge.svg?branch=main)](https://coveralls.io/github/desophos/idleon-saver?branch=main)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bda291e68f16afb3fbfe/maintainability)](https://codeclimate.com/github/desophos/idleon-saver/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
