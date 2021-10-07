@@ -19,7 +19,7 @@ This tool is for educational and investigative purposes only.
 
 ## For Users
 
-Most users will only need to **download [the latest exe release](https://github.com/desophos/idleon-saver/releases)**.
+Most users will only need to **download [the latest exe release](https://github.com/desophos/idleon-saver/releases/latest)**.
 
 ## For Developers
 
