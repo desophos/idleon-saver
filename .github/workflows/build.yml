@@ -31,7 +31,7 @@ jobs:
         env:
           cache-name: cache-pyinstaller
         with:
-          path: ${{ env.HOME }}/pyinstaller
+          path: pyinstaller
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           restore-keys: |
             ${{ runner.os }}-build-
@@ -42,20 +42,24 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: pyinstaller/pyinstaller
-          path: ${{ env.HOME }}/pyinstaller
+          path: pyinstaller
 
       - name: Build bootloader
         if: steps.cache-pyinstaller.outputs.cache-hit != 'true'
         run: |
-          cd $HOME/pyinstaller/bootloader
+          cd pyinstaller/bootloader
           python ./waf all
           cd $GITHUB_WORKSPACE
 
       - name: Check out repository
         uses: actions/checkout@v2
+        with:
+          path: main
+      
+      - run: cd main
 
       - name: Install PyInstaller
-        run: poetry add $HOME/pyinstaller/ --no-interaction
+        run: poetry add $GITHUB_WORKSPACE/pyinstaller/ --no-interaction
 
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
