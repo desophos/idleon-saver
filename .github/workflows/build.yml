@@ -49,26 +49,31 @@ jobs:
         run: |
           cd pyinstaller/bootloader
           python ./waf all
-          cd $GITHUB_WORKSPACE
 
       - name: Check out repository
         uses: actions/checkout@v2
         with:
           path: main
-      
-      - run: cd main
 
       - name: Install PyInstaller
-        run: poetry add $GITHUB_WORKSPACE/pyinstaller/ --no-interaction
+        run: |
+          cd main
+          poetry add $GITHUB_WORKSPACE/pyinstaller/ --no-interaction
 
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
+        run: |
+          cd main
+          poetry install --no-interaction --no-root
 
       - name: Install package
-        run: poetry install --no-interaction
+        run: |
+          cd main
+          poetry install --no-interaction
 
       - name: Build exe
-        run: poetry run pyinstaller -y onefile.spec
+        run: |
+          cd main
+          poetry run pyinstaller -y onefile.spec
         env:
           KIVY_GL_BACKEND: angle_sdl2
 
@@ -76,4 +81,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: IdleonSaver.exe
-          path: dist/IdleonSaver.exe
+          path: main/dist/IdleonSaver.exe
