@@ -6,7 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/bda291e68f16afb3fbfe/maintainability)](https://codeclimate.com/github/desophos/idleon-saver/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Converts Legends of Idleon Steam save files to and from JSON with [a friendly GUI](https://github.com/desophos/idleon-saver/releases) that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/).
+Converts Legends of Idleon Steam save files to and from JSON with [a friendly GUI](https://github.com/desophos/idleon-saver/releases) that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/), [Cogstruction](https://github.com/automorphis/Cogstruction), and other tools.
 
 ## Disclaimer
 
