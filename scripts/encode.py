@@ -54,12 +54,8 @@ def json2stencyl(args: Namespace):
 
 
 def main(args: Namespace):
-    try:
-        json2stencyl(args)
-    except:
-        raise
-    else:
-        stencyl2ldb(args)
+    json2stencyl(args)
+    stencyl2ldb(args)
 
 
 if __name__ == "__main__":

@@ -80,12 +80,8 @@ def stencyl2json(args: Namespace):
 
 
 def main(args: Namespace):
-    try:
-        ldb2stencyl(args)
-    except:
-        raise
-    else:
-        stencyl2json(args)
+    ldb2stencyl(args)
+    stencyl2json(args)
 
 
 if __name__ == "__main__":
