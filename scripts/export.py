@@ -327,7 +327,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
         "--to",
-        choices=[f for f in Formats],
+        choices=list(Formats),
         type=Formats.lookup,
         default=Formats.IC,
         help="format to parse save data into",

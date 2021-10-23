@@ -51,7 +51,7 @@ class ButtonBox(BoxLayout):
 class ExportButtonBox(ButtonBox):
     button = ObjectProperty(None)
     label = ObjectProperty(None)
-    fmt = OptionProperty(Formats.IC, options=[f for f in Formats])
+    fmt = OptionProperty(Formats.IC, options=list(Formats))
     try_export = ObjectProperty(None)
 
     def on_kv_post(self, _):
