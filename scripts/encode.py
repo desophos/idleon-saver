@@ -15,7 +15,8 @@ def stencyl2ldb(args: Namespace):
 
     with get_db(args.ldb) as db:
         try:
-            assert db.get(key) is not None
+            if db.get(key) is None:
+                raise AssertionError
         except plyvel.CorruptionError as e:
             raise IOError(
                 f"Could not access key {key!s} in database at {args.ldb}"
