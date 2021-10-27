@@ -95,7 +95,7 @@ def get_starsigns(data: dict) -> dict[str, bool]:
 
 
 def get_cardtier(name: str, level: int) -> int:
-    base = card_bases[name]
+    base = card_bases[name] if name in card_bases else 10
     if level == 0:
         return 0
     elif level >= base * 9:
@@ -110,7 +110,7 @@ def get_cardtier(name: str, level: int) -> int:
 
 def get_cards(data: dict) -> dict[str, int]:
     return {
-        card_names[name]: get_cardtier(name, level)
+        (card_names[name] if name in card_names else name): get_cardtier(name, level)
         for name, level in data["Cards"][0].items()
         if level > 0
     }
