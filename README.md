@@ -62,14 +62,14 @@ Script arguments:
 | `-i`, `--infile`  | Input filename                                | Varies by script                                                  |
 | `-o`, `--outfile` | Output filename                               | Varies by script                                                  |
 
-`python scripts/decode.py` will decode leveldb data into 2 JSON files:
+`python idleon_saver/scripts/decode.py` will decode leveldb data into 2 JSON files:
 
 - `decoded_plain.json`, which is easier to read, and
 - `decoded_types.json`, which contains all the information required to re-encode the data back into the leveldb.
 
-`python scripts/encode.py` will encode the data in `decoded_types.json` back into the database.
+`python idleon_saver/scripts/encode.py` will encode the data in `decoded_types.json` back into the database.
 
-After you've obtained your `decoded_plain.json`, you can export it into formats used by community tools with `python scripts/export.py`. This script takes one additional argument:
+After you've obtained your `decoded_plain.json`, you can export it into formats used by community tools with `python idleon_saver/scripts/export.py`. This script takes one additional argument:
 
 | Argument   | Description                                   | Default            | Choices                                       |
 | ---------- | --------------------------------------------- | ------------------ | --------------------------------------------- |

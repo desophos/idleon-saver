@@ -43,7 +43,7 @@ jobs:
         run: poetry install --with test --no-interaction
 
       - name: Run tests
-        run: poetry run pytest --cov-report= --cov=idleon_saver --cov=scripts
+        run: poetry run pytest --cov-report= --cov=idleon_saver
         env:
           KIVY_GL_BACKEND: angle_sdl2
       

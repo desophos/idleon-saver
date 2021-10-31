@@ -1,7 +1,7 @@
 import pytest
+from idleon_saver.scripts.decode import ldb2stencyl, stencyl2json
+from idleon_saver.scripts.encode import json2stencyl, stencyl2ldb
 from idleon_saver.utility import chunk
-from scripts.decode import ldb2stencyl, stencyl2json
-from scripts.encode import json2stencyl, stencyl2ldb
 
 
 @pytest.mark.parametrize(

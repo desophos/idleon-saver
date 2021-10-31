@@ -1,13 +1,12 @@
 import pytest
-from scripts.export import (
+from idleon_saver.data import cog_type_map
+from idleon_saver.scripts.export import (
     get_cog_type,
     get_empties,
     get_stamps,
     to_cogstruction,
     to_idleon_companion,
 )
-
-from data import cog_type_map
 
 
 def test_get_stamps(jsonsave):

@@ -9,7 +9,7 @@ from pathlib import Path
 from string import ascii_lowercase
 from typing import Any, Iterator, Optional, Tuple
 
-from data import (
+from idleon_saver.data import (
     Bags,
     bag_maps,
     card_reqs,

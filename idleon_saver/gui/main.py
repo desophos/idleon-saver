@@ -39,9 +39,9 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 # Make other modules use Kivy's logger.
 logging.Logger.manager.root = Logger
 
-from scripts import inject
-from scripts.decode import write_json
-from scripts.export import Formats, friendly_name, parsers, savers
+from idleon_saver.scripts import inject
+from idleon_saver.scripts.decode import write_json
+from idleon_saver.scripts.export import Formats, friendly_name, parsers, savers
 
 
 class ButtonBox(BoxLayout):
