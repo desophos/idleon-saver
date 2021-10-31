@@ -12,17 +12,16 @@ from typing import Any, Iterator, Optional, Tuple
 from data import (
     Bags,
     bag_maps,
-    card_bases,
-    card_names,
+    card_reqs,
     class_names,
     cog_boosts,
     cog_datas_map,
     cog_type_map,
     constellation_names,
+    gamedata,
     pouch_names,
     pouch_sizes,
     skill_names,
-    stamp_names,
     starsign_ids,
     starsign_names,
     statue_names,
@@ -95,14 +94,14 @@ def get_starsigns(raw: dict) -> dict[str, bool]:
 
 
 def get_cardtier(name: str, level: int) -> int:
-    base = card_bases[name]
+    req = card_reqs[name]
     if level == 0:
         return 0
-    elif level >= base * 9:
+    elif level >= req * 9:
         return 4
-    elif level >= base * 4:
+    elif level >= req * 4:
         return 3
-    elif level >= base:
+    elif level >= req:
         return 2
     else:
         return 1
@@ -110,14 +109,17 @@ def get_cardtier(name: str, level: int) -> int:
 
 def get_cards(raw: dict) -> dict[str, int]:
     return {
-        card_names[name]: get_cardtier(name, level)
+        gamedata["monsterNames"][name]: get_cardtier(name, level)
         for name, level in raw["Cards"][0].items()
         if level > 0
     }
 
 
-def get_stamps(data: dict) -> Iterator[Tuple[str, int]]:
-    return zip(stamp_names.values(), chain(*data["StampLevel"]))
+def get_stamps(raw: dict) -> Iterator[Tuple[str, int]]:
+    return chain.from_iterable(
+        zip(stamps, levels)
+        for stamps, levels in zip(gamedata["stampList"].values(), raw["StampLevel"])
+    )
 
 
 def get_statues(raw: dict) -> dict:
