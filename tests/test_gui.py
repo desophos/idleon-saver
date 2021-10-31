@@ -24,7 +24,7 @@ def next_button(app: TeleniumContext) -> str:
     return f"//{current_screen(app)}//NextButton"
 
 
-def next_blocked(app: TeleniumContext):
+def next_blocked(app: TeleniumContext) -> bool:
     return app.cli.getattr(next_button(app), "disabled")
 
 
