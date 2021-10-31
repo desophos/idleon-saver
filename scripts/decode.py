@@ -18,7 +18,8 @@ def ldb2stencyl(args: Namespace):
     with get_db(args.ldb) as db:
         try:
             val = db.get(key)
-            assert val is not None
+            if val is None:
+                raise AssertionError
         except plyvel.CorruptionError as e:
             raise IOError(
                 f"Could not access key {key!s} in database at {args.ldb}"

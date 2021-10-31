@@ -230,10 +230,11 @@ def save_idleon_companion(workdir: Path, raw: dict):
 
 
 def get_empties(cogs: list[str]) -> list[dict[str, int]]:
-    assert len(cogs) >= 96, (
-        "cog list must contain at least 96 entries to cover the whole cog board; "
-        f"{len(cogs)} isn't enough"
-    )
+    if len(cogs) < 96:
+        raise AssertionError(
+            "cog list must contain at least 96 entries to cover the whole cog board; "
+            f"{len(cogs)} isn't enough"
+        )
 
     empties: list[dict[str, int]] = []
     # The cog board is 8 rows by 12 columns = 96 spaces.

@@ -12,7 +12,8 @@ from idleon_saver.utility import ROOT_DIR, resolved_path
 @contextmanager
 def get_db(path: Path, create_if_missing: bool = False) -> plyvel.DB:
     try:
-        assert path.exists() and path.is_dir()
+        if not (path.exists() and path.is_dir()):
+            raise AssertionError
     except AssertionError as e:
         raise IOError(f"path does not exist: {path}") from e
 
@@ -88,7 +89,8 @@ def ldb_args(parser: ArgumentParser = None) -> Namespace:
     # Idleon path is only used for the db key, so it doesn't have to exist.
     # (Allows running from VMs.)
     try:
-        assert args.ldb.exists() and args.ldb.is_dir()
+        if not (args.ldb.exists() and args.ldb.is_dir()):
+            raise AssertionError
     except AssertionError as e:
         raise IOError(f"Invalid leveldb path: {args.ldb}") from e
 

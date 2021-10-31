@@ -33,8 +33,10 @@ def main(exe_path: Path):
         )
 
     try:
-        assert response["type"] == "string"
-        assert response["value"]
+        if response["type"] != "string":
+            raise AssertionError
+        if not response["value"]:
+            raise AssertionError
         return response["value"]
     except (KeyError, AssertionError) as e:
         logger.exception(f"Malformed return value: {response}", exc_info=e)
