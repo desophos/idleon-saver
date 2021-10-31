@@ -1,5 +1,19 @@
+import json
 from enum import Enum
 from itertools import chain
+
+from idleon_saver.utility import ROOT_DIR
+
+gamedata = {}
+for path in ROOT_DIR.joinpath("idleon-data", "maps").iterdir():
+    if path.suffix != ".json":
+        continue
+    with open(path, "r") as f:
+        jsondata = json.load(f)
+        # Every data file should have a comment, which we can ignore.
+        del jsondata["__comment"]
+        # If a data file has a top-level list, it's contained in the `data` field.
+        gamedata[path.stem] = jsondata.get("data", jsondata)
 
 class_names = [
     "0",
