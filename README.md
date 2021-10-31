@@ -6,9 +6,20 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/bda291e68f16afb3fbfe/maintainability)](https://codeclimate.com/github/desophos/idleon-saver/maintainability)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Converts Legends of Idleon Steam save files to and from JSON with [a friendly GUI](https://github.com/desophos/idleon-saver/releases) that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/), [Cogstruction](https://github.com/automorphis/Cogstruction), and other tools.
+Converts Legends of Idleon Steam save files to and from JSON with a friendly GUI that makes it easy to export your save data to [Idleon Companion](https://idleoncompanion.com/), [Cogstruction](https://github.com/automorphis/Cogstruction), and other tools.
 
-## Disclaimer
+## How to Use
+
+0. **Run Steam**, since Legends of Idleon won't run without Steam.
+1. **Download IdleonSaver.exe** from Assets in [the latest release](https://github.com/desophos/idleon-saver/releases/latest).
+2. **Run IdleonSaver.exe** from your download folder.
+3. If you get a "Windows protected your PC" popup window, **click "More info" then "Run Anyway"**.
+4. **Follow the instructions** displayed in the app.
+5. On the export screen, **click "Show Files"** to open the folder containing your exported data.
+
+## For Developers
+
+### Disclaimer
 
 **Use at your own risk.**
 
@@ -16,12 +27,6 @@ Converts Legends of Idleon Steam save files to and from JSON with [a friendly GU
 
 I do not endorse using this tool to edit your live save files.
 This tool is for educational and investigative purposes only.
-
-## For Users
-
-Most users will only need to **download [the latest exe release](https://github.com/desophos/idleon-saver/releases/latest)**.
-
-## For Developers
 
 ### Setup
 
