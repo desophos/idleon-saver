@@ -15,7 +15,7 @@ from idleon_saver.utility import BUGREPORT_LINK, logs_dir, user_dir
 # (Prevents kivy.config from creating extra log files.)
 os.environ["KCFG_KIVY_LOG_DIR"] = str(logs_dir())
 os.environ["KCFG_KIVY_LOG_NAME"] = "log_%y-%m-%d_%_.txt"
-os.environ["KCFG_KIVY_LOG_LEVEL"] = "info"
+os.environ["KCFG_KIVY_LOG_LEVEL"] = "debug"
 os.environ["KCFG_KIVY_LOG_MAXFILES"] = "10"
 
 from kivy.config import Config

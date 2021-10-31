@@ -37,7 +37,7 @@ def main(exe_path: Path):
             return response["value"]
         else:
             raise AssertionError
-    except (KeyError, AssertionError) as e:
+    except Exception as e:
         logger.exception(f"Malformed return value: {response}", exc_info=e)
         raise
 
