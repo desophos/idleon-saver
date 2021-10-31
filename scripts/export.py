@@ -49,8 +49,8 @@ def friendly_name(s: str) -> str:
     return s.replace("_", " ").title()
 
 
-def char_map(data: dict) -> dict[str, str]:
-    return dict(zip(data["GetPlayersUsernames"], "_" + ascii_lowercase))
+def char_map(raw: dict) -> dict[str, str]:
+    return dict(zip(raw["GetPlayersUsernames"], "_" + ascii_lowercase))
 
 
 def get_baseclass(which: int) -> int:
@@ -70,14 +70,14 @@ def get_classname(which: int) -> str:
     return friendly_name(class_names[which])
 
 
-def get_alchemy(data: dict) -> dict[str, dict]:
+def get_alchemy(raw: dict) -> dict[str, dict]:
     return {
         "upgrades": dict(
-            zip(("Orange", "Green", "Purple", "Yellow"), data["CauldronInfo"][:4])
+            zip(("Orange", "Green", "Purple", "Yellow"), raw["CauldronInfo"][:4])
         ),
         "vials": {
             friendly_name(name): level
-            for name, level in zip(vial_names, data["CauldronInfo"][4])
+            for name, level in zip(vial_names, raw["CauldronInfo"][4])
             if level > 0
         },
     }
@@ -87,10 +87,10 @@ def get_starsign_from_index(i: int) -> str:
     return starsign_ids[starsign_names[i]]
 
 
-def get_starsigns(data: dict) -> dict[str, bool]:
+def get_starsigns(raw: dict) -> dict[str, bool]:
     return {
         starsign_ids[name]: bool(unlocked)
-        for name, unlocked in data["StarSignsUnlocked"].items()
+        for name, unlocked in raw["StarSignsUnlocked"].items()
     }
 
 
@@ -108,10 +108,10 @@ def get_cardtier(name: str, level: int) -> int:
         return 1
 
 
-def get_cards(data: dict) -> dict[str, int]:
+def get_cards(raw: dict) -> dict[str, int]:
     return {
         card_names[name]: get_cardtier(name, level)
-        for name, level in data["Cards"][0].items()
+        for name, level in raw["Cards"][0].items()
         if level > 0
     }
 
@@ -120,7 +120,7 @@ def get_stamps(data: dict) -> Iterator[Tuple[str, int]]:
     return zip(stamp_names.values(), chain(*data["StampLevel"]))
 
 
-def get_statues(data: dict) -> dict:
+def get_statues(raw: dict) -> dict:
     return {
         name: {
             "golden": bool(gold),
@@ -129,12 +129,12 @@ def get_statues(data: dict) -> dict:
         }
         for name, gold, lvls, progs in zip(
             statue_names,
-            data["StatueG"],
+            raw["StatueG"],
             *[
                 [
                     [statue[i] for statue in statues]
                     for statues in zip_from_iterable(
-                        char["StatueLevels"] for char in data["PlayerDATABASE"].values()
+                        char["StatueLevels"] for char in raw["PlayerDATABASE"].values()
                     )
                 ]
                 for i in range(2)
@@ -143,15 +143,15 @@ def get_statues(data: dict) -> dict:
     }
 
 
-def get_checklist(data: dict) -> dict[str, bool]:
+def get_checklist(raw: dict) -> dict[str, bool]:
     return (
         from_keys_in(
             bag_maps[Bags.GEM],
-            list(data["PlayerDATABASE"].values())[0]["InvBagsUsed"],
+            list(raw["PlayerDATABASE"].values())[0]["InvBagsUsed"],
             True,
         )
-        | from_keys_in(bag_maps[Bags.STORAGE], data["InvStorageUsed"].keys(), True)
-        | {name: True for name, level in get_stamps(data) if level > 0}
+        | from_keys_in(bag_maps[Bags.STORAGE], raw["InvStorageUsed"].keys(), True)
+        | {name: True for name, level in get_stamps(raw) if level > 0}
     )
 
 
@@ -179,7 +179,7 @@ def get_pouches(carrycaps: dict[str, int]) -> dict[str, bool]:
     }
 
 
-def get_chars(data: dict) -> list[dict]:
+def get_chars(raw: dict) -> list[dict]:
     return [
         {
             "name": charname,
@@ -187,8 +187,8 @@ def get_chars(data: dict) -> list[dict]:
             "level": chardata["PersonalValuesMap"]["StatList"][4],
             "constellations": {
                 constellation_names[i]: True
-                for i, (chars, completed) in enumerate(data["StarSignProg"])
-                if char_map(data)[charname] in chars
+                for i, (chars, completed) in enumerate(raw["StarSignProg"])
+                if char_map(raw)[charname] in chars
             },
             "starSigns": {
                 get_starsign_from_index(int(k)): True
@@ -202,7 +202,7 @@ def get_chars(data: dict) -> list[dict]:
             )
             | get_pouches(chardata["MaxCarryCap"]),
         }
-        for charname, chardata in data["PlayerDATABASE"].items()
+        for charname, chardata in raw["PlayerDATABASE"].items()
     ]
 
 
@@ -218,11 +218,11 @@ def to_idleon_companion(raw: dict) -> dict:
     }
 
 
-def save_idleon_companion(workdir: Path, data: dict):
+def save_idleon_companion(workdir: Path, raw: dict):
     outfile = workdir / "idleon_companion.json"
 
     with open(outfile, "w", encoding="utf-8") as file:
-        json.dump(data, file)
+        json.dump(raw, file)
 
     logger.info(f"Wrote file: {outfile}")
 
