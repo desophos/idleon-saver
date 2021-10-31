@@ -55,6 +55,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: main
+          submodules: true
 
       - name: Install PyInstaller
         run: |
