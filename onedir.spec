@@ -12,7 +12,7 @@ block_cipher = None
 
 a = Analysis(['idleon_saver\\gui\\main.py'],
              pathex=['C:\\Users\\desophos\\Dropbox\\Code\\Python\\idleon\\Idleon Saver'],
-             datas=collect_data_files('data'),
+             datas=[('idleon-data/maps/*.json', 'idleon-data/maps')],
              hookspath=hookspath(),
              hooksconfig={},
              runtime_hooks=runtime_hooks(),
