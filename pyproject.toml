@@ -16,7 +16,7 @@ pywin32 = { version = ">=300", markers = "sys_platform == 'win32'" }
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = { version = "^21.6-beta.0", allow-prereleases = true }
+black = { version = "^21.8b0", allow-prereleases = true }
 mypy = "^0.910"
 
 [tool.poetry.group.test]
