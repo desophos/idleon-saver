@@ -220,7 +220,7 @@ bag_names = {
         "InvBag8": "Inventory Bag H",
         "InvBag9": "Inventory Bag I",
         "InvBag100": "Snakeskinventory Bag",
-        "InvBag101": "Totally Normal And Not Fake Bag",
+        "InvBag101": "Totally Normal and not fake Bag",
         "InvBag102": "Blunderbag",
         "InvBag103": "Sandy Satchel",
         "InvBag104": "Bummo Bag",
