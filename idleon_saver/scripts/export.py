@@ -190,7 +190,7 @@ def get_chars(raw: dict) -> list[dict]:
             "constellations": {
                 constellation_names[i]: True
                 for i, (chars, completed) in enumerate(raw["StarSignProg"])
-                if char_map(raw)[charname] in chars
+                if char_map(raw)[charname] in (chars or "")  # chars can be null
             },
             "starSigns": {
                 get_starsign_from_index(int(k)): True
