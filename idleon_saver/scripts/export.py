@@ -231,7 +231,7 @@ def save_idleon_companion(workdir: Path, raw: dict):
 
 def get_empties(cogs: list[str]) -> list[dict[str, int]]:
     if len(cogs) < 96:
-        raise AssertionError(
+        raise ValueError(
             "cog list must contain at least 96 entries to cover the whole cog board; "
             f"{len(cogs)} isn't enough"
         )

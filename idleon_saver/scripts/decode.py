@@ -19,13 +19,11 @@ def ldb2stencyl(args: Namespace):
         try:
             val = db.get(key)
             if val is None:
-                raise AssertionError
+                raise KeyError(f"Key not found in database: {key!s}")
         except plyvel.CorruptionError as e:
             raise IOError(
                 f"Could not access key {key!s} in database at {args.ldb}"
             ) from e
-        except AssertionError as e:
-            raise KeyError(f"Key not found in database: {key!s}") from e
         else:
             with open(outfile, "w", encoding="utf-8") as f:
                 f.write(str(val.strip(b"\x01"), encoding="utf-8"))

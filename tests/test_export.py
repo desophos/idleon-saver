@@ -21,7 +21,7 @@ def test_to_idleon_companion(jsonsave):
 
 
 def test_get_empties_error():
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         get_empties([])
 
 

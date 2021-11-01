@@ -16,14 +16,12 @@ def stencyl2ldb(args: Namespace):
     with get_db(args.ldb) as db:
         try:
             if db.get(key) is None:
-                raise AssertionError
+                raise KeyError(
+                    f"Key should already exist in database, but doesn't: {key!s}"
+                )
         except plyvel.CorruptionError as e:
             raise IOError(
                 f"Could not access key {key!s} in database at {args.ldb}"
-            ) from e
-        except AssertionError as e:
-            raise IOError(
-                f"Key should already exist in database, but doesn't: {key!s}"
             ) from e
 
         with open(infile, "rb") as file:
