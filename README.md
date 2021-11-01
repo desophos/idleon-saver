@@ -38,6 +38,9 @@ If using leveldb scripts, copy your database to a test location (default is `~/d
 ```
 cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
 ```
+### Updating the dev build since the addition of idleon-data as a submodule
+If `idleon-saver/idleon_data/` is empty, make sure to run the following command from your project root:  
+`git submodule update --init --recursive`
 
 ### Running the GUI
 
