@@ -18,12 +18,7 @@ def main(exe_path: Path):
         ]
     )
 
-    with ChromeContext(
-        binary=f'"{exe_path}"',
-        disable_page=True,
-        disable_dom=True,
-        disable_network=True,
-    ) as c:
+    with ChromeContext(binary=f'"{exe_path}"') as c:
         # The window minimizes late but it's better than leaving it up the whole time.
         win32gui.ShowWindow(
             win32gui.FindWindow(None, "Legends Of Idleon"), win32con.SW_MINIMIZE
