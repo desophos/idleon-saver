@@ -382,7 +382,7 @@ starsign_ids = {
 }
 
 constellation_names = list(
-    chain.from_iterable([f"{c}-{i}" for i in range(1, 13)] for c in "AB")
+    chain.from_iterable([f"{c}-{i}" for i in range(1, 13)] for c in "ABC")
 )
 
 cog_datas_map = {
