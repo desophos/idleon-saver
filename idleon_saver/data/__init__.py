@@ -342,6 +342,29 @@ starsign_names = [
     "All_Rounder",
     "Fatty_Doodoo",
     "Chronus_Cosmos",
+    "All_Rounderi",
+    "Centaurii",
+    "Murmollio",
+    "Strandissi",
+    "Agitagi",
+    "Wispommo",
+    "Lukiris",
+    "Pokaminni",
+    "Gor_Bowzor",
+    "Hydron_Cosmos",
+    "Trapezoidburg",
+    "Sawsaw_Salala",
+    "Preys_Bea",
+    "Cullingo",
+    "Gum_Drop_Major",
+    "Grim_Reaper_Major",
+    "Sir_Savvy_Major",
+    "The_Bulwark",
+    "Big_Brain_Major",
+    "The_Fiesty",
+    "The_Overachiever",
+    "Comatose_Major",
+    "S. Snoozer_Major",
 ]
 
 starsign_ids = {
@@ -379,10 +402,33 @@ starsign_ids = {
     "The_Forsaken": "16a",
     "The_OG_Skiller": "17",
     "Mr_No_Sleep": "18",
+    "All_Rounderi": "19",
+    "Centaurii": "20",
+    "Murmollio": "21",
+    "Strandissi": "22",
+    "Agitagi": "22a",
+    "Wispommo": "23",
+    "Lukiris": "23a",
+    "Pokaminni": "24",
+    "Gor_Bowzor": "25",
+    "Hydron_Cosmos": "26",
+    "Trapezoidburg": "26a",
+    "Sawsaw_Salala": "27",
+    "Preys_Bea": "27B",
+    "Cullingo": "28",
+    "Gum_Drop_Major": "28a",
+    "Grim_Reaper_Major": "29",
+    "Sir_Savvy_Major": "30",
+    "The_Bulwark": "31",
+    "Big_Brain_Major": "32",
+    "The_Fiesty": "33",
+    "The_Overachiever": "33a",
+    "Comatose_Major": "34",
+    "S. Snoozer_Major": "35",
 }
 
 constellation_names = list(
-    chain.from_iterable([f"{c}-{i}" for i in range(1, 13)] for c in "AB")
+    chain.from_iterable([f"{c}-{i}" for i in range(1, 13)] for c in "ABC")
 )
 
 cog_datas_map = {
