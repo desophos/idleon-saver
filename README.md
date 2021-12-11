@@ -40,6 +40,7 @@ cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
 ```
 
 ### Updating idleon-data
+
 If `idleon-saver/idleon-data/` is empty, make sure to run the following command from your project root:
 `git submodule update --init --recursive`
 

@@ -364,7 +364,7 @@ starsign_names = [
     "The_Fiesty",
     "The_Overachiever",
     "Comatose_Major",
-    "S. Snoozer_Major",
+    "S._Snoozer_Major",
 ]
 
 starsign_ids = {
@@ -424,7 +424,7 @@ starsign_ids = {
     "The_Fiesty": "33",
     "The_Overachiever": "33a",
     "Comatose_Major": "34",
-    "S. Snoozer_Major": "35",
+    "S._Snoozer_Major": "35",
 }
 
 constellation_names = list(
