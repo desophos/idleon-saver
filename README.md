@@ -39,10 +39,13 @@ If using leveldb scripts, copy your database to a test location (default is `~/d
 cp -r ~/AppData/Roaming/legends-of-idleon/"Local Storage"/leveldb ~/dev/leveldb
 ```
 
-### Updating idleon-data
+#### Updating idleon-data
 
 If `idleon-saver/idleon-data/` is empty, make sure to run the following command from your project root:
-`git submodule update --init --recursive`
+
+```
+git submodule update --init --recursive
+```
 
 ### Running the GUI
 
