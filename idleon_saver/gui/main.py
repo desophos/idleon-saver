@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import sys
@@ -262,14 +263,10 @@ class MainWindow(ScreenManager):
         for screen in screens:
             self.add_widget(screen)
 
-    def get_stencyl(self, path: str):
-        return inject.main(Path(path))
-
     def get_json(self, path: str):
-        rawdata = self.get_stencyl(path)
-        decoded = StencylDecoder(rawdata).result
-        self.savedata = decoded.unwrapped
-        write_json(decoded, self.userdir, filename="idleon_save.json")
+        self.savedata = inject.main(Path(path))
+        with open(self.userdir / "idleon_save.json", "w", encoding="utf-8") as file:
+            json.dump(self.savedata, file)
 
     def export(self, fmt: Formats):
         savers[fmt](self.userdir, parsers[fmt](self.savedata))
