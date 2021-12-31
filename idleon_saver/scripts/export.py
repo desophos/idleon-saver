@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+from abc import ABC
 from argparse import ArgumentParser, Namespace
 from enum import Enum
 from itertools import chain, starmap
@@ -48,10 +49,6 @@ def friendly_name(s: str) -> str:
     return s.replace("_", " ").title()
 
 
-def char_map(raw: dict) -> dict[str, str]:
-    return dict(zip(raw["GetPlayersUsernames"], "_" + ascii_lowercase))
-
-
 def get_baseclass(which: int) -> int:
     if which in range(1, 5 + 1):
         # special case for beginner because it has only 4 subclasses
@@ -69,28 +66,8 @@ def get_classname(which: int) -> str:
     return friendly_name(class_names[which])
 
 
-def get_alchemy(raw: dict) -> dict[str, dict]:
-    return {
-        "upgrades": dict(
-            zip(("Orange", "Green", "Purple", "Yellow"), raw["CauldronInfo"][:4])
-        ),
-        "vials": {
-            friendly_name(name): level
-            for name, level in zip(vial_names, raw["CauldronInfo"][4])
-            if level > 0
-        },
-    }
-
-
 def get_starsign_from_index(i: int) -> str:
     return starsign_ids[starsign_names[i]]
-
-
-def get_starsigns(raw: dict) -> dict[str, bool]:
-    return {
-        starsign_ids[name]: bool(unlocked)
-        for name, unlocked in raw["StarSignsUnlocked"].items()
-    }
 
 
 def get_cardtier(name: str, level: int) -> int:
@@ -105,56 +82,6 @@ def get_cardtier(name: str, level: int) -> int:
         return 2
     else:
         return 1
-
-
-def get_cards(raw: dict) -> dict[str, int]:
-    return {
-        gamedata["monsterNames"][name]: get_cardtier(name, level)
-        for name, level in raw["Cards"][0].items()
-        if level > 0
-    }
-
-
-def get_stamps(raw: dict) -> Iterator[Tuple[str, int]]:
-    return chain.from_iterable(
-        zip(stamps, levels)
-        for stamps, levels in zip(gamedata["stampList"].values(), raw["StampLevel"])
-    )
-
-
-def get_statues(raw: dict) -> dict:
-    return {
-        name: {
-            "golden": bool(gold),
-            "level": max(lvls),
-            "progress": floor(max(progs)),
-        }
-        for name, gold, lvls, progs in zip(
-            statue_names,
-            raw["StatueG"],
-            *[
-                [
-                    [statue[i] for statue in statues]
-                    for statues in zip_from_iterable(
-                        char["StatueLevels"] for char in raw["PlayerDATABASE"].values()
-                    )
-                ]
-                for i in range(2)
-            ],
-        )
-    }
-
-
-def get_checklist(raw: dict) -> dict[str, bool]:
-    return (
-        from_keys_in(
-            bag_maps[Bags.GEM],
-            list(raw["PlayerDATABASE"].values())[0]["InvBagsUsed"],
-            True,
-        )
-        | from_keys_in(bag_maps[Bags.STORAGE], raw["InvStorageUsed"].keys(), True)
-        | {name: True for name, level in get_stamps(raw) if level > 0}
-    )
 
 
 def get_pouchsize(itemtype: str, stacksize: int) -> str:
@@ -179,54 +106,6 @@ def get_pouches(carrycaps: dict[str, int]) -> dict[str, bool]:
         for itemtype, stacksize in carrycaps.items()
         if stacksize > 10
     }
-
-
-def get_chars(raw: dict) -> list[dict]:
-    return [
-        {
-            "name": charname,
-            "class": get_classname(chardata["CharacterClass"]),
-            "level": chardata["PersonalValuesMap"]["StatList"][4],
-            "constellations": {
-                constellation_names[i]: True
-                for i, (chars, completed) in enumerate(raw["StarSignProg"])
-                if char_map(raw)[charname] in (chars or "")  # chars can be null
-            },
-            "starSigns": {
-                get_starsign_from_index(int(k)): True
-                for k in chardata["PersonalValuesMap"]["StarSign"]
-                .strip(",_")
-                .split(",")
-            },
-            "skills": dict(list(zip(skill_names, chardata["Lv0"]))[1:]),
-            "items": from_keys_in(
-                bag_maps[Bags.INV], chardata["InvBagsUsed"].keys(), True
-            )
-            | get_pouches(chardata["MaxCarryCap"]),
-        }
-        for charname, chardata in raw["PlayerDATABASE"].items()
-    ]
-
-
-def to_idleon_companion(raw: dict) -> dict:
-    return {
-        "alchemy": get_alchemy(raw),
-        "starSigns": get_starsigns(raw),
-        "cards": get_cards(raw),
-        "stamps": {name: level for name, level in get_stamps(raw) if level > 0},
-        "statues": get_statues(raw),
-        "checklist": get_checklist(raw),
-        "chars": get_chars(raw),
-    }
-
-
-def save_idleon_companion(workdir: Path, raw: dict):
-    outfile = workdir / "idleon_companion.json"
-
-    with open(outfile, "w", encoding="utf-8") as file:
-        json.dump(raw, file)
-
-    logger.info(f"Wrote file: {outfile}")
 
 
 def get_empties(cogs: list[str]) -> list[dict[str, int]]:
@@ -290,40 +169,203 @@ def get_cog_data(cog: dict[str, Any], name: str) -> Optional[dict[str, Any]]:
     return data
 
 
-def to_cogstruction(raw: dict) -> dict[str, Any]:
-    return {
-        "cog_datas": list(
-            filter(None, starmap(get_cog_data, zip(raw["CogMap"], raw["CogOrder"])))
-        ),  # Filter to ignore blank cogs.
-        "empties_datas": get_empties(raw["CogOrder"]),
-    }
+class Exporter(ABC):
+    def __init__(self, savedata: dict) -> None:
+        self.savedata = savedata
 
+    def export(self, fmt: Formats, workdir: Path):
+        if fmt == Formats.IC:
+            self.save_idleon_companion(workdir)
+        elif fmt == Formats.COG:
+            self.save_cogstruction(workdir)
+        else:
+            raise ValueError(
+                "Format must be idleon_companion or cogstruction, not {fmt}"
+            )
 
-def save_cogstruction(workdir: Path, data: dict):
-    for which in ["cog_datas", "empties_datas"]:
-        outfile = workdir / f"{which}.csv"
+    def save_idleon_companion(self, workdir: Path):
+        outfile = workdir / "idleon_companion.json"
 
-        with open(outfile, "w", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=data[which][0].keys())
-
-            writer.writeheader()
-            for row in data[which]:
-                writer.writerow(row)
+        with open(outfile, "w", encoding="utf-8") as file:
+            json.dump(self.to_idleon_companion(), file)
 
         logger.info(f"Wrote file: {outfile}")
 
+    def to_idleon_companion(self) -> dict:
+        return {
+            "alchemy": self.get_alchemy(),
+            "starSigns": self.get_starsigns(),
+            "cards": self.get_cards(),
+            "stamps": {name: level for name, level in self.get_stamps() if level > 0},
+            "statues": self.get_statues(),
+            "checklist": self.get_checklist(),
+            "chars": self.get_chars(),
+        }
 
-parsers = {Formats.IC: to_idleon_companion, Formats.COG: to_cogstruction}
-savers = {Formats.IC: save_idleon_companion, Formats.COG: save_cogstruction}
+    def save_cogstruction(self, workdir: Path):
+        data = self.to_cogstruction()
+
+        for which in ["cog_datas", "empties_datas"]:
+            outfile = workdir / f"{which}.csv"
+
+            with open(outfile, "w", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=data[which][0].keys())
+
+                writer.writeheader()
+                for row in data[which]:
+                    writer.writerow(row)
+
+            logger.info(f"Wrote file: {outfile}")
+
+    def to_cogstruction(self):
+        raise NotImplementedError
+
+    def get_alchemy(self):
+        raise NotImplementedError
+
+    def get_starsigns(self):
+        raise NotImplementedError
+
+    def get_cards(self):
+        raise NotImplementedError
+
+    def get_stamps(self):
+        raise NotImplementedError
+
+    def get_statues(self):
+        raise NotImplementedError
+
+    def get_checklist(self):
+        raise NotImplementedError
+
+    def get_chars(self):
+        raise NotImplementedError
+
+
+class LocalExporter(Exporter):
+    def char_map(self) -> dict[str, str]:
+        return dict(zip(self.savedata["GetPlayersUsernames"], "_" + ascii_lowercase))
+
+    def get_alchemy(self) -> dict[str, dict]:
+        return {
+            "upgrades": dict(
+                zip(
+                    ("Orange", "Green", "Purple", "Yellow"),
+                    self.savedata["CauldronInfo"][:4],
+                )
+            ),
+            "vials": {
+                friendly_name(name): level
+                for name, level in zip(vial_names, self.savedata["CauldronInfo"][4])
+                if level > 0
+            },
+        }
+
+    def get_starsigns(self) -> dict[str, bool]:
+        return {
+            starsign_ids[name]: bool(unlocked)
+            for name, unlocked in self.savedata["StarSignsUnlocked"].items()
+        }
+
+    def get_cards(self) -> dict[str, int]:
+        return {
+            gamedata["monsterNames"][name]: get_cardtier(name, level)
+            for name, level in self.savedata["Cards"][0].items()
+            if level > 0
+        }
+
+    def get_stamps(self) -> Iterator[Tuple[str, int]]:
+        return chain.from_iterable(
+            zip(stamps, levels)
+            for stamps, levels in zip(
+                gamedata["stampList"].values(), self.savedata["StampLevel"]
+            )
+        )
+
+    def get_statues(self) -> dict:
+        return {
+            name: {
+                "golden": bool(gold),
+                "level": max(lvls),
+                "progress": floor(max(progs)),
+            }
+            for name, gold, lvls, progs in zip(
+                statue_names,
+                self.savedata["StatueG"],
+                *[
+                    [
+                        [statue[i] for statue in statues]
+                        for statues in zip_from_iterable(
+                            char["StatueLevels"]
+                            for char in self.savedata["PlayerDATABASE"].values()
+                        )
+                    ]
+                    for i in range(2)
+                ],
+            )
+        }
+
+    def get_checklist(self) -> dict[str, bool]:
+        return (
+            from_keys_in(
+                bag_maps[Bags.GEM],
+                list(self.savedata["PlayerDATABASE"].values())[0]["InvBagsUsed"],
+                True,
+            )
+            | from_keys_in(
+                bag_maps[Bags.STORAGE], self.savedata["InvStorageUsed"].keys(), True
+            )
+            | {name: True for name, level in self.get_stamps() if level > 0}
+        )
+
+    def get_chars(self) -> list[dict]:
+        return [
+            {
+                "name": charname,
+                "class": get_classname(chardata["CharacterClass"]),
+                "level": chardata["PersonalValuesMap"]["StatList"][4],
+                "constellations": {
+                    constellation_names[i]: True
+                    for i, (chars, completed) in enumerate(
+                        self.savedata["StarSignProg"]
+                    )
+                    if self.char_map()[charname] in (chars or "")  # chars can be null
+                },
+                "starSigns": {
+                    get_starsign_from_index(int(k)): True
+                    for k in chardata["PersonalValuesMap"]["StarSign"]
+                    .strip(",_")
+                    .split(",")
+                },
+                "skills": dict(list(zip(skill_names, chardata["Lv0"]))[1:]),
+                "items": from_keys_in(
+                    bag_maps[Bags.INV], chardata["InvBagsUsed"].keys(), True
+                )
+                | get_pouches(chardata["MaxCarryCap"]),
+            }
+            for charname, chardata in self.savedata["PlayerDATABASE"].items()
+        ]
+
+    def to_cogstruction(self) -> dict[str, Any]:
+        return {
+            "cog_datas": list(
+                filter(
+                    None,
+                    starmap(
+                        get_cog_data,
+                        zip(self.savedata["CogMap"], self.savedata["CogOrder"]),
+                    ),
+                )
+            ),  # Filter to ignore blank cogs.
+            "empties_datas": get_empties(self.savedata["CogOrder"]),
+        }
 
 
 def main(args: Namespace):
     infile = args.workdir / (args.infile or "decoded.json")
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
-
-    parsed = parsers[args.to](data)
-    savers[args.to](args.workdir, parsed)
+    LocalExporter(data).export(args.to, args.workdir)
 
 
 if __name__ == "__main__":
