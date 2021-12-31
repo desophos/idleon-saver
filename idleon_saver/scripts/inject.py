@@ -1,3 +1,4 @@
+import json
 import logging
 from functools import partial
 from pathlib import Path
@@ -9,6 +10,17 @@ from idleon_saver.ldb import ldb_args
 from idleon_saver.utility import ROOT_DIR
 
 logger = logging.getLogger(__name__)
+
+
+def jsonify(x):
+    try:
+        return json.loads(x)
+    except (TypeError, json.JSONDecodeError):
+        return x
+
+
+def jsonify_values(obj):
+    return {k: jsonify(v) for k, v in obj.items()}
 
 
 def main(exe_path: Path):
@@ -26,7 +38,7 @@ def main(exe_path: Path):
 
     try:
         if response["value"] and response["type"] == "object":
-            return response["value"]
+            return jsonify_values(response["value"])
         else:
             raise AssertionError
     except Exception as e:
