@@ -423,7 +423,7 @@ def main(args: Namespace):
     infile = args.workdir / (args.infile or "decoded.json")
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
-    LocalExporter(data).export(args.to, args.workdir)
+    FirebaseExporter(data).export(args.to, args.workdir)
 
 
 if __name__ == "__main__":

@@ -42,7 +42,7 @@ logging.Logger.manager.root = Logger
 
 from idleon_saver.scripts import inject
 from idleon_saver.scripts.decode import write_json
-from idleon_saver.scripts.export import Formats, LocalExporter, friendly_name
+from idleon_saver.scripts.export import FirebaseExporter, Formats, friendly_name
 
 
 class ButtonBox(BoxLayout):
@@ -269,7 +269,7 @@ class MainWindow(ScreenManager):
             json.dump(self.savedata, file)
 
     def export(self, fmt: Formats):
-        LocalExporter(self.savedata).export(fmt, self.userdir)
+        FirebaseExporter(self.savedata).export(fmt, self.userdir)
 
     def next(self):
         # don't wrap from last to first screen
