@@ -1,7 +1,7 @@
 import csv
 import json
 import logging
-from abc import ABC
+from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
 from enum import Enum
 from itertools import chain, starmap
@@ -173,6 +173,29 @@ class Exporter(ABC):
     def __init__(self, savedata: dict) -> None:
         self.savedata = savedata
 
+        self.classes: list[int] = self.all_players("CharacterClass")
+        self.skill_levels: list[list[int]] = self.all_players("Lv0")
+        self.statue_levels: list[list[list]] = self.all_players("StatueLevels")
+        self.bags_used: list[dict[str, Any]] = self.all_players("InvBagsUsed")
+        self.carrycaps = self.all_players("MaxCarryCap")
+
+        # Abstract attributes defined by subclasses
+        self.names: list[str]
+        self.stats: list[list[int]]
+        self.cauldron: list[list[str]]
+        self.starsigns_unlocked: dict[str, int]
+        self.starsigns_prog: list[tuple[str, int]]
+        self.starsigns_equipped: list[str]
+        self.cards: dict[str, int]
+        self.stamp_levels: list[list[int]]
+        self.statues_golden: list[int]
+        self.cog_map: list[dict[str, Any]]
+        self.cog_order: list[str]
+
+    @abstractmethod
+    def all_players(self, key: str) -> list:
+        raise NotImplementedError
+
     def export(self, fmt: Formats, workdir: Path):
         if fmt == Formats.IC:
             self.save_idleon_companion(workdir)
@@ -217,46 +240,34 @@ class Exporter(ABC):
 
             logger.info(f"Wrote file: {outfile}")
 
-    def to_cogstruction(self):
-        raise NotImplementedError
+    def to_cogstruction(self) -> dict[str, Any]:
+        return {
+            "cog_datas": list(
+                filter(
+                    None,
+                    starmap(
+                        get_cog_data,
+                        zip(self.cog_map, self.cog_order),
+                    ),
+                )
+            ),  # Filter to ignore blank cogs.
+            "empties_datas": get_empties(self.cog_order),
+        }
+
+    def char_map(self) -> dict[str, str]:
+        return dict(zip(self.names, "_" + ascii_lowercase))
 
     def get_alchemy(self):
-        raise NotImplementedError
-
-    def get_starsigns(self):
-        raise NotImplementedError
-
-    def get_cards(self):
-        raise NotImplementedError
-
-    def get_stamps(self):
-        raise NotImplementedError
-
-    def get_statues(self):
-        raise NotImplementedError
-
-    def get_checklist(self):
-        raise NotImplementedError
-
-    def get_chars(self):
-        raise NotImplementedError
-
-
-class LocalExporter(Exporter):
-    def char_map(self) -> dict[str, str]:
-        return dict(zip(self.savedata["GetPlayersUsernames"], "_" + ascii_lowercase))
-
-    def get_alchemy(self) -> dict[str, dict]:
         return {
             "upgrades": dict(
                 zip(
                     ("Orange", "Green", "Purple", "Yellow"),
-                    self.savedata["CauldronInfo"][:4],
+                    self.cauldron[:4],
                 )
             ),
             "vials": {
                 friendly_name(name): level
-                for name, level in zip(vial_names, self.savedata["CauldronInfo"][4])
+                for name, level in zip(vial_names, self.cauldron[4])
                 if level > 0
             },
         }
@@ -264,22 +275,20 @@ class LocalExporter(Exporter):
     def get_starsigns(self) -> dict[str, bool]:
         return {
             starsign_ids[name]: bool(unlocked)
-            for name, unlocked in self.savedata["StarSignsUnlocked"].items()
+            for name, unlocked in self.starsigns_unlocked.items()
         }
 
     def get_cards(self) -> dict[str, int]:
         return {
             gamedata["monsterNames"][name]: get_cardtier(name, level)
-            for name, level in self.savedata["Cards"][0].items()
+            for name, level in self.cards.items()
             if level > 0
         }
 
     def get_stamps(self) -> Iterator[Tuple[str, int]]:
         return chain.from_iterable(
             zip(stamps, levels)
-            for stamps, levels in zip(
-                gamedata["stampList"].values(), self.savedata["StampLevel"]
-            )
+            for stamps, levels in zip(gamedata["stampList"].values(), self.stamp_levels)
         )
 
     def get_statues(self) -> dict:
@@ -291,17 +300,13 @@ class LocalExporter(Exporter):
             }
             for name, gold, lvls, progs in zip(
                 statue_names,
-                self.savedata["StatueG"],
-                *[
-                    [
-                        [statue[i] for statue in statues]
-                        for statues in zip_from_iterable(
-                            char["StatueLevels"]
-                            for char in self.savedata["PlayerDATABASE"].values()
-                        )
+                self.statues_golden,
+                *zip(
+                    *[
+                        zip(*statues)
+                        for statues in zip_from_iterable(self.statue_levels)
                     ]
-                    for i in range(2)
-                ],
+                ),
             )
         }
 
@@ -309,7 +314,7 @@ class LocalExporter(Exporter):
         return (
             from_keys_in(
                 bag_maps[Bags.GEM],
-                list(self.savedata["PlayerDATABASE"].values())[0]["InvBagsUsed"],
+                self.bags_used[0],
                 True,
             )
             | from_keys_in(
@@ -318,47 +323,67 @@ class LocalExporter(Exporter):
             | {name: True for name, level in self.get_stamps() if level > 0}
         )
 
-    def get_chars(self) -> list[dict]:
-        return [
-            {
-                "name": charname,
-                "class": get_classname(chardata["CharacterClass"]),
-                "level": chardata["PersonalValuesMap"]["StatList"][4],
-                "constellations": {
-                    constellation_names[i]: True
-                    for i, (chars, completed) in enumerate(
-                        self.savedata["StarSignProg"]
-                    )
-                    if self.char_map()[charname] in (chars or "")  # chars can be null
-                },
-                "starSigns": {
-                    get_starsign_from_index(int(k)): True
-                    for k in chardata["PersonalValuesMap"]["StarSign"]
-                    .strip(",_")
-                    .split(",")
-                },
-                "skills": dict(list(zip(skill_names, chardata["Lv0"]))[1:]),
-                "items": from_keys_in(
-                    bag_maps[Bags.INV], chardata["InvBagsUsed"].keys(), True
-                )
-                | get_pouches(chardata["MaxCarryCap"]),
-            }
-            for charname, chardata in self.savedata["PlayerDATABASE"].items()
-        ]
-
-    def to_cogstruction(self) -> dict[str, Any]:
+    def get_player_constellations(self, charname: str) -> dict[str, bool]:
         return {
-            "cog_datas": list(
-                filter(
-                    None,
-                    starmap(
-                        get_cog_data,
-                        zip(self.savedata["CogMap"], self.savedata["CogOrder"]),
-                    ),
-                )
-            ),  # Filter to ignore blank cogs.
-            "empties_datas": get_empties(self.savedata["CogOrder"]),
+            constellation_names[i]: True
+            for i, (chars, completed) in enumerate(self.starsigns_prog)
+            if self.char_map()[charname] in (chars or "")  # chars can be null
         }
+
+    def parse_player_starsigns(self, starsign_codes: str):
+        return {
+            get_starsign_from_index(int(k)): True
+            for k in starsign_codes.strip(",_").split(",")
+        }
+
+    def build_char(self, name, klass, stats, starsigns, skills, bags, carrycaps):
+        return {
+            "name": name,
+            "class": get_classname(klass),
+            "level": stats[4],
+            "constellations": self.get_player_constellations(name),
+            "starSigns": self.parse_player_starsigns(starsigns),
+            "skills": dict(list(zip(skill_names, skills))[1:]),
+            "items": from_keys_in(bag_maps[Bags.INV], bags.keys(), True)
+            | get_pouches(carrycaps),
+        }
+
+    def get_chars(self) -> list[dict]:
+        return list(
+            starmap(
+                self.build_char,
+                zip(
+                    self.names,
+                    self.classes,
+                    self.stats,
+                    self.starsigns_equipped,
+                    self.skill_levels,
+                    self.bags_used,
+                    self.carrycaps,
+                ),
+            )
+        )
+
+
+class LocalExporter(Exporter):
+    def __init__(self, savedata: dict) -> None:
+        super().__init__(savedata)
+        self.names = savedata["GetPlayersUsernames"]
+        self.stats = [pv["StatList"] for pv in self.all_players("PersonalValuesMap")]
+        self.starsigns_equipped = [
+            pv["StarSign"] for pv in self.all_players("PersonalValuesMap")
+        ]
+        self.starsigns_unlocked = savedata["StarSignsUnlocked"]
+        self.starsigns_prog = savedata["StarSignProg"]
+        self.cauldron = savedata["CauldronInfo"]
+        self.cards = savedata["Cards"][0]
+        self.stamp_levels = savedata["StampLevel"]
+        self.statues_golden = savedata["StatueG"]
+        self.cog_map = savedata["CogMap"]
+        self.cog_order = savedata["CogOrder"]
+
+    def all_players(self, key: str) -> list:
+        return [player[key] for player in self.savedata["PlayerDATABASE"].values()]
 
 
 def main(args: Namespace):
