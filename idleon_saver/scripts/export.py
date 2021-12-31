@@ -180,7 +180,7 @@ class Exporter(ABC):
             self.save_cogstruction(workdir)
         else:
             raise ValueError(
-                "Format must be idleon_companion or cogstruction, not {fmt}"
+                f"Format must be idleon_companion or cogstruction, not {fmt}"
             )
 
     def save_idleon_companion(self, workdir: Path):
