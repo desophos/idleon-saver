@@ -386,6 +386,39 @@ class LocalExporter(Exporter):
         return [player[key] for player in self.savedata["PlayerDATABASE"].values()]
 
 
+class FirebaseExporter(Exporter):
+    def __init__(self, savedata: dict) -> None:
+        super().__init__(savedata)
+        self.names = savedata["PlayerNames"]
+        self.stats = self.all_players("PVStatList")
+        self.starsigns_equipped = self.all_players("PVtStarSign")
+        self.starsigns_unlocked = savedata["StarSg"]
+        self.starsigns_prog = savedata["SSprog"]
+        self.cauldron = list(map(self.parse_pseudoarray, savedata["CauldronInfo"]))
+        self.cards = savedata["Cards0"]
+        self.stamp_levels = list(map(self.parse_pseudoarray, savedata["StampLv"]))
+        self.statues_golden = savedata["StuG"]
+        self.cog_order = savedata["CogO"]
+        self.cog_map = self.parse_cog_map(savedata["CogM"])
+
+    def parse_pseudoarray(self, obj: dict) -> list:
+        if "length" not in obj:
+            raise ValueError(f"Object has no `length` key: {obj}")
+        return [v for k, v in obj.items() if k != "length"]
+
+    def all_players(self, key: str) -> list:
+        return [v for k, v in sorted(self.savedata.items()) if k.startswith(key)]
+
+    def parse_cog_map(self, cog_map: dict[str, dict]) -> list[dict]:
+        new_cogs = []
+        for i in range(len(self.cog_order)):
+            try:
+                new_cogs.append(cog_map[str(i)])
+            except KeyError:
+                new_cogs.append({})
+        return new_cogs
+
+
 def main(args: Namespace):
     infile = args.workdir / (args.infile or "decoded.json")
     with open(infile, encoding="utf-8") as file:
