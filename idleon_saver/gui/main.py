@@ -8,7 +8,6 @@ from pathlib import Path
 from time import sleep
 from zipfile import ZipFile
 
-from idleon_saver.stencyl.decoder import StencylDecoder
 from idleon_saver.utility import BUGREPORT_LINK, logs_dir, user_dir
 
 # Set log config before all kivy imports
@@ -41,7 +40,6 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 logging.Logger.manager.root = Logger
 
 from idleon_saver.scripts import inject
-from idleon_saver.scripts.decode import write_json
 from idleon_saver.scripts.export import FirebaseExporter, Formats, friendly_name
 
 
