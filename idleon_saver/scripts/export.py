@@ -34,6 +34,11 @@ from idleon_saver.utility import from_keys_in, zip_from_iterable
 logger = logging.getLogger(__name__)
 
 
+class Sources(Enum):
+    LOCAL = "local"
+    FIREBASE = "firebase"
+
+
 class Formats(Enum):
     IC = "idleon_companion"
     COG = "cogstruction"
@@ -413,11 +418,17 @@ class FirebaseExporter(Exporter):
         return new_cogs
 
 
+exporters = {
+    Sources.LOCAL: LocalExporter,
+    Sources.FIREBASE: FirebaseExporter,
+}
+
+
 def main(args: Namespace):
     infile = args.workdir / (args.infile or "decoded.json")
     with open(infile, encoding="utf-8") as file:
         data = json.load(file)
-    FirebaseExporter(data).export(args.to, args.workdir)
+    exporters[args.source](data).export(args.to, args.workdir)
 
 
 if __name__ == "__main__":
@@ -428,6 +439,14 @@ if __name__ == "__main__":
         default=Formats.IC.value,
         help="format to parse save data into",
     )
+    parser.add_argument(
+        "-s",
+        "--source",
+        choices=[member.value for member in Sources],
+        default=Sources.FIREBASE.value,
+        help="source of save data",
+    )
     args = ldb_args(parser)
     args.to = Formats(args.to)
+    args.source = Sources(args.source)
     main(args)
