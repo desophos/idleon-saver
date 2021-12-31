@@ -38,12 +38,6 @@ class Formats(Enum):
     IC = "idleon_companion"
     COG = "cogstruction"
 
-    @staticmethod
-    def lookup(key: str):
-        for member in Formats.__members__.values():
-            if member.value == key:
-                return member
-
 
 def friendly_name(s: str) -> str:
     return s.replace("_", " ").title()
@@ -430,9 +424,10 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
         "--to",
-        choices=list(Formats),
-        type=Formats.lookup,
-        default=Formats.IC,
+        choices=[member.value for member in Formats],
+        default=Formats.IC.value,
         help="format to parse save data into",
     )
-    main(ldb_args(parser))
+    args = ldb_args(parser)
+    args.to = Formats(args.to)
+    main(args)
