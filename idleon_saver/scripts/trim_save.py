@@ -1,9 +1,8 @@
 import json
 import logging
-from argparse import ArgumentParser, Namespace
+from argparse import Namespace
 
-from idleon_saver.ldb import ldb_args
-from idleon_saver.scripts.export import Sources
+from idleon_saver.utility import Args, Sources, get_args
 
 logger = logging.getLogger(__name__)
 
@@ -83,14 +82,4 @@ def main(args: Namespace):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-s",
-        "--source",
-        choices=[member.value for member in Sources],
-        default=Sources.FIREBASE.value,
-        help="source of save data",
-    )
-    args = ldb_args(parser)
-    args.source = Sources(args.source)
-    main(args)
+    main(get_args(Args.INFILE, Args.OUTFILE, Args.WORKDIR, Args.SOURCE))

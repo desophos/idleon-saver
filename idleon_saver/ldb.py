@@ -1,12 +1,7 @@
-import logging
-import sys
-from argparse import ArgumentParser, Namespace
 from contextlib import contextmanager
 from pathlib import Path
 
 import plyvel
-
-from idleon_saver.utility import ROOT_DIR, resolved_path
 
 
 @contextmanager
@@ -29,63 +24,3 @@ def db_key(install_path: Path) -> bytes:
         + bytes(path, encoding="utf-8")
         + b"/resources/app.asar/distBuild/static/game/index.html:mySave"
     )
-
-
-def ldb_args(parser: ArgumentParser = None) -> Namespace:
-    # Redirect logs to stdout for CLI scripts.
-    root = logging.getLogger()
-    root.setLevel(logging.INFO)
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.INFO)
-    root.addHandler(handler)
-
-    if parser is None:
-        parser = ArgumentParser()
-    parser.add_argument(
-        "-n",
-        "--idleon",
-        type=Path,
-        default="C:/Program Files (x86)/Steam/steamapps/common/Legends of Idleon",
-        help="your Legends of Idleon install path",
-    )
-    parser.add_argument(
-        "-l",
-        "--ldb",
-        type=resolved_path,
-        default="~/dev/leveldb",
-        help="path to the leveldb to work with",
-    )
-    parser.add_argument(
-        "-w",
-        "--workdir",
-        type=resolved_path,
-        default=ROOT_DIR / "work",
-        help="path to the working directory where files will be created",
-    )
-    parser.add_argument(
-        "-i",
-        "--infile",
-        default="",
-        help="name of the input file; default varies by script",
-    )
-    parser.add_argument(
-        "-o",
-        "--outfile",
-        default="",
-        help="name of the output file; default varies by script",
-    )
-    args = parser.parse_args()
-
-    args.workdir.mkdir(exist_ok=True)
-
-    # In case someone passes the exe path instead of the install dir.
-    if args.idleon.name == "LegendsOfIdleon.exe":
-        args.idleon = args.idleon.parent
-
-    # Only check ldb path.
-    # Idleon path is only used for the db key, so it doesn't have to exist.
-    # (Allows running from VMs.)
-    if not (args.ldb.exists() and args.ldb.is_dir()):
-        raise IOError(f"Invalid leveldb path: {args.ldb}")
-
-    return args

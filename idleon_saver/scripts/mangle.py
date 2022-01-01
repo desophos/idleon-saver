@@ -3,8 +3,8 @@ import logging
 import random
 from argparse import Namespace
 
-from idleon_saver.ldb import ldb_args
 from idleon_saver.stencyl.encoder import StencylEncoder
+from idleon_saver.utility import Args, get_args
 
 logger = logging.getLogger(__name__)
 CHARS = [x for x in map(chr, range(32, 127)) if x.isalnum()]
@@ -38,4 +38,4 @@ def main(args: Namespace):
 
 
 if __name__ == "__main__":
-    main(ldb_args())
+    main(get_args(Args.WORKDIR, Args.INFILE, Args.OUTFILE))

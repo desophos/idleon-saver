@@ -40,7 +40,8 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 logging.Logger.manager.root = Logger
 
 from idleon_saver.scripts import inject
-from idleon_saver.scripts.export import FirebaseExporter, Formats, friendly_name
+from idleon_saver.scripts.export import FirebaseExporter
+from idleon_saver.utility import Formats, friendly_name
 
 
 class ButtonBox(BoxLayout):

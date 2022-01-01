@@ -2,8 +2,7 @@ import csv
 import json
 import logging
 from abc import ABC, abstractmethod
-from argparse import ArgumentParser, Namespace
-from enum import Enum
+from argparse import Namespace
 from itertools import chain, starmap
 from math import floor
 from pathlib import Path
@@ -28,24 +27,17 @@ from idleon_saver.data import (
     statue_names,
     vial_names,
 )
-from idleon_saver.ldb import ldb_args
-from idleon_saver.utility import from_keys_in, zip_from_iterable
+from idleon_saver.utility import (
+    Args,
+    Formats,
+    Sources,
+    friendly_name,
+    from_keys_in,
+    get_args,
+    zip_from_iterable,
+)
 
 logger = logging.getLogger(__name__)
-
-
-class Sources(Enum):
-    LOCAL = "local"
-    FIREBASE = "firebase"
-
-
-class Formats(Enum):
-    IC = "idleon_companion"
-    COG = "cogstruction"
-
-
-def friendly_name(s: str) -> str:
-    return s.replace("_", " ").title()
 
 
 def get_baseclass(which: int) -> int:
@@ -432,21 +424,4 @@ def main(args: Namespace):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "--to",
-        choices=[member.value for member in Formats],
-        default=Formats.IC.value,
-        help="format to parse save data into",
-    )
-    parser.add_argument(
-        "-s",
-        "--source",
-        choices=[member.value for member in Sources],
-        default=Sources.FIREBASE.value,
-        help="source of save data",
-    )
-    args = ldb_args(parser)
-    args.to = Formats(args.to)
-    args.source = Sources(args.source)
-    main(args)
+    main(get_args(Args.WORKDIR, Args.INFILE, Args.TO, Args.SOURCE))

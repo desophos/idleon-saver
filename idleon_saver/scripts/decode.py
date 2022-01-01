@@ -4,9 +4,10 @@ from argparse import Namespace
 from pathlib import Path
 
 import plyvel
-from idleon_saver.ldb import db_key, get_db, ldb_args
+from idleon_saver.ldb import db_key, get_db
 from idleon_saver.stencyl.common import StencylData
 from idleon_saver.stencyl.decoder import StencylDecoder
+from idleon_saver.utility import Args, get_args
 
 logger = logging.getLogger(__name__)
 
@@ -84,4 +85,4 @@ def main(args: Namespace):
 
 
 if __name__ == "__main__":
-    main(ldb_args())
+    main(get_args(Args.WORKDIR, Args.INFILE))

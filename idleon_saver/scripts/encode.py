@@ -3,8 +3,9 @@ import logging
 from argparse import Namespace
 
 import plyvel
-from idleon_saver.ldb import db_key, get_db, ldb_args
+from idleon_saver.ldb import db_key, get_db
 from idleon_saver.stencyl.encoder import StencylEncoder
+from idleon_saver.utility import Args, get_args
 
 logger = logging.getLogger(__name__)
 
@@ -58,4 +59,4 @@ def main(args: Namespace):
 
 
 if __name__ == "__main__":
-    main(ldb_args())
+    main(get_args(Args.WORKDIR, Args.INFILE, Args.OUTFILE))

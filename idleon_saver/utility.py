@@ -2,15 +2,23 @@ import logging
 import os
 import sys
 import time
-from argparse import Action, ArgumentParser
+from argparse import Action, ArgumentParser, Namespace
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Iterable, List
 
-from idleon_saver.scripts.export import Formats, Sources
-
 ROOT_DIR = Path(__file__).resolve().parent.parent
 BUGREPORT_LINK = "https://github.com/desophos/idleon-saver/issues/new?assignees=desophos&labels=bug&template=bug_report.md&title="
+
+
+class Sources(Enum):
+    LOCAL = "local"
+    FIREBASE = "firebase"
+
+
+class Formats(Enum):
+    IC = "idleon_companion"
+    COG = "cogstruction"
 
 
 class Args(Enum):
@@ -113,7 +121,7 @@ arg_adders: dict[Args, Callable[[ArgumentParser], Any]] = {
 }
 
 
-def get_args(to_add: list[Args]):
+def get_args(*to_add: Args) -> Namespace:
     # Redirect logs to stdout for CLI scripts.
     root = logging.getLogger()
     root.setLevel(logging.INFO)
@@ -125,6 +133,10 @@ def get_args(to_add: list[Args]):
     for arg in to_add:
         arg_adders[arg](parser)
     return parser.parse_args()
+
+
+def friendly_name(s: str) -> str:
+    return s.replace("_", " ").title()
 
 
 def user_dir() -> Path:

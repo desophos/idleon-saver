@@ -6,8 +6,7 @@ from pathlib import Path
 import win32con
 import win32gui
 from ChromeController import ChromeContext
-from idleon_saver.ldb import ldb_args
-from idleon_saver.utility import ROOT_DIR
+from idleon_saver.utility import ROOT_DIR, Args, get_args
 
 logger = logging.getLogger(__name__)
 
@@ -47,4 +46,4 @@ def main(exe_path: Path):
 
 
 if __name__ == "__main__":
-    print(main(ldb_args().idleon / "LegendsOfIdleon.exe"))
+    print(main(get_args(Args.IDLEON).idleon / "LegendsOfIdleon.exe"))
