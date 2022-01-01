@@ -261,8 +261,11 @@ class MainWindow(ScreenManager):
         for screen in screens:
             self.add_widget(screen)
 
+    def download_savedata(self, path: str) -> dict:
+        return inject.main(Path(path))
+
     def get_json(self, path: str):
-        self.savedata = inject.main(Path(path))
+        self.savedata = self.download_savedata(path)
         with open(self.userdir / "idleon_save.json", "w", encoding="utf-8") as file:
             json.dump(self.savedata, file)
 
