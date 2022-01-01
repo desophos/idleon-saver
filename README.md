@@ -56,7 +56,7 @@ To launch the GUI, run `python idleon_saver/gui/main.py`.
 #### Preamble
 
 The first iteration of this project used scripts that interact with the leveldb directly instead of launching the game.
-The flakiness of leveldb on Windows has prompted me to abandon that route, which is why the GUI doesn't use the leveldb scripts.
+The flakiness of plyvel on Windows has prompted me to abandon that route, which is why the GUI doesn't use the leveldb scripts.
 
 However, these scripts are still available for use if desired.
 
@@ -82,15 +82,18 @@ Script arguments:
 
 `python idleon_saver/scripts/encode.py` will encode the data in `decoded_types.json` back into the database.
 
-After you've obtained your `decoded_plain.json`, you can export it into formats used by community tools with `python idleon_saver/scripts/export.py`. This script takes one additional argument:
+After you've obtained your `decoded_plain.json`, you can export it into formats used by community tools with `python idleon_saver/scripts/export.py`. This script takes two additional arguments:
 
-| Argument   | Description                                   | Default            | Choices                                       |
-| ---------- | --------------------------------------------- | ------------------ | --------------------------------------------- |
-| `--to`     | Community tool format to export your data to  | `idleon_companion` | `idleon_companion`, `cogstruction`            |
+| Argument         | Description                                            | Default            | Choices                                       |
+| ---------------- | ------------------------------------------------------ | ------------------ | --------------------------------------------- |
+| `-t`, `--to`     | Community tool format to export your data to           | `idleon_companion` | `idleon_companion`, `cogstruction`            |
+| `-s`, `--source` | The save data's origin, which determines its structure | `firebase`         | `firebase`, `local`                           |
 
 The `idleon_companion` option produces `idleon_companion.json` for import into [Idleon Companion](https://idleoncompanion.com/).
 
 The `cogstruction` option produces `cog_datas.csv` and `empties_datas.csv` for use with [Cogstruction](https://github.com/automorphis/Cogstruction).
+
+Data obtained from `inject.py` (or the GUI) is in the `firebase` format, while data obtained via `decode.py` is in the `local` format.
 
 ### Contributing
 
