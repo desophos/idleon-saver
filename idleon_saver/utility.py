@@ -7,13 +7,13 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 BUGREPORT_LINK = "https://github.com/desophos/idleon-saver/issues/new?assignees=desophos&labels=bug&template=bug_report.md&title="
 
 
-def user_dir():
+def user_dir() -> Path:
     path = Path(os.environ["APPDATA"], "IdleonSaver")
     path.mkdir(exist_ok=True)
     return path
 
 
-def logs_dir():
+def logs_dir() -> Path:
     path = user_dir() / "logs"
     path.mkdir(exist_ok=True)
     return path
