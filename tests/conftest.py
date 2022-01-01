@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 from idleon_saver.ldb import db_key, get_db
-from idleon_saver.scripts.export import Exporter, FirebaseExporter, LocalExporter
+from idleon_saver.scripts.export import Exporter, exporters
 from idleon_saver.utility import ROOT_DIR
 
 
@@ -43,8 +43,8 @@ def datafiles() -> dict[str, str]:
 
 @pytest.fixture(
     scope="session",
-    params=[(LocalExporter, "local"), (FirebaseExporter, "firebase")],
+    params=[(source.value, exporter) for source, exporter in exporters.items()],
 )
 def exporter(datafiles, request) -> Exporter:
-    which_exporter, which_data = request.param
-    return which_exporter(json.loads(datafiles[which_data]))
+    source, exporter = request.param
+    return exporter(json.loads(datafiles[source]))
