@@ -29,13 +29,13 @@ def next_blocked(app: TeleniumContext) -> bool:
 
 
 @pytest.fixture
-def app(tmp_path, stencylsave) -> TeleniumContext:
+def app(tmp_path, datafiles) -> TeleniumContext:
     with TeleniumContext(
         cmd_process=[sys.executable, "-m", "telenium.execute"],
         cmd_entrypoint=["idleon_saver/gui/main.py"],
     ) as ctx:
         ctx.cli.select_and_store("window", "/MainWindow")
-        ctx.cli.execute(f'window.get_stencyl = lambda _: r"{stencylsave}"')
+        ctx.cli.execute(f'window.download_savedata = lambda _: {datafiles["firebase"]}')
         ctx.cli.execute(
             f"""
             from pathlib import Path

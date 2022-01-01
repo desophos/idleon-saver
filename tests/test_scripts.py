@@ -7,12 +7,12 @@ from idleon_saver.utility import chunk
 @pytest.mark.parametrize(
     "scripts", [(stencyl2json, json2stencyl), (stencyl2ldb, ldb2stencyl)]
 )
-def test_inversion(testargs, stencylsave, scripts):
+def test_inversion(testargs, datafiles, scripts):
     with open(testargs.workdir / "encoded.txt", "w") as file:
-        file.write(stencylsave)
+        file.write(datafiles["stencyl"])
 
     for f in scripts:
         f(testargs)
 
     with open(testargs.workdir / "encoded.txt", "r") as file:
-        assert chunk(stencylsave, 50) == chunk(file.read(), 50)
+        assert chunk(datafiles["stencyl"], 50) == chunk(file.read(), 50)

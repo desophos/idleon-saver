@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 from idleon_saver.ldb import db_key, get_db
+from idleon_saver.scripts.export import Exporter, FirebaseExporter, LocalExporter
 from idleon_saver.utility import ROOT_DIR
 
 
@@ -26,12 +27,24 @@ def testdb(testargs):
 
 
 @pytest.fixture(scope="session")
-def stencylsave() -> str:
-    with open(ROOT_DIR.joinpath("tests", "data", "stencylsave.txt"), "r") as f:
-        return f.read()
+def datafiles() -> dict[str, str]:
+    # Tests shouldn't need to know filenames, so provide a layer of abstraction.
+    filename2key = {
+        "firebase.json": "firebase",
+        "local.json": "local",
+        "stencylsave.txt": "stencyl",
+    }
+    data = {}
+    for filename, key in filename2key.items():
+        with open(ROOT_DIR.joinpath("tests", "data", filename), "r") as file:
+            data[key] = file.read()
+    return data
 
 
-@pytest.fixture(scope="session")
-def jsonsave() -> str:
-    with open(ROOT_DIR.joinpath("tests", "data", "save.json"), "r") as f:
-        return json.load(f)
+@pytest.fixture(
+    scope="session",
+    params=[(LocalExporter, "local"), (FirebaseExporter, "firebase")],
+)
+def exporter(datafiles, request) -> Exporter:
+    which_exporter, which_data = request.param
+    return which_exporter(json.loads(datafiles[which_data]))
