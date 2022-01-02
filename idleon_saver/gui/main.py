@@ -71,13 +71,15 @@ class ErrorDialog(VBox):
     text = StringProperty("")
     done = ObjectProperty(None)
 
-    def open_logs(self):
+    @staticmethod
+    def open_logs():
         with ZipFile(user_dir() / "logs.zip", "w") as zf:
             for f in logs_dir().iterdir():
                 zf.write(f, f.name)
         os.startfile(user_dir(), "explore")
 
-    def open_github(self):
+    @staticmethod
+    def open_github():
         os.startfile(BUGREPORT_LINK)
 
 
@@ -262,7 +264,8 @@ class MainWindow(ScreenManager):
         for screen in screens:
             self.add_widget(screen)
 
-    def download_savedata(self, path: str) -> dict:
+    @staticmethod
+    def download_savedata(path: str) -> dict:
         return inject.main(Path(path))
 
     def get_json(self, path: str):
