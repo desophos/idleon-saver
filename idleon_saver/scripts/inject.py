@@ -36,10 +36,11 @@ def main(exe_path: Path):
         response = c.execute_javascript_function(to_inject)
 
     try:
-        if response["value"] and response["type"] == "object":
-            return jsonify_values(response["value"])
-        else:
-            raise AssertionError
+        if not response["value"]:
+            raise ValueError("Empty response")
+        if response["type"] != "object":
+            raise TypeError(f"Invalid response type: {response['type']}")
+        return jsonify_values(response["value"])
     except Exception as e:
         logger.exception(f"Malformed return value: {response}", exc_info=e)
         raise

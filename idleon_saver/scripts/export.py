@@ -61,6 +61,13 @@ def get_starsign_from_index(i: int) -> str:
     return starsign_ids[starsign_names[i]]
 
 
+def parse_player_starsigns(starsign_codes: str):
+    return {
+        get_starsign_from_index(int(k)): True
+        for k in starsign_codes.strip(",_").split(",")
+    }
+
+
 def get_cardtier(name: str, level: int) -> int:
     req = card_reqs[name]
     if level == 0:
@@ -321,19 +328,13 @@ class Exporter(ABC):
             if self.char_map()[charname] in (chars or "")  # chars can be null
         }
 
-    def parse_player_starsigns(self, starsign_codes: str):
-        return {
-            get_starsign_from_index(int(k)): True
-            for k in starsign_codes.strip(",_").split(",")
-        }
-
     def build_char(self, name, klass, stats, starsigns, skills, bags, carrycaps):
         return {
             "name": name,
             "class": get_classname(klass),
             "level": stats[4],
             "constellations": self.get_player_constellations(name),
-            "starSigns": self.parse_player_starsigns(starsigns),
+            "starSigns": parse_player_starsigns(starsigns),
             "skills": dict(list(zip(skill_names, skills))[1:]),
             "items": from_keys_in(bag_maps[Bags.INV], bags.keys(), True)
             | get_pouches(carrycaps),
