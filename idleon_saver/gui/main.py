@@ -76,10 +76,12 @@ class ErrorDialog(VBox):
         with ZipFile(user_dir() / "logs.zip", "w") as zf:
             for f in logs_dir().iterdir():
                 zf.write(f, f.name)
+        # skipcq: BAN-B606
         os.startfile(user_dir(), "explore")
 
     @staticmethod
     def open_github():
+        # skipcq: BAN-B606
         os.startfile(BUGREPORT_LINK)
 
 
@@ -98,6 +100,7 @@ class MyScreen(Screen):
 
     def popup_error(self, text):
         content = ErrorDialog(text=text, done=self.dismiss_popup)
+        # skipcq: PYL-W0201
         self._popup = Popup(title="Error :(", content=content, size_hint=(0.95, 0.95))
         self._popup.open()
 
@@ -112,6 +115,7 @@ class EndScreen(MyScreen):
     def try_export(self, fmt: Formats):
         try:
             self.export(fmt)
+        # skipcq: PYL-W0703
         except Exception as e:
             Logger.exception(e)
             self.popup_error(
@@ -165,6 +169,7 @@ class PathScreen(MyScreen):
         content = FileChooserDialog(
             done=self.set_path, cancel=self.dismiss_popup, filters=self.path_filters
         )
+        # skipcq: PYL-W0201
         self._popup = Popup(title="Find file", content=content, size_hint=(1, 1))
         self._popup.open()
 
@@ -214,6 +219,7 @@ class PathScreen(MyScreen):
 
         try:
             self.action(path)
+        # skipcq: PYL-W0703
         except Exception as e:
             Logger.exception(e)
             self.popup_error(
@@ -296,6 +302,7 @@ class MainWindow(ScreenManager):
 
 class IdleonSaver(App):
     def build(self):
+        # skipcq: PYL-W0201
         self.title = "Idleon Saver"
         return MainWindow()
 
@@ -303,6 +310,7 @@ class IdleonSaver(App):
 if __name__ == "__main__":
     # Add data dir to Kivy path in frozen bundle.
     if hasattr(sys, "_MEIPASS"):
+        # skipcq: PYL-W0212
         resource_add_path(os.path.join(sys._MEIPASS))  # type: ignore[attr-defined]
 
     IdleonSaver(kv_file="main.kv").run()
