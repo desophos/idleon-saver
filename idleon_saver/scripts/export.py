@@ -393,7 +393,8 @@ class FirebaseExporter(Exporter):
         self.cog_order = savedata["CogO"]
         self.cog_map = self.parse_cog_map(savedata["CogM"])
 
-    def parse_pseudoarray(self, obj: dict) -> list:
+    @staticmethod
+    def parse_pseudoarray(obj: dict) -> list:
         if "length" not in obj:
             raise ValueError(f"Object has no `length` key: {obj}")
         return [v for k, v in obj.items() if k != "length"]

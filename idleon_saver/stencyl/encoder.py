@@ -20,10 +20,12 @@ class StencylEncoder:
             list: self._encode_list,
         }
 
-    def _encode_int(self, x: int) -> str:
+    @staticmethod
+    def _encode_int(x: int) -> str:
         return f"i{x}"
 
-    def _encode_float(self, x: str) -> str:
+    @staticmethod
+    def _encode_float(x: str) -> str:
         return f"d{x}"
 
     def _encode_string(self, s: str) -> str:
