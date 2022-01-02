@@ -25,7 +25,7 @@ def test_get_empties(exporter):
 
     assert len(empties) == cogs[:96].count("Blank")
     for slot in empties:
-        assert slot.keys() == set(("empties_x", "empties_y"))
+        assert slot.keys() == {"empties_x", "empties_y"}
         assert slot["empties_x"] in range(12)
         assert slot["empties_y"] in range(8)
 
