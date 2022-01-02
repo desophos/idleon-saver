@@ -91,7 +91,10 @@ class FileChooserDialog(VBox):
 
 class MyScreen(Screen):
     def dismiss_popup(self):
-        self._popup.dismiss()
+        try:
+            self._popup.dismiss()
+        except AttributeError as e:
+            Logger.exception("Popup dismissed before being created", exc_info=e)
 
     def popup_error(self, text):
         content = ErrorDialog(text=text, done=self.dismiss_popup)
