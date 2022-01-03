@@ -106,11 +106,11 @@ class StencylDecoder:
         if char in constants:
             return StencylLiteral(char, constants[char])
         elif char in self.literal_parsers:
-            cls, parser = self.literal_parsers[char]
-            return cls(char, parser())
+            lit_cls, lit_parser = self.literal_parsers[char]
+            return lit_cls(char, lit_parser())
         elif char in self.container_parsers:
-            end_char, cls, parser = self.container_parsers[char]
-            return cls(char, end_char, parser(end_char))
+            end_char, data_cls, data_parser = self.container_parsers[char]
+            return data_cls(char, end_char, data_parser(end_char))
         else:
             raise Exception(f"Unknown character {char} at index {self.index}")
 

@@ -310,6 +310,7 @@ class Exporter(ABC):
 
     def get_checklist(self) -> dict[str, bool]:
         return (
+            # DeepSource error due to old python/mypy version? skipcq: TYP-052
             from_keys_in(
                 bag_maps[Bags.GEM],
                 self.bags_used[0],
