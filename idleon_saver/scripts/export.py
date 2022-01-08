@@ -3,7 +3,7 @@ import json
 import logging
 from abc import ABC, abstractmethod
 from argparse import Namespace
-from itertools import chain, starmap
+from itertools import chain, repeat, starmap
 from math import floor
 from pathlib import Path
 from string import ascii_lowercase
@@ -261,16 +261,21 @@ class Exporter(ABC):
         return dict(zip(self.names, "_" + ascii_lowercase))
 
     def get_alchemy(self):
+        # Get possibly empty alchemy data
+        try:
+            upgrades = self.cauldron[:4]
+        except IndexError:
+            upgrades = repeat([])
+        try:
+            vial_levels = self.cauldron[4]
+        except IndexError:
+            vial_levels = []
+
         return {
-            "upgrades": dict(
-                zip(
-                    ("Orange", "Green", "Purple", "Yellow"),
-                    self.cauldron[:4],
-                )
-            ),
+            "upgrades": dict(zip(("Orange", "Green", "Purple", "Yellow"), upgrades)),
             "vials": {
                 friendly_name(name): level
-                for name, level in zip(vial_names, self.cauldron[4])
+                for name, level in zip(vial_names, vial_levels)
                 if level > 0
             },
         }

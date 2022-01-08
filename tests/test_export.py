@@ -24,6 +24,11 @@ def test_parse_player_starsigns(starsigns, expected):
     )
 
 
+def test_get_alchemy_empty(exporter):
+    exporter.cauldron = []
+    assert exporter.get_alchemy() == {"upgrades": {}, "vials": {}}
+
+
 def test_get_stamps(exporter):
     for stamp, level in exporter.get_stamps():
         if level > 0:
