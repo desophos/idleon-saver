@@ -261,7 +261,7 @@ class Exporter(ABC):
         return dict(zip(self.names, "_" + ascii_lowercase))
 
     def get_alchemy(self):
-        # Get possibly empty alchemy data
+        # Get possibly empty alchemy data.
         try:
             upgrades = self.cauldron[:4]
         except IndexError:
@@ -340,10 +340,17 @@ class Exporter(ABC):
         }
 
     def build_char(self, name, klass, stats, starsigns, skills, bags, carrycaps):
+        try:
+            level = stats[4]
+        except IndexError:
+            # Characters that have never been played have placeholder stats
+            # that don't include level, so make up a placeholder level.
+            level = 0
+
         return {
             "name": name,
             "class": get_classname(klass),
-            "level": stats[4],
+            "level": level,
             "constellations": self.get_player_constellations(name),
             "starSigns": parse_player_starsigns(starsigns),
             "skills": dict(list(zip(skill_names, skills))[1:]),

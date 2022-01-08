@@ -29,6 +29,11 @@ def test_get_alchemy_empty(exporter):
     assert exporter.get_alchemy() == {"upgrades": {}, "vials": {}}
 
 
+def test_missing_stats(exporter):
+    exporter.stats = [[]]
+    assert exporter.get_chars()[0]["level"] == 0
+
+
 def test_get_stamps(exporter):
     for stamp, level in exporter.get_stamps():
         if level > 0:
