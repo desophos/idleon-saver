@@ -1,6 +1,27 @@
 import pytest
 from idleon_saver.data import cog_type_map
-from idleon_saver.scripts.export import get_cog_type, get_empties
+from idleon_saver.scripts.export import (
+    get_cog_type,
+    get_empties,
+    get_starsign_from_index,
+    parse_player_starsigns,
+)
+from idleon_saver.utility import dict_sorted
+
+
+@pytest.mark.parametrize(
+    ("starsigns", "expected"),
+    [
+        (",_,", []),
+        ("0,_,,_", [0]),
+        ("_,,0,_,", [0]),
+        (",1,_,0", [1, 0]),
+    ],
+)
+def test_parse_player_starsigns(starsigns, expected):
+    assert dict_sorted(parse_player_starsigns(starsigns)) == dict_sorted(
+        dict.fromkeys(map(get_starsign_from_index, expected), True)
+    )
 
 
 def test_get_stamps(exporter):

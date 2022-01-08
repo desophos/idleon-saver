@@ -61,11 +61,16 @@ def get_starsign_from_index(i: int) -> str:
     return starsign_ids[starsign_names[i]]
 
 
-def parse_player_starsigns(starsign_codes: str):
-    return {
-        get_starsign_from_index(int(k)): True
-        for k in starsign_codes.strip(",_").split(",")
-    }
+def parse_player_starsigns(starsign_codes: str) -> dict[str, bool]:
+    starsigns = []
+    for k in starsign_codes.strip(",_").split(","):
+        try:
+            starsigns.append(get_starsign_from_index(int(k)))
+        except ValueError:
+            pass  # Malformed key ("" or "_")
+        except KeyError as e:
+            logger.exception(f"Couldn't parse starsign index {k}", exc_info=e)
+    return dict.fromkeys(starsigns, True)
 
 
 def get_cardtier(name: str, level: int) -> int:

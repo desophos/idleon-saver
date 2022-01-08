@@ -155,6 +155,10 @@ def zip_from_iterable(iterables):
     return zip(*iterables)
 
 
+def dict_sorted(d: dict) -> dict:
+    return dict(sorted(d.items()))
+
+
 def from_keys_in(d: dict, keys: Iterable, value=None) -> dict:
     return {d[key]: value for key in keys if key in d}
 
