@@ -11,7 +11,10 @@ for path in ROOT_DIR.joinpath("idleon-data", "maps").iterdir():
     with open(path, "r") as f:
         jsondata = json.load(f)
         # Every data file should have a comment, which we can ignore.
-        del jsondata["__comment"]
+        try:
+            del jsondata["__comment"]
+        except KeyError:
+            pass  # The file doesn't have a comment, which is fine.
         # If a data file has a top-level list, it's contained in the `data` field.
         gamedata[path.stem] = jsondata.get("data", jsondata)
 
