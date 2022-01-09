@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from argparse import Namespace
 from itertools import chain, repeat, starmap
 from math import floor
+from operator import itemgetter
 from pathlib import Path
 from string import ascii_lowercase
 from typing import Any, Iterator, Optional, Tuple
@@ -13,19 +14,19 @@ from idleon_saver.data import (
     Bags,
     bag_maps,
     card_reqs,
-    class_names,
     cog_boosts,
     cog_datas_map,
     cog_type_map,
     constellation_names,
-    gamedata,
+    idleon_data,
     pouch_names,
     pouch_sizes,
     skill_names,
+    stamp_names,
     starsign_ids,
     starsign_names,
-    statue_names,
     vial_names,
+    wiki_data,
 )
 from idleon_saver.utility import (
     Args,
@@ -54,7 +55,7 @@ def get_baseclass(which: int) -> int:
 
 
 def get_classname(which: int) -> str:
-    return friendly_name(class_names[which])
+    return idleon_data["classNames"][str(which)]
 
 
 def get_starsign_from_index(i: int) -> str:
@@ -288,7 +289,7 @@ class Exporter(ABC):
 
     def get_cards(self) -> dict[str, int]:
         return {
-            gamedata["monsterNames"][name]: get_cardtier(name, level)
+            wiki_data["EnemyDetails"][name]["Name"]: get_cardtier(name, level)
             for name, level in self.cards.items()
             if level > 0
         }
@@ -296,7 +297,7 @@ class Exporter(ABC):
     def get_stamps(self) -> Iterator[Tuple[str, int]]:
         return chain.from_iterable(
             zip(stamps, levels)
-            for stamps, levels in zip(gamedata["stampList"].values(), self.stamp_levels)
+            for stamps, levels in zip(stamp_names, self.stamp_levels)
         )
 
     def get_statues(self) -> dict:
@@ -307,7 +308,7 @@ class Exporter(ABC):
                 "progress": floor(max(progs)),
             }
             for name, gold, lvls, progs in zip(
-                statue_names,
+                map(itemgetter("name"), wiki_data["Statue"]),
                 self.statues_golden,
                 *zip(
                     *[
