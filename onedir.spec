@@ -20,6 +20,7 @@ a = Analysis(
     datas=[
         ("idleon_saver/scripts/*.js", "idleon_saver/scripts"),
         ("idleon-data/maps/*.json", "idleon-data/maps"),
+        ("IdleonWikiBot/exported/repo/*.json", "IdleonWikiBot/exported/repo"),
     ],
     hookspath=hookspath(),
     hooksconfig={},
