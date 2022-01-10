@@ -48,7 +48,7 @@ vial_names = [
 
 stamps = [
     list(stamps)
-    for group, stamps in groupby(
+    for _, stamps in groupby(
         filter(
             lambda stamp: stamp["typeGen"] == "aStamp",
             wiki_data["SpecificItem"].values(),
@@ -57,9 +57,7 @@ stamps = [
     )
 ]
 
-stamp_names = list(
-    map(lambda group: list(map(itemgetter("displayName"), group)), stamps)
-)
+stamp_names = [[stamp["displayName"] for stamp in group] for group in stamps]
 
 
 class Bags(Enum):
