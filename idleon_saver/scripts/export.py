@@ -301,6 +301,18 @@ class Exporter(ABC):
         )
 
     def get_statues(self) -> dict:
+        """Explanation of zip magic:
+        0. statue_levels:
+           list of characters, each with a list of statues, each with (level, progress)
+        1. zip_from_iterable(_):
+           list of statues, each with a list of characters, each with (level, progress)
+        2. map(zip_from_iterable, _):
+           list of statues, each with (list of levels, list of progresses)
+        3. zip_from_iterable(_):
+           ([list of statues, each with a list of levels], [list of statues, each with a list of progresses])
+        4. for lvls, progs in zip(*_):
+           iterates over statues, unpacking each into a list of levels and list of progresses
+        """
         return {
             name: {
                 "golden": bool(gold),
@@ -310,11 +322,8 @@ class Exporter(ABC):
             for name, gold, lvls, progs in zip(
                 map(itemgetter("name"), wiki_data["Statue"]),
                 self.statues_golden,
-                *zip(
-                    *[
-                        zip(*statues)
-                        for statues in zip_from_iterable(self.statue_levels)
-                    ]
+                *zip_from_iterable(
+                    map(zip_from_iterable, zip_from_iterable(self.statue_levels))
                 ),
             )
         }
