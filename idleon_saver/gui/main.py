@@ -308,9 +308,12 @@ class IdleonSaver(App):
 
 
 if __name__ == "__main__":
+    import importlib.metadata
+
     # Add data dir to Kivy path in frozen bundle.
     if hasattr(sys, "_MEIPASS"):
         # skipcq: PYL-W0212
         resource_add_path(os.path.join(sys._MEIPASS))  # type: ignore[attr-defined]
 
+    Logger.info(f"Idleon Saver: version {importlib.metadata.version('idleon_saver')}")
     IdleonSaver(kv_file="main.kv").run()
