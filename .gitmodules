@@ -1,6 +1,8 @@
 [submodule "idleon-data"]
 	path = idleon-data
 	url = https://github.com/Corbeno/idleon-data.git
+	branch = main
 [submodule "IdleonWikiBot"]
 	path = IdleonWikiBot
-	url = https://github.com/BigCoight/IdleonWikiBot3.0.git
+	url = https://github.com/desophos/IdleonWikiBot3.0.git
+	branch = master
