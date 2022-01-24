@@ -7,9 +7,9 @@ cachetools==5.0.0; python_version >= "3.7" and python_version < "4.0" \
 certifi==2021.10.8; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" \
     --hash=sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569 \
     --hash=sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872
-charset-normalizer==2.0.9; python_full_version >= "3.6.0" and python_version >= "3" \
-    --hash=sha256:b0b883e8e874edfdece9c28f314e3dd5badf067342e42fb162203335ae61aa2c \
-    --hash=sha256:1eecaa09422db5be9e29d7fc65664e6c33bd06f9ced7838578ba40d58bdf3721
+charset-normalizer==2.0.10; python_full_version >= "3.6.0" and python_version >= "3" \
+    --hash=sha256:876d180e9d7432c5d1dfd4c5d26b72f099d503e8fcc0feb7532c9289be60fcbd \
+    --hash=sha256:cb957888737fc0bbcd78e3df769addb41fd1ff8cf950dc9e7ad7793f1bf44455
 chromecontroller @ git+https://github.com/desophos/ChromeController.git@master
 docopt==0.6.2 \
     --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491
@@ -19,15 +19,15 @@ docutils==0.18.1; python_version >= "2.7" and python_full_version < "3.0.0" or p
 idna==3.3; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.5" \
     --hash=sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff \
     --hash=sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d
-kivy-deps.angle==0.3.0; sys_platform == "win32" \
-    --hash=sha256:a2cea09e8a5e899629466403fbd540459f1cdef8d08c6c479b6607b95309be02 \
-    --hash=sha256:b167e19b3eea55a9a8c606a607bb909ec1bedda88deee40347c780b310155a79 \
-    --hash=sha256:d0e7b7b9eb9669837a5d70808a7ea45f2b61961b56f9f69a233bad6bd36ce260 \
-    --hash=sha256:b9d07976b0bf6bac724a42aa8ed5a8c7caa95609046db30c8f15bb731f8e4d36 \
-    --hash=sha256:99c40d53582a958748e251dfbd61aa67fb85963e27529ca08a21f2f5eeed04e1 \
-    --hash=sha256:50605fdd4c9fdbe9f717069734a598a9aba0afe5d3f0412afbe2ecff0326e92d \
-    --hash=sha256:64ac7f33c000585dc30194e604aed925972c6b7c3848b5c3b073ae916fb0b55c \
-    --hash=sha256:bb4d53f15a093214adbbe205c108ede5cc0f6af6eff104c1b8c468ddaaf6400a
+kivy-deps.angle==0.3.1; sys_platform == "win32" \
+    --hash=sha256:5e03805148f52ed7dd9fab63b231c6bdd8a49f5be57cd206d3b8d83eec837551 \
+    --hash=sha256:555bdfec11cdb06c74ac298678a5637fa0ed7fb12fbd85ed80e6c3c942461bee \
+    --hash=sha256:d48d0e306a261a37c3c1951d4161940edc29d86dad242082c31f49a65de7a54a \
+    --hash=sha256:dc6043775a2a472762a37e302350ab49df6a6b5e5bad86c5827eca9d2da52099 \
+    --hash=sha256:e3462556908b5265d1bfe51944bfbd3809bd0118ea14f5307895e4cd3dad1d6c \
+    --hash=sha256:e4cd37bb5735efc3e739a2aaedf3ff841b32555e2f36c4f594da2fdb687441cb \
+    --hash=sha256:04dde57a46b08fb8c2fa5724617e2e9c11c058263b8b3f8770dbd7b4029bfdef \
+    --hash=sha256:b94c24e86dc8a6afd1a77f809bf253c2ebc2665f00e575f165549b9b71125e76
 kivy-deps.glew==0.3.0; sys_platform == "win32" \
     --hash=sha256:5a63e3dd0affef2613410fe5b9b8572f1932ae2285db60071446d62f37961825 \
     --hash=sha256:28aa195875a767314b12091842bdcf832401077f9e65dd9975059ddb978f2f75 \
@@ -111,9 +111,9 @@ plyvel==1.4.0; sys_platform != "win32" \
     --hash=sha256:b4a4e25b75852a379744f14e743f17ae78513d0ba4f354be54199735487c71d7 \
     --hash=sha256:d50eb65421e40d788868943bbaa0e1b62e806a07323a21ce9a4b7bf6bea022ec \
     --hash=sha256:4ea98bea04ebf0f44747bacdfafefc8827787106fbb787f0aedc46482b2dfd53
-pygments==2.11.1; python_version >= "3.5" \
-    --hash=sha256:9135c1af61eec0f650cd1ea1ed8ce298e54d56bcd8cc2ef46edd7702c171337c \
-    --hash=sha256:59b895e326f0fb0d733fd28c6839bd18ad0687ba20efc26d4277fd1d30b971f4
+pygments==2.11.2; python_version >= "3.5" \
+    --hash=sha256:44238f1b60a76d78fc8ca0528ee429702aae011c265fe6a8dd8b63049ae41c65 \
+    --hash=sha256:4e426f72023d88d03b2fa258de560726ce890ff3b630f88c21cbb8b2503b8c6a
 pypiwin32==223; sys_platform == "win32" \
     --hash=sha256:67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775 \
     --hash=sha256:71be40c1fbd28594214ecaecb58e7aa8b708eabfa0125c8a109ebd51edbd776a
@@ -130,12 +130,12 @@ pywin32==303 \
     --hash=sha256:793bf74fce164bcffd9d57bb13c2c15d56e43c9542a7b9687b4fccf8f8a41aba \
     --hash=sha256:7d3271c98434617a11921c5ccf74615794d97b079e22ed7773790822735cc352 \
     --hash=sha256:79cbb862c11b9af19bcb682891c1b91942ec2ff7de8151e2aea2e175899cda34
-requests==2.26.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" \
-    --hash=sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24 \
-    --hash=sha256:b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7
-urllib3==1.26.7; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version < "4" \
-    --hash=sha256:c4fdf4019605b6e5423637e01bc9fe4daef873709a7973e195ceba0a62bbc844 \
-    --hash=sha256:4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece
+requests==2.27.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" \
+    --hash=sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d \
+    --hash=sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61
+urllib3==1.26.8; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version < "4" \
+    --hash=sha256:000ca7f471a233c2251c6c7023ee85305721bfdf18621ebff4fd17a8653427ed \
+    --hash=sha256:0e7c33d9a63e7ddfcb86780aac87befc2fbddf46c58dbb487e0855f7ceec283c
 websocket-client==1.2.3; python_version >= "3.6" \
     --hash=sha256:1315816c0acc508997eb3ae03b9d3ff619c9d12d544c9a9b553704b1cc4f6af5 \
     --hash=sha256:2eed4cc58e4d65613ed6114af2f380f7910ff416fc8c46947f6e76b6815f56c0
