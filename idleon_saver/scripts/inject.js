@@ -26,12 +26,5 @@ async function topLevel() {
         return execute(1)
     }
 
-    function load() {
-        return new Promise(function(resolve, reject) {
-            window.addEventListener('load', resolve)
-            window.addEventListener('error', reject)
-        })
-    }
-    
-    return load().then(() => retry(getFirebaseData, 10))
+    return await retry(getFirebaseData, 10)
 }
