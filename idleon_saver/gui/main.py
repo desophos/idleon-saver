@@ -215,7 +215,7 @@ class PathScreen(MyScreen):
     def resolve_action(self, path):
         # Increment progress bar while action is underway.
         self.action_done.clear()
-        threading.Thread(target=self.increment_progress, args=(1, 0.25)).start()
+        threading.Thread(target=self.increment_progress, args=(1, 0.3)).start()
 
         try:
             self.action(path)
