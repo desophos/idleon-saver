@@ -181,13 +181,15 @@ class Exporter(ABC):
         self.classes: list[int] = self.all_players("CharacterClass")
         self.skill_levels: list[list[int]] = self.all_players("Lv0")
         self.statue_levels: list[list[list]] = self.all_players("StatueLevels")
-        self.bags_used: list[dict[str, Any]] = self.all_players("InvBagsUsed")
-        self.carrycaps = self.all_players("MaxCarryCap")
+        self.bags_used: list[list[str]] = [
+            bags.keys() for bags in self.all_players("InvBagsUsed")
+        ]  # Values are just the number of slots granted by the bag, so ignore them
+        self.carrycaps: list[dict[str, int]] = self.all_players("MaxCarryCap")
 
         # Abstract attributes defined by subclasses
         self.names: list[str]
         self.stats: list[list[int]]
-        self.cauldron: list[list[str]]
+        self.cauldron: list[list[int]]
         self.starsigns_unlocked: dict[str, int]
         self.starsigns_prog: list[tuple[str, int]]
         self.starsigns_equipped: list[str]
@@ -350,7 +352,16 @@ class Exporter(ABC):
             if self.char_map()[charname] in (chars or "")  # chars can be null
         }
 
-    def build_char(self, name, klass, stats, starsigns, skills, bags, carrycaps):
+    def build_char(
+        self,
+        name: str,
+        klass: int,
+        stats: list[int],
+        starsigns: str,
+        skills: list[int],
+        bags: list[str],
+        carrycaps: dict[str, int],
+    ):
         try:
             level = stats[4]
         except IndexError:
@@ -365,7 +376,7 @@ class Exporter(ABC):
             "constellations": self.get_player_constellations(name),
             "starSigns": parse_player_starsigns(starsigns),
             "skills": dict(list(zip(skill_names, skills))[1:]),
-            "items": from_keys_in(bag_maps[Bags.INV], bags.keys(), True)
+            "items": from_keys_in(bag_maps[Bags.INV], bags, True)
             | get_pouches(carrycaps),
         }
 
