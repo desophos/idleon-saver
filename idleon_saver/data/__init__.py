@@ -67,7 +67,7 @@ class Bags(Enum):
 
 
 def get_bag_names(
-    typeGen: str, gem: Callable[[bool], bool] = lambda x: x
+    typeGen: str, gem: Callable[[bool], bool] = lambda _: True
 ) -> dict[str, str]:
     return {
         item["item"]["internalName"]: item["item"]["displayName"]
