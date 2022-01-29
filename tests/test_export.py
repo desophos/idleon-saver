@@ -41,8 +41,11 @@ def test_get_stamps(exporter):
 
 
 def test_to_idleon_companion(exporter):
-    for key, value in exporter.to_idleon_companion().items():
+    exported = exporter.to_idleon_companion()
+    for key, value in exported.items():
         assert value, f"{key} is empty"
+    for statue_name in exported["statues"]:
+        assert statue_name.endswith(" Statue")
 
 
 def test_get_empties_error():

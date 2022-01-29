@@ -27,6 +27,8 @@ for path in ROOT_DIR.joinpath("IdleonWikiBot", "exported", "repo").iterdir():
     with open(path, "r") as f:
         wiki_data[path.stem.removesuffix("Repo")] = json.load(f)
 
+statues = [f"{statue['name']} Statue" for statue in wiki_data["Statue"]]
+
 skill_names = [
     "Character",
     "Mining",

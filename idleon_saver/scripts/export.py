@@ -25,6 +25,7 @@ from idleon_saver.data import (
     stamp_names,
     starsign_ids,
     starsign_names,
+    statues,
     vial_names,
     wiki_data,
 )
@@ -320,7 +321,7 @@ class Exporter(ABC):
                 "progress": floor(max(progs)),
             }
             for name, gold, lvls, progs in zip(
-                map(itemgetter("name"), wiki_data["Statue"]),
+                statues,
                 self.statues_golden,
                 *zip_from_iterable(
                     map(zip_from_iterable, zip_from_iterable(self.statue_levels))
