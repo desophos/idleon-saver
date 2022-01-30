@@ -5,7 +5,6 @@ from abc import ABC, abstractmethod
 from argparse import Namespace
 from itertools import chain, repeat, starmap
 from math import floor
-from operator import itemgetter
 from pathlib import Path
 from string import ascii_lowercase
 from typing import Any, Iterator, Optional, Tuple
@@ -376,6 +375,7 @@ class Exporter(ABC):
             "constellations": self.get_player_constellations(name),
             "starSigns": parse_player_starsigns(starsigns),
             "skills": dict(list(zip(skill_names, skills))[1:]),
+            # DeepSource error due to old python/mypy version? skipcq: TYP-052
             "items": from_keys_in(bag_maps[Bags.INV], bags, True)
             | get_pouches(carrycaps),
         }
