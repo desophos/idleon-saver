@@ -74,8 +74,10 @@ class ErrorDialog(VBox):
     @staticmethod
     def open_logs():
         with ZipFile(user_dir() / "logs.zip", "w") as zf:
-            for f in logs_dir().iterdir():
-                zf.write(f, f.name)
+            for f in user_dir().iterdir():
+                # Include all data files
+                if f.suffix != ".zip":
+                    zf.write(f, f.name)
         # skipcq: BAN-B606
         os.startfile(user_dir(), "explore")
 
