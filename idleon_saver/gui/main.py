@@ -74,7 +74,7 @@ class ErrorDialog(VBox):
     @staticmethod
     def open_logs():
         with ZipFile(user_dir() / "logs.zip", "w") as zf:
-            for f in user_dir().iterdir():
+            for f in user_dir().rglob("*.*"):
                 # Include all data files
                 if f.suffix != ".zip":
                     zf.write(f, f.name)
