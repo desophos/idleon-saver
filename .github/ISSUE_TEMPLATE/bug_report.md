@@ -10,17 +10,8 @@ assignees: desophos
 **Describe the problem**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior, for example:
-1. Go to '...'
-2. Click on '....'
-3. See error
-
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
-**Log file**
-Please attach your log file, found at `%APPDATA%\IdleonSaver\idleon_saver.log`.
+**Log files**
+Please attach your logs.zip file, found at `%APPDATA%\IdleonSaver\logs.zip`.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
