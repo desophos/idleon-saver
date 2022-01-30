@@ -186,7 +186,7 @@ class PathScreen(MyScreen):
         if text is None:
             text = self.path_input.text
 
-        if text and Path(text).exists() and Path(text).suffix == ".exe":
+        if text and Path(text).exists() and Path(text).name == "LegendsOfIdleon.exe":
             # Valid path -> allow next
             self.error.opacity = 0.0
             self.block_next(Blockers.PATH, False)
