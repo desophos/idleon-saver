@@ -125,7 +125,7 @@ class EndScreen(MyScreen):
                     "Oops! Something went wrong.\n\n"
                     "If you keep getting this error, "
                     "please report it on GitHub with "
-                    "your logs.zip and idleon_save.json attached."
+                    "your logs.zip attached."
                 )
             )
             return False
