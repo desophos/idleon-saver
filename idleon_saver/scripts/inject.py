@@ -72,7 +72,7 @@ def main(exe_path: Path):
             win32gui.FindWindow(None, "Legends Of Idleon"), win32con.SW_MINIMIZE
         )
         # Wait for page to fully load.
-        wait_for_idle(c, secs_idle=2, max_wait=20)
+        wait_for_idle(c, secs_idle=3, max_wait=30)
         # Patch Runtime.evaluate to await our async function.
         c.Runtime_evaluate = partial(c.Runtime_evaluate, awaitPromise=True)
         response = c.execute_javascript_function(to_inject)
