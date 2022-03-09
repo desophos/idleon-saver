@@ -7,10 +7,10 @@ readme = "README.md"
 repository = "https://github.com/desophos/idleon-saver"
 
 [tool.poetry.dependencies]
-python = "^3.9"
 plyvel = { version = "^1.3.0", markers = "sys_platform != 'win32'" }
 plyvel-win32 = { version = "^1.3.0", markers = "sys_platform == 'win32'" }
 Kivy = { extras = ["base"], version = "^2.0.0" }
+python = ">=3.9.0, <=3.9.9"
 chromecontroller = { git = "https://github.com/desophos/ChromeController.git" }
 pywin32 = { version = ">=300", markers = "sys_platform == 'win32'" }
 
