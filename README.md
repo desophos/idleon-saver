@@ -100,3 +100,7 @@ Data obtained from `inject.py` (or the GUI) is in the `firebase` format, while d
 Feedback, suggestions, and contributions are welcome!
 
 Use `poetry install --with dev,test` to install the optional dependencies. Run tests with [`pytest`](https://docs.pytest.org/en/latest/index.html). Please run [Black](https://black.readthedocs.io/en/stable/) before submitting a PR; I have it configured to run on save. Thanks for reading!
+
+### Credits
+
+- Windows plyvel wheels from https://github.com/synodriver/plyvel/actions

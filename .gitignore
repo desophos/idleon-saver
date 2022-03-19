@@ -6,7 +6,6 @@ __pycache__
 build
 dist
 *.egg-info
-*.whl
 *.pyc
 *.pyd
 *.pyo
