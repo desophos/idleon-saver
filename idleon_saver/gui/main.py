@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import os
@@ -157,6 +158,11 @@ class PathScreen(MyScreen):
         # Recheck path every second in case of filesystem changes.
         # Hopefully not a performance issue.
         Clock.schedule_interval(lambda dt: self.on_path_text(), 1)
+        self.next.bind(
+            on_release=lambda _: asyncio.get_running_loop().create_task(
+                self.start_action()
+            )
+        )
 
     def block_next(self, which: Blockers, val: bool):
         """Disable "Next" button if blocked for any reason.
@@ -195,7 +201,7 @@ class PathScreen(MyScreen):
             self.error.opacity = 1.0
             self.block_next(Blockers.PATH, True)
 
-    def increment_progress(self, amt: int, slp: float):
+    def increment_progress(self, amt: int):
         """Increments progress until self.action_done is set.
 
         Args:
@@ -204,23 +210,27 @@ class PathScreen(MyScreen):
 
         Time to fill progress bar = 100 * slp / amt.
         """
-        self.progress.opacity = 1.0
-
-        while not self.action_done.is_set():
+        if self.action_done.is_set():
+            # Reset progress bar.
+            self.progress.opacity = 0.0
+            self.progress.value = 0
+            return False  # Stop scheduling this callback.
+        else:
+            self.progress.opacity = 1.0
             self.progress.value += amt
-            sleep(slp)
 
-        # Reset progress bar.
-        self.progress.opacity = 0.0
-        self.progress.value = 0
+    async def start_action(self):
+        # Disable "Next" button until action is completed.
+        self.next.text = "Loading..."
+        self.block_next(Blockers.ACTION, True)
 
-    def resolve_action(self, path):
         # Increment progress bar while action is underway.
         self.action_done.clear()
-        threading.Thread(target=self.increment_progress, args=(1, 0.3)).start()
+        Clock.schedule_interval(lambda dt: self.increment_progress(1), 0.3)
 
         try:
-            self.action(path)
+            # Use threading to avoid freezing the UI.
+            await asyncio.to_thread(self.action, self.path_input.text)
         # skipcq: PYL-W0703
         except Exception as e:
             Logger.exception(e)
@@ -243,14 +253,6 @@ class PathScreen(MyScreen):
             # Only re-enable "Next" button once action is completed.
             self.next.text = "Next"
             self.block_next(Blockers.ACTION, False)
-
-    def start_action(self, path):
-        # Disable "Next" button until action is completed.
-        self.next.text = "Loading..."
-        self.block_next(Blockers.ACTION, True)
-
-        # Use threading to avoid freezing the UI.
-        threading.Thread(target=self.resolve_action, args=(path,)).start()
 
 
 class MainWindow(ScreenManager):
@@ -318,4 +320,5 @@ if __name__ == "__main__":
         resource_add_path(os.path.join(sys._MEIPASS))  # type: ignore[attr-defined]
 
     Logger.info(f"Idleon Saver: version {importlib.metadata.version('idleon_saver')}")
-    IdleonSaver(kv_file="main.kv").run()
+
+    asyncio.run(IdleonSaver(kv_file="main.kv").async_run())
