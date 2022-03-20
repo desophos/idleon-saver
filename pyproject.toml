@@ -7,7 +7,7 @@ readme = "README.md"
 repository = "https://github.com/desophos/idleon-saver"
 
 [tool.poetry.dependencies]
-python = ">=3.9.0, <=3.9.9"
+python = "~3.9"
 plyvel = [
     { version = "^1.4", markers = "sys_platform != 'win32'" },
     { path = "wheels/plyvel-1.4.0-cp39-cp39-win_amd64.whl", markers = "sys_platform == 'win32' and python_version ~= '3.9'" },
