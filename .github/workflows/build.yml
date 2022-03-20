@@ -23,7 +23,7 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.2.0a2
+          version: 1.2.0b1
 
       - name: Cache PyInstaller
         uses: actions/cache@v2
