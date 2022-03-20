@@ -33,5 +33,5 @@ pytest-cov = "^2.12.1"
 telenium = { git = "https://github.com/desophos/telenium.git" }
 
 [build-system]
-requires = ["poetry-core>=1.2.0a2"]
+requires = ["poetry-core>=1.2.0b1"]
 build-backend = "poetry.core.masonry.api"
