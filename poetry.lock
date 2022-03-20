@@ -138,7 +138,7 @@ websocket-client = "*"
 [package.source]
 type = "git"
 url = "https://github.com/desophos/ChromeController.git"
-reference = "master"
+reference = "HEAD"
 resolved_reference = "746f6382afc390c15ff399f28cab75b4588ac98f"
 
 [[package]]
@@ -558,7 +558,7 @@ testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtuale
 
 [[package]]
 name = "pytz"
-version = "2021.3"
+version = "2022.1"
 description = "World timezone definitions, modern and historical"
 category = "dev"
 optional = false
@@ -630,7 +630,7 @@ ws4py = ">=0.4.2"
 [package.source]
 type = "git"
 url = "https://github.com/desophos/telenium.git"
-reference = "master"
+reference = "HEAD"
 resolved_reference = "6ef4529fe4337d3e4a18057c0573c824cff0ac8f"
 
 [[package]]
@@ -734,8 +734,8 @@ test = ["zope.testing"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = ">=3.9.0, <=3.9.9"
-content-hash = "9edbb71c3bc3cb79699d2b8de207b524545905a2ae16d0ddd07752095621c5de"
+python-versions = "~3.9"
+content-hash = "7d1b1efda1694d3f5217cd16a2566582f65d2bb58cfaec71d9d11ccd6f01a3ce"
 
 [metadata.files]
 astor = [
@@ -1112,8 +1112,8 @@ pytest-cov = [
     {file = "pytest_cov-2.12.1-py2.py3-none-any.whl", hash = "sha256:261bb9e47e65bd099c89c3edf92972865210c36813f80ede5277dceb77a4a62a"},
 ]
 pytz = [
-    {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
-    {file = "pytz-2021.3.tar.gz", hash = "sha256:acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326"},
+    {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
+    {file = "pytz-2022.1.tar.gz", hash = "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7"},
 ]
 pywin32 = [
     {file = "pywin32-303-cp310-cp310-win32.whl", hash = "sha256:6fed4af057039f309263fd3285d7b8042d41507343cd5fa781d98fcc5b90e8bb"},
