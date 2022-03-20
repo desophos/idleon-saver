@@ -10,8 +10,7 @@ repository = "https://github.com/desophos/idleon-saver"
 python = "~3.9"
 plyvel = [
     { version = "^1.4", markers = "sys_platform != 'win32'" },
-    { path = "wheels/plyvel-1.4.0-cp39-cp39-win_amd64.whl", markers = "sys_platform == 'win32' and python_version ~= '3.9'" },
-    { path = "wheels/plyvel-1.4.0-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32' and python_version ~= '3.10'" },
+    { path = "wheels/plyvel-1.4.0-cp39-cp39-win_amd64.whl", python = "~3.9", markers = "sys_platform == 'win32'" },
 ]
 kivy = { extras = ["base"], version = "^2.1" }
 chromecontroller = { git = "https://github.com/desophos/ChromeController.git" }
