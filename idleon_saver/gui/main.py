@@ -6,7 +6,6 @@ import sys
 import threading
 from enum import Enum
 from pathlib import Path
-from time import sleep
 from zipfile import ZipFile
 
 from idleon_saver.utility import BUGREPORT_LINK, logs_dir, user_dir
