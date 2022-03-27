@@ -7,9 +7,7 @@ from typing import Callable, Mapping
 from idleon_saver.utility import ROOT_DIR
 
 idleon_data = {}
-for path in ROOT_DIR.joinpath("idleon-data", "maps").iterdir():
-    if path.suffix != ".json":
-        continue
+for path in ROOT_DIR.joinpath("idleon-data", "maps").glob("*.json"):
     with open(path, "r") as f:
         jsondata = json.load(f)
         # Every data file should have a comment, which we can ignore.
@@ -21,11 +19,10 @@ for path in ROOT_DIR.joinpath("idleon-data", "maps").iterdir():
         idleon_data[path.stem] = jsondata.get("data", jsondata)
 
 wiki_data = {}
-for path in ROOT_DIR.joinpath("IdleonWikiBot", "exported", "repo").iterdir():
-    if path.suffix != ".json":
-        continue
-    with open(path, "r") as f:
-        wiki_data[path.stem.removesuffix("Repo")] = json.load(f)
+for leaf in ("repo", "list"):
+    for path in ROOT_DIR.joinpath("IdleonWikiBot", "exported", leaf).glob("**/*.json"):
+        with open(path, "r") as f:
+            wiki_data[path.stem.removesuffix("Repo")] = json.load(f)
 
 statues = [f"{statue['name']} Statue" for statue in wiki_data["Statue"]]
 
