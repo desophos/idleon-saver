@@ -117,7 +117,7 @@ pouch_sizes = {
     2000: "Large",
 }
 
-starsign_names = list(wiki_data["StarSigns"].keys())
+starsign_names = list(sign["name"].replace(" ", "_") for sign in wiki_data["StarSigns"])
 
 starsign_ids = {
     "The_Book_Worm": "1",
